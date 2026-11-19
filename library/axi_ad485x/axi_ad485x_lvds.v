@@ -92,7 +92,6 @@ module axi_ad485x_lvds #(
 );
 
   localparam DW  = (32 * N_CHANNELS);
-  localparam HDW = (DW / 2)-1;
   localparam BW  = DW - 1;
   localparam FBW = DW + 31;
   localparam HBW = ((DW + 32) / 2)-1;
@@ -122,7 +121,6 @@ module axi_ad485x_lvds #(
   reg                 run_busy_period_cnt = 'h0;
   reg        [ 31:0]  busy_conversion_cnt = 'h0;
   reg        [ 31:0]  busy_measure_value = 'h0;
-  reg        [ 31:0]  busy_measure_value_plus = 'h0;
 
   reg        [FBW:0]  adc_data_store = 'h0;
   reg        [FBW:0]  adc_data_init = 'h0;
@@ -172,7 +170,6 @@ module axi_ad485x_lvds #(
 
   wire                scko;
   wire                scko_s;
-  wire                sdo;
   wire                conversion_completed;
   wire                conversion_quiet_time_s;
 
@@ -303,19 +300,6 @@ module axi_ad485x_lvds #(
 
   generate
     wire aquire_data_delay;
-  // DEBUG
-  (* MARK_DEBUG = "TRUE" *)  wire  [31:0]  ila_path_delay_tap     = path_delay_tap   ;
-  (* MARK_DEBUG = "TRUE" *)  wire  [31:0]  ila_aquire_data        = aquire_data      ;
-  (* MARK_DEBUG = "TRUE" *)  wire  [31:0]  ila_aquire_data_delay  = aquire_data_delay;
-
-    reg [15:0] test_cnt;
-    always @(posedge scko_s or posedge start_transfer) begin
-      if (start_transfer) begin
-        test_cnt <= 0;
-      end else begin
-        test_cnt <= test_cnt +1;
-      end
-    end
     if (ECHO_CLK_EN == 1'b1) begin
       IBUFDS i_scko_bufds (
         .O(scko_s),
@@ -328,12 +312,6 @@ module axi_ad485x_lvds #(
         aquire_data_delay_reg <= sckio_delay[path_delay_tap];
       end
       assign aquire_data_delay = aquire_data_delay_reg;
-      //BUFGCE_1 BUFGCE_inst (
-      //  .O(scko_s),
-      //  .CE(aquire_data_delay),
-      //  .I(fast_clk)
-      //);
-
       BUFGCE #(
         .CE_TYPE("SYNC"),          // ASYNC, HARDSYNC, SYNC
         .IS_CE_INVERTED(1'b0),     // Programmable inversion on CE

@@ -158,7 +158,6 @@ module axi_ad485x #(
                                       (DEVICE == "AD4853") ? 4 :
                                       (DEVICE == "AD4852") ? 4 :
                                       (DEVICE == "AD4851") ? 4 : 'hz;
-  localparam             SEVEN_SERIES  = 1;
   localparam             ULTRASCALE  = 2;
   localparam             ULTRASCALE_PLUS  = 3;
 
@@ -308,8 +307,6 @@ module axi_ad485x #(
       wire                  up_dld;
       wire [DRP_WIDTH-1:0]  up_dwdata;
       wire [DRP_WIDTH-1:0]  up_drdata;
-
-     (* MARK_DEBUG = "TRUE" *)  wire  [7:0]  ila_adc_config_ctrl_s     = adc_config_ctrl_s[7:0];
 
       assign scki = 1'b0;
 

@@ -295,13 +295,6 @@ module axi_ad4858_lvds_nssi #(
     adc_valid <= (ch_valid_dn == 1'b1 && ch_index_dn == max_channel_transfer) ? 1'b1 : 1'b0;
   end
 
-  (* MARK_DEBUG = "TRUE" *)  wire  [ 3:0]  ila_path_valid_delay_tap     = path_valid_delay_tap   ;
-  (* MARK_DEBUG = "TRUE" *)  wire  [ 3:0]  ila_path_index_delay_tap     = path_index_delay_tap   ;
-  (* MARK_DEBUG = "TRUE" *)  wire  [ 3:0]  ila_ch_index_dn              = ch_index_dn   ;
-  (* MARK_DEBUG = "TRUE" *)  wire          ila_aquire_data              = aquire_data      ;
-  (* MARK_DEBUG = "TRUE" *)  wire          ila_adc_valid                = adc_valid;
-  (* MARK_DEBUG = "TRUE" *)  wire          ila_busy                     = busy;
-
   // dev status
   assign dev_status = packet_format == 0 ? adc_data_store[8][23:16] << 4 :
                                            adc_data_store[8][23:16];

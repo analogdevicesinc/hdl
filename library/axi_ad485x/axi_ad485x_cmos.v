@@ -102,7 +102,6 @@ module axi_ad485x_cmos #(
   reg         [31:0]  adc_lane_7;
 
   reg         [ 1:0]  packet_format = 'h0;
-  reg         [ 5:0]  data_counter = 6'h0;
   reg         [ 5:0]  scki_counter = 6'h0;
   reg                 adc_captured = 'h0;
   reg                 adc_captured_d = 'h0;
@@ -182,8 +181,6 @@ module axi_ad485x_cmos #(
   // internal wires
 
   wire        [ 7:0]  db_s;
-
-  wire        [31:0]  status_and_crc_data;
 
   wire                aquire_data;
   wire                scki_cnt_rst;
