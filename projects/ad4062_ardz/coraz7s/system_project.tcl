@@ -59,4 +59,6 @@ adi_project_files ad4062_ardz_coraz7s [list \
     "system_constr.xdc" \
     "$ad_hdl_dir/projects/common/coraz7s/coraz7s_system_constr.xdc"]
 
+set_property used_in_synthesis false [get_files $ad_hdl_dir/projects/ad4062_ardz/coraz7s/system_constr.xdc]
+
 adi_project_run ad4062_ardz_coraz7s
