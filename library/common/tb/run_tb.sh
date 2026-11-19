@@ -59,6 +59,7 @@ case "$SIMULATOR" in
 		#Icarus flow
 		iverilog -g2005-sv -o run_${NAME} -I.. ${SOURCE} || exit 1
 		./run_${NAME} > ${NAME}_icarus.log
+		cat ${NAME}_icarus.log
 		;;
 
 	*)
