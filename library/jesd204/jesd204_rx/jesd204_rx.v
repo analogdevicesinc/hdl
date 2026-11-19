@@ -224,20 +224,6 @@ module jesd204_rx #(
 
   assign all_buffer_ready_n = |(buffer_ready_n);
 
-  generate
-    if (NUM_LANES >= 4) begin
-      wire all_buffer_ready_n_1;
-      wire all_buffer_ready_n_2;
-      wire all_buffer_ready_n_3;
-      wire all_buffer_ready_n_4;
-
-      assign all_buffer_ready_n_1 = |(buffer_ready_n[QUARTER_NO_OF_LANES-1:0]);
-      assign all_buffer_ready_n_2 = |(buffer_ready_n[HALF_NO_OF_LANES-1:QUARTER_NO_OF_LANES]);
-      assign all_buffer_ready_n_3 = |(buffer_ready_n[HALF_NO_OF_LANES+QUARTER_NO_OF_LANES-1:HALF_NO_OF_LANES]);
-      assign all_buffer_ready_n_4 = |(buffer_ready_n[NUM_LANES-1:HALF_NO_OF_LANES+QUARTER_NO_OF_LANES]);
-    end
-  endgenerate
-
   sync_bits #(
     .NUM_OF_BITS (1),
     .ASYNC_CLK(ASYNC_CLK)
@@ -613,6 +599,16 @@ module jesd204_rx #(
           }));
 
         if (NUM_LANES >= 4) begin
+          wire all_buffer_ready_n_1;
+          wire all_buffer_ready_n_2;
+          wire all_buffer_ready_n_3;
+          wire all_buffer_ready_n_4;
+
+          assign all_buffer_ready_n_1 = |(buffer_ready_n[QUARTER_NO_OF_LANES-1:0]);
+          assign all_buffer_ready_n_2 = |(buffer_ready_n[HALF_NO_OF_LANES-1:QUARTER_NO_OF_LANES]);
+          assign all_buffer_ready_n_3 = |(buffer_ready_n[HALF_NO_OF_LANES+QUARTER_NO_OF_LANES-1:HALF_NO_OF_LANES]);
+          assign all_buffer_ready_n_4 = |(buffer_ready_n[NUM_LANES-1:HALF_NO_OF_LANES+QUARTER_NO_OF_LANES]);
+
           if ((i == 0) || (i == HALF_NO_OF_LANES)) begin
             wire all_buffer_ready_n_d_1;
             wire all_buffer_ready_n_d_2;
