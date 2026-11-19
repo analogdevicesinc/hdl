@@ -138,7 +138,7 @@
 <url><loc>https://analogdevicesinc.github.io/hdl/library/axi_clkgen/</loc><lastmod>2026-11-19</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/axi_clock_monitor/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/axi_dac_interpolate/</loc><lastmod>2026-11-19</lastmod></url>
-<url><loc>https://analogdevicesinc.github.io/hdl/library/axi_dmac/</loc><lastmod>2026-11-13</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/axi_dmac/</loc><lastmod>2026-11-19</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/axi_fan_control/</loc><lastmod>2026-11-19</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/axi_hdmi_rx/</loc><lastmod>2026-11-19</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/axi_hdmi_tx/</loc><lastmod>2026-11-19</lastmod></url>
@@ -159,7 +159,7 @@
 <url><loc>https://analogdevicesinc.github.io/hdl/library/corundum/ethernet/k26/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/corundum/ethernet/vcu118/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/corundum/</loc><lastmod>2026-11-13</lastmod></url>
-<url><loc>https://analogdevicesinc.github.io/hdl/library/data_offload/</loc><lastmod>2026-11-13</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/data_offload/</loc><lastmod>2026-11-19</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/i3c_controller/i3c_controller_core/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/i3c_controller/i3c_controller_host_interface/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/i3c_controller/</loc><lastmod>2026-11-13</lastmod></url>
@@ -189,12 +189,12 @@
 <url><loc>https://analogdevicesinc.github.io/hdl/library/spi_engine/spi_engine_interconnect/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/spi_engine/spi_engine_offload/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/spi_engine/tutorial/</loc><lastmod>2026-11-13</lastmod></url>
-<url><loc>https://analogdevicesinc.github.io/hdl/library/spi_slave/</loc><lastmod>2026-11-13</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/spi_slave/</loc><lastmod>2026-11-19</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/template_framework/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/template_framework/instruction-set/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/template_framework/interface/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/template_framework/template_module/</loc><lastmod>2026-11-13</lastmod></url>
-<url><loc>https://analogdevicesinc.github.io/hdl/library/template_ip/</loc><lastmod>2026-11-13</lastmod></url>
+<url><loc>https://analogdevicesinc.github.io/hdl/library/template_ip/</loc><lastmod>2026-11-19</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/util_axis_fifo_asym/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/util_axis_fifo/</loc><lastmod>2026-11-13</lastmod></url>
 <url><loc>https://analogdevicesinc.github.io/hdl/library/util_extract/</loc><lastmod>2026-11-13</lastmod></url>
