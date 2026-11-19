@@ -1,0 +1,612 @@
+TITLE
+HSCI Master (axi_hsci)
+axi_hsci
+ENDTITLE
+
+############################################################################################
+############################################################################################
+
+REG
+0x0000
+REVISION_ID
+Revision ID Register
+ENDREG
+
+FIELD
+[15:0] 0x0001
+HSCI_REVISION_ID
+RO
+Revision of the HSCI master core.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x0001 + n
+WHERE n IS FROM 0 TO 32767
+BRAM_n
+Transfer buffer, word n
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+BRAM_DATA
+RW
+Transfer buffer word n. Requests start at ``HSCI_MASTER_BRAM_ADDRESS``;
+read responses start at word 0 (DWORD address 0x0001).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8001
+HSCI_MASTER_MODE
+HSCI Master Mode Selection
+ENDREG
+
+FIELD
+[1:0] 0x0
+HSCI_XFER_MODE
+RW
+Unused. Transfer mode is derived from ``HSCI_XFER_NUM``.
+ENDFIELD
+
+FIELD
+[4] 0x1
+VER_B_NA
+RW
+Slave revision: 0 = A, 1 = B.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8002
+HSCI_MASTER_XFER_NUM
+HSCI Master Number of Transactions
+ENDREG
+
+FIELD
+[15:0] 0x0000
+HSCI_XFER_NUM
+RW
+Transaction count. 1 = single or continuous transfer;
+>1 = dis-contiguous transfers, each with its own slave address.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8003
+HSCI_MASTER_ADDR_SIZE
+HSCI Master Address Size
+ENDREG
+
+FIELD
+[2:0] 0x0
+HSCI_ADDR_SIZE
+RW
+Slave address size minus one: 0 to 3 select 1 to 4 bytes.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8004
+HSCI_MASTER_BYTE_NUM
+HSCI Master Data Size
+ENDREG
+
+FIELD
+[16:0] 0x00000
+HSCI_BYTE_NUM
+RW
+Byte count per transaction. Must be a multiple of 2 for half-word
+and of 4 for word transfers.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8005
+HSCI_MASTER_TARGET
+HSCI Master Target Chip Select
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SPI_TARGET
+RW
+Not used by the core.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8006
+HSCI_MASTER_CTRL
+HSCI Master Control
+ENDREG
+
+FIELD
+[1:0] 0x0
+HSCI_CMD_SEL
+RW
+Transaction type:
+
+* 0 - write.
+* 1 - read.
+* 2 - read-modify-write.
+* 3 - reserved.
+
+For read-modify-write, interleave masks and data in the transfer buffer.
+ENDFIELD
+
+FIELD
+[5:4] 0x0
+HSCI_SLAVE_AHB_TSIZE
+RW
+Transfer size: 0 = byte, 1 = half-word (16 bits), 2 = word (32 bits).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8007
+HSCI_MASTER_BRAM_ADDRESS
+Transfer Buffer Start Address
+ENDREG
+
+FIELD
+[15:0] 0x0000
+HSCI_BRAM_START_ADDRESS
+RW
+Request start address in DWORDs. 0x0001 selects ``BRAM_0``.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8008
+HSCI_MASTER_RUN
+HSCI Master Run Trigger
+ENDREG
+
+FIELD
+[0] 0x0
+HSCI_RUN
+RW
+Write 1 to start the sequence. Self-clearing.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8009
+HSCI_MASTER_STATUS
+HSCI Master Status
+ENDREG
+
+FIELD
+[0] 0x0
+MASTER_DONE
+RO-V
+Master idle.
+ENDFIELD
+
+FIELD
+[1] 0x0
+MASTER_RUNNING
+RO-V
+Sequence in progress.
+ENDFIELD
+
+FIELD
+[2] 0x0
+MASTER_WR_IN_PROG
+RO-V
+Write in progress.
+ENDFIELD
+
+FIELD
+[3] 0x0
+MASTER_RD_IN_PROG
+RO-V
+Read in progress.
+ENDFIELD
+
+FIELD
+[4] 0x0
+MISO_TEST_LFSR_ACQ
+RO-V
+MISO PN15 checker locked.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x800A
+HSCI_MASTER_LINKUP_CTRL
+HSCI Master Link-up Control
+ENDREG
+
+FIELD
+[9:0] 0x000
+HSCI_MAN_LINKUP_WORD
+RW
+Link-up sub-frame (10 bits) sent to the slave in manual link-up mode.
+ENDFIELD
+
+FIELD
+[10] 0x0
+HSCI_MAN_LINKUP
+RW
+Enable manual link-up mode.
+ENDFIELD
+
+FIELD
+[11] 0x0
+HSCI_AUTO_LINKUP
+RW
+Enable automatic link-up mode.
+ENDFIELD
+
+FIELD
+[12] 0x0
+MOSI_CLK_INV
+RW
+Invert the MOSI clock.
+ENDFIELD
+
+FIELD
+[13] 0x0
+MISO_CLK_INV
+RW
+Invert the MISO clock (shift the sampling of the MISO data by one bit).
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x800B
+HSCI_MASTER_TEST_CTRL
+HSCI Master Test Control
+ENDREG
+
+FIELD
+[0] 0x0
+HSCI_MOSI_TEST_MODE
+RW
+Transmit PN15 (1 + x^14 + x^15) instead of data.
+ENDFIELD
+
+FIELD
+[1] 0x0
+HSCI_MISO_TEST_MODE
+RW
+Check MISO against PN15 (1 + x^14 + x^15).
+Count errors in ``MISO_TEST_BER``.
+ENDFIELD
+
+FIELD
+[2] 0x0
+HSCI_CAPTURE_MODE
+RW
+Enable MISO word capture in ``CAPTURE_WORD``.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x800C
+HSCI_MASTER_LINKUP_STATUS
+HSCI Master Link-up Status
+ENDREG
+
+FIELD
+[0] 0x0
+LINK_ACTIVE
+RO-V
+The link is up.
+ENDFIELD
+
+FIELD
+[7:4] 0x0
+ALINK_TXCLK_ADJ
+RO-V
+Slave TX clock adjustment selected during automatic link-up.
+ENDFIELD
+
+FIELD
+[8] 0x0
+ALINK_TXCLK_INV
+RO-V
+Slave TX clock inversion selected during automatic link-up.
+ENDFIELD
+
+FIELD
+[10] 0x0
+TXCLK_ADJ_MISMATCH
+RO-V
+Slave TX clock adjustment readback mismatch. Valid when ``VER_B_NA`` is set.
+ENDFIELD
+
+FIELD
+[11] 0x0
+TXCLK_INV_MISMATCH
+RO-V
+Slave TX clock inversion readback mismatch. Valid when ``VER_B_NA`` is set.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x800D
+HSCI_MASTER_LINKUP_STATUS2
+HSCI Master Link-up Status 2
+ENDREG
+
+FIELD
+[15:0] 0x0000
+ALINK_TABLE
+RO-V
+Bit n: MISO link locked with slave TX clock adjustment n.
+ENDFIELD
+
+FIELD
+[19:16] 0x0
+ALINK_FSM
+RO-V
+Link-up FSM: 0x0 = IDLE, 0x1 = RX_LINK, 0x2 = TX_DETECT,
+0x3 = TX_CLK_ADJ, 0x5 = TX_ACQ, 0x6 = TX_ENDLP, 0x7 = TX_STALL,
+0x8 = TX_DECIDE, 0x9 = TX_CLK_INV, 0xA = SET_TXCLK, 0xB = TX_REACQ,
+0xC = TX_LINKUP, 0xD = LINKUP, 0xE = LINK_ERR.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x800E
+HSCI_DEBUG_STATUS
+HSCI Master FSM Status
+ENDREG
+
+FIELD
+[3:0] 0x0
+ENC_FSM
+RO-V
+Encoder FSM: 0x0 = IDLE, 0x1 = START1, 0x2 = START2, 0x3 = START3,
+0x4 = SEND_INSTR, 0x5 = SEND_ADDR, 0x6 = SEND_MASK, 0x7 = SEND_DATA,
+0x8 = SEND_NUM, 0x9 = READOP, 0xA = SEND_LINKUP.
+ENDFIELD
+
+FIELD
+[6:4] 0x0
+DEC_FSM
+RO-V
+Decoder FSM: 0x0 = IDLE, 0x1 = INSTR, 0x2 = RINDEX, 0x3 = RDATA,
+0x4 = ERROR, 0x5 = LINKUP, 0x6 = TMODE, 0x7 = MERR.
+ENDFIELD
+
+FIELD
+[17:8] 0x000
+CAPTURE_WORD
+RO-V
+Last received MISO word, updated while ``HSCI_CAPTURE_MODE`` is set.
+ENDFIELD
+
+FIELD
+[18] 0x0
+PARITY_ERROR
+RO-V
+MISO parity error. Cleared by ``HSCI_MASTER_CLEAR_ERRORS``.
+ENDFIELD
+
+FIELD
+[19] 0x0
+UNKOWN_INSTRUCTION_ERROR
+RO-V
+Unknown slave instruction. Cleared by ``HSCI_MASTER_CLEAR_ERRORS``.
+ENDFIELD
+
+FIELD
+[27:20] 0x00
+SLAVE_ERROR_CODE
+RO-V
+Last slave error frame:
+
+* [0] - unknown instruction received.
+* [1] - bad parity detected.
+* [2] - address size error (more than 4 address sub-frames received).
+* [3] - byte number size error (more than 4 byte number sub-frames
+  received).
+* [4] - write FIFO full.
+* [5] - read FIFO full.
+
+Cleared by ``HSCI_MASTER_CLEAR_ERRORS``.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x800F
+MISO_TEST_BER
+MISO Test Bit Error Counter
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+MISO_TEST_BER
+RO-V
+MISO PN15 word error count. Saturates at 0xFFFFFFFF.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8010
+HSCI_MASTER_LINK_ERR_INFO
+HSCI Master Link Error Info
+ENDREG
+
+FIELD
+[30:0] 0x00000000
+HSCI_LINK_ERR_INFO
+RO-V
+Captured on entry to LINK_ERR:
+
+* [3:0] - previous state.
+* [4] - signal lock.
+* [5] - RX link timeout.
+* [6] - TX acquire timeout.
+* [7] - decision made.
+* [11:8] - TX clock adjustment value.
+* [15:12] - TX clock adjustment.
+* [16] - TX link-up achieved.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8011
+HSCI_RATE_CTRL
+HSCI Rate Control
+ENDREG
+
+FIELD
+[0] 0x0
+HSCI_MMCM_DRP_TRIG
+RW
+Not used by the core.
+ENDFIELD
+
+FIELD
+[2:1] 0x0
+HSCI_RATE_SEL
+RW
+Unused by RTL. Linux interface clock selection:
+
+* 0 - 800 MHz.
+* 1 - 400 MHz.
+* 2 - 200 MHz.
+ENDFIELD
+
+FIELD
+[8] 0x0
+HSCI_PLL_RESET
+RW
+PHY reset output, ``hsci_pll_reset``.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8012
+HSCI_MASTER_RST
+HSCI Master Reset Control
+ENDREG
+
+FIELD
+[4] 0x0
+HSCI_MASTER_CLEAR_ERRORS
+RW
+Clear ``PARITY_ERROR``, ``UNKOWN_INSTRUCTION_ERROR`` and ``SLAVE_ERROR_CODE``.
+Not self-clearing.
+ENDFIELD
+
+FIELD
+[8] 0x0
+HSCI_MASTER_RSTN
+RW
+Active-low reset of the HSCI master logic. The logic is also held in reset
+while ``hsci_pll_locked`` is low.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x8013
+HSCI_PHY_STATUS
+HSCI PHY Status
+ENDREG
+
+FIELD
+[0] 0x0
+HSCI_RESET_SEQ_DONE
+RO-V
+State of the ``hsci_rst_seq_done`` input.
+ENDFIELD
+
+FIELD
+[1] 0x0
+HSCI_PHY_PLL_LOCKED
+RO-V
+State of the ``hsci_pll_locked`` input.
+ENDFIELD
+
+FIELD
+[2] 0x0
+HSCI_VTC_RDY_TX
+RO-V
+State of the ``hsci_vtc_rdy_bsc_tx`` input.
+ENDFIELD
+
+FIELD
+[3] 0x0
+HSCI_VTC_RDY_RX
+RO-V
+State of the ``hsci_vtc_rdy_bsc_rx`` input.
+ENDFIELD
+
+FIELD
+[4] 0x0
+HSCI_DLY_RDY_TX
+RO-V
+State of the ``hsci_dly_rdy_bsc_tx`` input.
+ENDFIELD
+
+FIELD
+[5] 0x0
+HSCI_DLY_RDY_RX
+RO-V
+State of the ``hsci_dly_rdy_bsc_rx`` input.
+ENDFIELD
+
+############################################################################################
+############################################################################################
+
+REG
+0x801F
+HSCI_MASTER_SCRATCH
+Scratch Register
+ENDREG
+
+FIELD
+[31:0] 0x00000000
+SCRATCH_REG
+RW
+Scratch register.
+ENDFIELD
+
+############################################################################################
+############################################################################################
