@@ -1,0 +1,101 @@
+###############################################################################
+## Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
+## Short identifier: ADIBSD
+##
+## Redistribution and use in source and binary forms, with or without modification,
+## are permitted provided that the following conditions are met:
+##     - Redistributions of source code must retain the above copyright
+##       notice, this list of conditions and the following disclaimer.
+##     - Redistributions in binary form must reproduce the above copyright
+##       notice, this list of conditions and the following disclaimer in
+##       the documentation and/or other materials provided with the
+##       distribution.
+##     - Neither the name of Analog Devices, Inc. nor the names of its
+##       contributors may be used to endorse or promote products derived
+##       from this software without specific prior written permission.
+##     - The use of this software may or may not infringe the patent rights
+##       of one or more patent holders. This license does not release you
+##       from the requirement that you obtain separate licenses from these
+##       patent holders to use this software.
+##     - Use of the software either in source or binary form, must be run
+##       on or directly connected to an Analog Devices Inc. component.
+##
+## THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+## INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
+## PARTICULAR PURPOSE ARE DISCLAIMED.
+##
+## IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+## EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
+## RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+## BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+## STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+###############################################################################
+
+# zcu102
+# ad9166 device
+
+# SYNC_P/N
+set_property  -dict {PACKAGE_PIN  AB4 IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports tx_sync_p]      ; ## D8   FMC0_LA01_CC_P            IO_L16P_T2U_N6_QBC_AD3P_66
+set_property  -dict {PACKAGE_PIN  AC4 IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports tx_sync_n]      ; ## D9   FMC0_LA01_CC_N            IO_L16N_T2U_N7_QBC_AD3N_66
+
+# tx_sysref = LA00_CC_P/N = SYSREF_FMC_P/N
+set_property  -dict {PACKAGE_PIN  Y4  IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports tx_sysref_p]    ; ## G6   FMC0_LA00_CC_P            IO_L13P_T2L_N0_GC_QBC_66
+set_property  -dict {PACKAGE_PIN  Y3  IOSTANDARD LVDS DIFF_TERM TRUE} [get_ports tx_sysref_n]    ; ## G7   FMC0_LA00_CC_N            IO_L13N_T2L_N1_GC_QBC_66
+
+# GBTCLK0_M2C_P/N = BR40_P/N
+set_property  -dict {PACKAGE_PIN  G8} [get_ports tx_ref_clk_p]                                   ; ## D4   FMC0_GBTCLK0_M2C_C_P      MGTREFCLK0P_229
+set_property  -dict {PACKAGE_PIN  G7} [get_ports tx_ref_clk_n]                                   ; ## D5   FMC0_GBTCLK0_M2C_C_N      MGTREFCLK0N_229
+
+# JESD204 TX lanes. Port names follow the FPGA GT pins (tx_data_p -> MGTHTXP,
+# tx_data_n -> MGTHTXN); GT pads are fixed P/N, so the names are never swapped.
+# Lanes 4-7: the EVAL-AD9166 PCB swaps P/N (FPGA TXP -> SERDINx_N), which
+# inverts the data. The GTH re-inverts these lanes with TX_LANE_INVERT = 0xF0
+# (bits 4-7) in common/ad9166_fmc_bd.tcl, so the AD9166 receives correct data.
+set_property  -dict {PACKAGE_PIN  G4} [get_ports tx_data_p[0]]                                   ; ## C2   FMC0_DP0_C2M_P            MGTHTXP2_229
+set_property  -dict {PACKAGE_PIN  G3} [get_ports tx_data_n[0]]                                   ; ## C3   FMC0_DP0_C2M_N            MGTHTXN2_229
+set_property  -dict {PACKAGE_PIN  H6} [get_ports tx_data_p[1]]                                   ; ## A22  FMC0_DP1_C2M_P            MGTHTXP1_229
+set_property  -dict {PACKAGE_PIN  H5} [get_ports tx_data_n[1]]                                   ; ## A23  FMC0_DP1_C2M_N            MGTHTXN1_229
+set_property  -dict {PACKAGE_PIN  F6} [get_ports tx_data_p[2]]                                   ; ## A26  FMC0_DP2_C2M_P            MGTHTXP3_229
+set_property  -dict {PACKAGE_PIN  F5} [get_ports tx_data_n[2]]                                   ; ## A27  FMC0_DP2_C2M_N            MGTHTXN3_229
+set_property  -dict {PACKAGE_PIN  K6} [get_ports tx_data_p[3]]                                   ; ## A30  FMC0_DP3_C2M_P            MGTHTXP0_229
+set_property  -dict {PACKAGE_PIN  K5} [get_ports tx_data_n[3]]                                   ; ## A31  FMC0_DP3_C2M_N            MGTHTXN0_229
+set_property  -dict {PACKAGE_PIN  N4} [get_ports tx_data_p[4]]                                   ; ## B32  FMC0_DP7_C2M_P            MGTHTXP2_228 SERDIN4_N
+set_property  -dict {PACKAGE_PIN  N3} [get_ports tx_data_n[4]]                                   ; ## B33  FMC0_DP7_C2M_N            MGTHTXN2_228 SERDIN4_P
+set_property  -dict {PACKAGE_PIN  M6} [get_ports tx_data_p[5]]                                   ; ## A34  FMC0_DP4_C2M_P            MGTHTXP3_228 SERDIN5_N
+set_property  -dict {PACKAGE_PIN  M5} [get_ports tx_data_n[5]]                                   ; ## A35  FMC0_DP4_C2M_N            MGTHTXN3_228 SERDIN5_P
+set_property  -dict {PACKAGE_PIN  R4} [get_ports tx_data_p[6]]                                   ; ## B36  FMC0_DP6_C2M_P            MGTHTXP0_228 SERDIN6_N
+set_property  -dict {PACKAGE_PIN  R3} [get_ports tx_data_n[6]]                                   ; ## B37  FMC0_DP6_C2M_N            MGTHTXN0_228 SERDIN6_P
+set_property  -dict {PACKAGE_PIN  P6} [get_ports tx_data_p[7]]                                   ; ## A38  FMC0_DP5_C2M_P            MGTHTXP1_228 SERDIN7_N
+set_property  -dict {PACKAGE_PIN  P5} [get_ports tx_data_n[7]]                                   ; ## A39  FMC0_DP5_C2M_N            MGTHTXN1_228 SERDIN7_P
+
+# FMC_SCLK
+set_property  -dict {PACKAGE_PIN  Y2  IOSTANDARD LVCMOS18} [get_ports spi_fmc_clk]               ; ## G9   FMC0_LA03_P               IO_L22P_T3U_N6_DBC_AD0P_66
+# FMC_MOSI (-> SDIO via FXLA108)
+set_property  -dict {PACKAGE_PIN  Y1  IOSTANDARD LVCMOS18} [get_ports spi_mosi]                  ; ## G10  FMC0_LA03_N               IO_L22N_T3U_N7_DBC_AD0N_66
+# FMC_MISO (<- SDO via FXLA108)
+set_property  -dict {PACKAGE_PIN  AA2 IOSTANDARD LVCMOS18} [get_ports spi_miso]                  ; ## H10  FMC0_LA04_P               IO_L21P_T3L_N4_AD8P_66
+# FMC_CS1 (AD9166)
+set_property  -dict {PACKAGE_PIN  AA1 IOSTANDARD LVCMOS18} [get_ports spi_csn_dac]               ; ## H11  FMC0_LA04_N               IO_L21N_T3L_N5_AD8N_66
+# FMC_CS2 (HMC7044)
+set_property  -dict {PACKAGE_PIN  AB3 IOSTANDARD LVCMOS18} [get_ports spi_csn_hmc7044]           ; ## D11  FMC0_LA05_P               IO_L20P_T3L_N2_AD1P_66
+# FMC_CS3 (ADF4372)
+set_property  -dict {PACKAGE_PIN  AC2 IOSTANDARD LVCMOS18} [get_ports spi_csn_adf4372]           ; ## C10  FMC0_LA06_P               IO_L19P_T3L_N0_DBC_AD9P_66
+# FMC_CS4 (Amplifier)
+set_property  -dict {PACKAGE_PIN  AC1 IOSTANDARD LVCMOS18} [get_ports spi_csn_amp]               ; ## C11  FMC0_LA06_N               IO_L19N_T3L_N1_DBC_AD9N_66
+# FMC_SPI_EN
+set_property  -dict {PACKAGE_PIN  AC3 IOSTANDARD LVCMOS18} [get_ports spi_fmc_en]                ; ## D12  FMC0_LA05_N               IO_L20N_T3L_N3_AD1N_66
+# FMC_TXEN_0 (DAC_TXEN_0)
+set_property  -dict {PACKAGE_PIN  U5  IOSTANDARD LVCMOS18} [get_ports fmc_txen]                  ; ## H13  FMC0_LA07_P               IO_L18P_T2U_N10_AD2P_66
+
+# Max lane rate of 12.5 Gbps
+# ref clock = lane_rate/40 (312.5 MHz at 12.5 Gbps)
+
+create_clock -name tx_ref_clk   -period 3.2 [get_ports tx_ref_clk_p]
+
+# Assumption is that REFCLK and SYSREF have similar propagation delay,
+# and the SYSREF is a source synchronous Center-Aligned signal to REFCLK
+
+set_input_delay -clock [get_clocks tx_ref_clk] \
+  [expr [get_property  PERIOD [get_clocks tx_ref_clk]] / 2] \
+  [get_ports {tx_sysref_*}]
