@@ -32,12 +32,47 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
+## Returns the absolute path of the folder where the ROM initialization files
+# are written: the build sub-folder when one is used, otherwise the current
+# folder. Quartus already runs inside the build sub-folder and passes its
+# absolute path in ad_project_dir, Vivado runs in the project folder.
+#
+# \return - absolute path
+#
+
+proc sysid_mem_init_dir {} {
+
+  global ad_project_dir
+  if {[info exists ad_project_dir] && $ad_project_dir != ""} {
+    return [file join [pwd] $ad_project_dir]
+  }
+  if {[info exists ::env(ADI_PROJECT_DIR)]} {
+    return [file join [pwd] $::env(ADI_PROJECT_DIR)]
+  }
+  return [pwd]
+}
+
+## Returns the project parameters as a "NAME=value NAME=value" string, in the
+# order in which they are passed to adi_project.
+#
+# \return - string
+#
+
+proc sysid_project_params_string {} {
+
+  global ad_project_param_list
+  set params {}
+  if {[info exists ad_project_param_list]} {
+    foreach {param value} $ad_project_param_list {
+      lappend params "$param=$value"
+    }
+  }
+  return [join $params " "]
+}
+
 ## Initialize global variables
 
-set mem_init_sys_file_path [pwd]
-if {[info exists ::env(ADI_PROJECT_DIR)]} {
-  set mem_init_sys_file_path [string trimright [pwd]/$::env(ADI_PROJECT_DIR) "/"]
-}
+set mem_init_sys_file_path [sysid_mem_init_dir]
 
 ## Converts a string input to hex and adds whitespace as padding to obtain the size defined by
 # the blocksize parameter.
@@ -126,12 +161,14 @@ proc rev_by_string {str} {
   return $rev;
 }
 
-## Generates a file used for initializing the system ROM.
+## Builds the content of the system ROM, without the padding to the ROM size.
 #
 # \param[custom_string] - string input
 #
+# \return - hex
+#
 
-proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
+proc sysid_sys_rom_hex {{custom_string {}}} {
   global project_name;
   if {[info exists project_name]} {
     puts "project_name: $project_name";
@@ -237,15 +274,28 @@ proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
   set comh_hex [format %0-[expr [expr $table_size - 2] * 8]s $comh_hex];
   append comh_hex "00000000" [checksum8bit $comh_hex] "000000";
 
-  set memory_size [expr int(pow(2, $address_bits)) * 8]
-  set sys_mem_hex [format %0-${memory_size}s [concat $comh_hex$verh_hex$projname_hex$boardname_hex$custom_hex]];
+  return $comh_hex$verh_hex$projname_hex$boardname_hex$custom_hex;
+}
 
-  if {[info exists ::env(ADI_PROJECT_DIR)]} {
-    set mem_init_sys_file_path [pwd]/$::env(ADI_PROJECT_DIR)mem_init_sys.txt
-  } else {
-    set mem_init_sys_file_path "mem_init_sys.txt"
+## Writes the system ROM content, padded to the ROM size, to mem_init_sys.txt.
+#
+# \param[sys_mem_hex] - ROM content, as returned by sysid_sys_rom_hex
+# \param[address_bits] - ROM address width
+#
+# \return - absolute path of the written file
+#
+
+proc sysid_write_sys_init_file {sys_mem_hex address_bits} {
+
+  set memory_size [expr int(pow(2, $address_bits)) * 8]
+  if {[string length $sys_mem_hex] > $memory_size} {
+    error "System ID ROM content needs [expr [string length $sys_mem_hex] / 8] words,\
+      ROM_ADDR_BITS=$address_bits provides only [expr $memory_size / 8]."
   }
-  set sys_mem_file [open ${mem_init_sys_file_path} "w"];
+  set sys_mem_hex [format %0-${memory_size}s $sys_mem_hex];
+
+  set mem_init_sys_file [file join [sysid_mem_init_dir] mem_init_sys.txt]
+  set sys_mem_file [open $mem_init_sys_file "w"];
 
   for {set i 0} {$i < [string length $sys_mem_hex]} {incr i} {
     if { ($i+1) % 8 == 0} {
@@ -255,6 +305,50 @@ proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
     }
   };
   close $sys_mem_file;
+  return $mem_init_sys_file
+}
+
+## Generates a file used for initializing the system ROM.
+#
+# \param[custom_string] - string input
+# \param[address_bits] - ROM address width
+#
+# \return - absolute path of the written file
+#
+
+proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
+
+  return [sysid_write_sys_init_file [sysid_sys_rom_hex $custom_string] $address_bits]
+}
+
+## Sets up the system ID: generates mem_init_sys.txt, with the project
+# parameters and the optional custom string, and configures axi_sysid_0 and
+# rom_sys_0 to use it. The ROM address width is the smallest one, starting
+# from address_bits, that fits the content.
+#
+# \param[custom_string] - extra information, appended after the project parameters
+# \param[address_bits] - minimum ROM address width
+#
+
+proc ad_sysid_init {{custom_string {}} {address_bits {9}}} {
+
+  set sys_cstring [string trim "[sysid_project_params_string] $custom_string"]
+  set sys_mem_hex [sysid_sys_rom_hex $sys_cstring]
+  while {[string length $sys_mem_hex] > [expr int(pow(2, $address_bits)) * 8]} {
+    incr address_bits
+  }
+  puts "System ID ROM_ADDR_BITS: $address_bits"
+  set mem_init_sys_file [sysid_write_sys_init_file $sys_mem_hex $address_bits]
+
+  if {[info commands set_instance_parameter_value] != ""} {
+    set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} $address_bits
+    set_instance_parameter_value rom_sys_0 {ROM_ADDR_BITS} $address_bits
+    set_instance_parameter_value rom_sys_0 {PATH_TO_FILE} $mem_init_sys_file
+  } else {
+    ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS $address_bits
+    ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE $mem_init_sys_file
+    ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS $address_bits
+  }
 }
 
 ## Generates a file used for initializing the PR ROM.
@@ -265,11 +359,7 @@ proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
 proc sysid_gen_pr_init_file {custom_string} {
 
   set custom_hex [stringtohex $custom_string 64];
-  if {[info exists ::env(ADI_PROJECT_DIR)]} {
-    set mem_init_pr_file_path $::env(ADI_PROJECT_DIR)mem_init_pr.txt
-  } else {
-    set mem_init_pr_file_path "mem_init_pr.txt"
-  }
+  set mem_init_pr_file_path [file join [sysid_mem_init_dir] mem_init_pr.txt]
 
   set pr_mem_file [open $mem_init_pr_file_path "w"];
   for {set i 0} {$i < [string length $custom_hex]} {incr i} {
