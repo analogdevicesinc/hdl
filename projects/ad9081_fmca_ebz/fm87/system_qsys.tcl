@@ -68,11 +68,7 @@ add_interface ref_clk_in clock sink
 set_interface_property ref_clk_in EXPORT_OF systemclk.refclk_fgt
 
 set TRANSCEIVER_TYPE "F-Tile"
-if [info exists ad_project_dir] {
-  source ../../common/ad9081_fmca_ebz_qsys.tcl
-} else {
-  source ../common/ad9081_fmca_ebz_qsys.tcl
-}
+source ../common/ad9081_fmca_ebz_qsys.tcl
 
 #system ID
 set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}

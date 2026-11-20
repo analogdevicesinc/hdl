@@ -44,11 +44,7 @@ set_instance_parameter_value sys_hps {I2C1_PinMuxing} {Unused}
 
 set_instance_parameter_value sys_hps {S2FCLK_USER0CLK_FREQ} {100.0}
 
-if [info exists ad_project_dir] {
-  source ../../common/ad4062_qsys.tcl
-} else {
-  source ../common/ad4062_qsys.tcl
-}
+source ../common/ad4062_qsys.tcl
 
 # system ID
 
