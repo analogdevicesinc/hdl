@@ -197,6 +197,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
   global ad_hdl_dir
   global ad_ghdl_dir
   global ad_project_dir
+  global ad_project_param_list
   global p_board
   global p_device
   global sys_zynq
@@ -320,6 +321,7 @@ proc adi_project_create {project_name mode parameter_list device {board "not-app
   # Set parameters of the top level file
   # Make the same parameters available to system_bd.tcl
   set proj_params [get_property generic [current_fileset]]
+  set ad_project_param_list $parameter_list
   foreach {param value} $parameter_list {
     lappend proj_params $param=$value
     set ad_project_params($param) $value

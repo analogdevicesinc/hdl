@@ -196,13 +196,7 @@ ad_cpu_interrupt ps-9 mb-9 v_frmbuf_wr_2/interrupt
 ad_cpu_interrupt ps-8 mb-8 v_frmbuf_wr_3/interrupt
 
 #system ID
-
-set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
+ad_sysid_init
 
 #system ID
-ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
-ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
-
-sysid_gen_sys_init_file
 

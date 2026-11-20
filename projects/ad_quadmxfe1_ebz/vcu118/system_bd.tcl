@@ -48,31 +48,7 @@ ad_ip_parameter $dac_offload_name/storage_unit CONFIG.RD_FIFO_ADDRESS_WIDTH 3
 ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 16
 
 #system ID
-ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 10
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
-ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 10
-
-set sys_cstring "$ad_project_params(JESD_MODE)\
-RX:RATE=$ad_project_params(RX_LANE_RATE)\
-M=$ad_project_params(RX_JESD_M)\
-L=$ad_project_params(RX_JESD_L)\
-S=$ad_project_params(RX_JESD_S)\
-NP=$ad_project_params(RX_JESD_NP)\
-LINKS=$ad_project_params(RX_NUM_LINKS)\
-KS/CH=$ad_project_params(RX_KS_PER_CHANNEL)\
-PLL_SEL=$ad_project_params(RX_PLL_SEL)\
-TX:RATE=$ad_project_params(TX_LANE_RATE)\
-M=$ad_project_params(TX_JESD_M)\
-L=$ad_project_params(TX_JESD_L)\
-S=$ad_project_params(TX_JESD_S)\
-NP=$ad_project_params(TX_JESD_NP)\
-LINKS=$ad_project_params(TX_NUM_LINKS)\
-KS/CH=$ad_project_params(TX_KS_PER_CHANNEL)\
-PLL_SEL=$ad_project_params(TX_PLL_SEL)\
-REF_CLK=$ad_project_params(REF_CLK_RATE)\
-DAC_TPL_XBAR=$ad_project_params(DAC_TPL_XBAR_ENABLE)"
-
-sysid_gen_sys_init_file $sys_cstring 10
+ad_sysid_init
 
 if {$ad_project_params(JESD_MODE) == "8B10B"} {
   # Parameters for 10Gpbs lane rate

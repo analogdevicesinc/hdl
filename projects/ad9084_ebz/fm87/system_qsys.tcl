@@ -87,9 +87,4 @@ ad_cpu_interconnect 0x000EA000 apollo_spi.spi_control_port
 ad_cpu_interrupt 18 apollo_spi.irq
 
 #system ID
-set_instance_parameter_value axi_sysid_0 {ROM_ADDR_BITS} {9}
-set_instance_parameter_value rom_sys_0 {ROM_ADDR_BITS} {9}
-
-set_instance_parameter_value rom_sys_0 {PATH_TO_FILE} "[pwd]/mem_init_sys.txt"
-
-sysid_gen_sys_init_file;
+ad_sysid_init

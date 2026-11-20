@@ -594,6 +594,19 @@ Running the command below will create a folder named **LVDSCMOSN1**.
 
    make LVDS_CMOS_N=1
 
+The parameters keep the order in which they were given on the command line.
+Variables that only control the build flow (``CFG``, ``MODE``, ``VERBOSE``,
+``REQUIRED_VIVADO_VERSION`` and the ``ADI_*`` build flags listed below) do not
+affect the folder name. The parameters used for a build are recorded in
+**build_params.txt** inside the folder.
+
+A project can restrict which variables are treated as parameters by defining
+``PROJECT_PARAMS`` in its Makefile, before including the project makefile:
+
+.. code-block:: makefile
+
+   PROJECT_PARAMS := RX_LANE_RATE TX_LANE_RATE RX_JESD_L RX_JESD_M
+
 Available build flags and parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

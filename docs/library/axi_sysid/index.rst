@@ -233,13 +233,20 @@ ADI uses to build projects. It is instantiated in two stages, first in the
 system_bd.tcl of each project.
 
 The information written to the System ID ROM(s) is obtained from Vivado in the
-early stages of project building. It is at this point that the user can choose
-the information that will be written to the "Custom String" areas.
+early stages of project building. The system_bd.tcl of each project calls
+``ad_sysid_init``, which generates **mem_init_sys.txt** in the build folder and
+configures ``axi_sysid_0`` and ``rom_sys_0`` to use it.
+
+The project parameters passed to ``adi_project`` in system_project.tcl are
+written automatically to the "Custom String" area, as ``NAME=value`` pairs.
+Information that is not a project parameter can be appended with the optional
+custom string argument. The ROM address width is sized automatically to fit the
+content, starting from 9; an optional second argument sets a larger minimum.
 
 .. code:: tcl
 
-   set sys_cstring "sys rom custom string placeholder"
-   sysid_gen_sys_init_file $sys_cstring
+   ad_sysid_init
+   ad_sysid_init "DAC_OFFLOAD:TYPE=$dac_offload_type SIZE=$dac_offload_size"
 
 Software Support
 --------------------------------------------------------------------------------
