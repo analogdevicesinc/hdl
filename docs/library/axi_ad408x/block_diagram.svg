@@ -550,41 +550,11 @@
        y="152.95148" />
     <rect
        style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect958"
-       width="30.195099"
-       height="23.444344"
-       x="87.362427"
-       y="71.033249" />
-    <rect
-       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
        id="rect958-1"
        width="36.765831"
        height="27.993313"
        x="82.294746"
        y="105.21623" />
-    <text
-       xml:space="preserve"
-       transform="matrix(0.28749283,0,0,0.26458333,-55.938679,-36.897189)"
-       id="text4758"
-       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760);display:inline;stroke-width:0.959329"><tspan
-         x="505.75977"
-         y="453.41916"
-         id="tspan1">ad_serdes_in</tspan></text>
-    <rect
-       style="fill:#ffcccc;fill-opacity:1;fill-rule:evenodd;stroke:#a01414;stroke-width:0.426;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.0426, 0.0426;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect958-2"
-       width="30.195099"
-       height="23.444344"
-       x="126.42592"
-       y="70.791069" />
-    <text
-       xml:space="preserve"
-       transform="matrix(0.28749283,0,0,0.26458333,-11.520597,-36.760299)"
-       id="text4758-5"
-       style="font-size:14px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';white-space:pre;shape-inside:url(#rect4760-6);display:inline;stroke-width:0.959329"><tspan
-         x="505.75977"
-         y="453.41916"
-         id="tspan6">ad_pack</tspan></text>
     <text
        xml:space="preserve"
        transform="scale(0.26458333)"
@@ -594,13 +564,19 @@
        xml:space="preserve"
        style="font-size:8.46667px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
        x="99.571869"
-       y="61.663799"
+       y="76.5"
        id="text21502"><tspan
          sodipodi:role="line"
          id="tspan21500"
          style="stroke-width:0.264583"
          x="99.571869"
-         y="61.663799">ad408x_phy</tspan></text>
+         y="76.5">ad408x_phy</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.2333px;line-height:1.25;font-family:Arial;text-anchor:middle;fill:#505050;stroke-width:0.264583"
+       x="122.25"
+       y="86"
+       id="text_phy_note">see PHY Data Path</text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,6.9183558,-6.8946301)"
@@ -765,8 +741,23 @@
        id="path51036-1-1-7" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.665;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutM-6-1-9-9)"
-       d="m 168.2491,114.62279 c 31.45126,0 31.45126,0 31.45126,0"
+       d="m 201.4,114.62279 c -31.2,0 -31.2,0 -31.2,0"
        id="path51036-9-3-4-7" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.665;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutM-6-1-9)"
+       d="m 168.28562,119.62 c 31.45126,0 31.45126,0 31.45126,0"
+       id="path_slots_select" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.6px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
+       x="169.2"
+       y="118.6"
+       id="text_slots_select"><tspan
+         sodipodi:role="line"
+         id="tspan_slots_select"
+         style="font-size:2.6px;stroke-width:0.264583"
+         x="169.2"
+         y="118.6">adc_sample_slots_select</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:3.175px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial, Normal';stroke-width:0.264583"
@@ -868,7 +859,7 @@
            id="tspan56449-8-0-4-5"
            style="font-size:3.175px;stroke-width:0.264583"
            x="36.71307"
-           y="67.386765">filter_data_ready_n</tspan></text>
+           y="67.386765">filter_rdy_n</tspan></text>
       <path
          style="fill:none;stroke:#000000;stroke-width:0.665;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutM-6-1-7-6-7)"
          d="m 34.955054,68.810651 c 31.451263,0 31.451263,0 31.451263,0"
@@ -946,32 +937,29 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:2.00906px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:0.265;stroke-dasharray:none"
+       style="font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';fill:#005aaa;fill-opacity:1;stroke-width:0.265"
        x="169.13988"
-       y="80.680878"
+       y="73.625343"
        id="text1"><tspan
          sodipodi:role="line"
-         style="stroke-width:0.265;stroke-dasharray:none"
          x="169.13988"
-         y="80.680878"
-         id="tspan2">             <tspan
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#005aaa;fill-opacity:1;stroke-width:0.265;stroke-dasharray:none"
-   id="tspan4">DWIDTH =</tspan></tspan><tspan
+         y="73.625343"
+         id="tspan_dw0">DWIDTH =</tspan><tspan
          sodipodi:role="line"
-         style="stroke-width:0.265;stroke-dasharray:none"
+         x="169.13988"
+         y="77.153114"
+         id="tspan_dw1">(ENABLE_20BIT ||</tspan><tspan
+         sodipodi:role="line"
+         x="169.13988"
+         y="80.680885"
+         id="tspan_dw2"> (ENABLE_14BIT &amp;&amp;</tspan><tspan
+         sodipodi:role="line"
          x="169.13988"
          y="84.208656"
-         id="tspan3"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#005aaa;fill-opacity:1;stroke-width:0.265;stroke-dasharray:none"
-           id="tspan5">((ADC_N_BITS &gt; 16)? </tspan></tspan><tspan
+         id="tspan_dw3">  NUM_LANES == 2))</tspan><tspan
          sodipodi:role="line"
-         style="stroke-width:0.265;stroke-dasharray:none"
          x="169.13988"
          y="87.736427"
-         id="tspan11"><tspan
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#005aaa;fill-opacity:1;stroke-width:0.265;stroke-dasharray:none"
-   id="tspan12">         32 : 16)</tspan><tspan
-   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal"
-   id="tspan10"> </tspan> </tspan></text>
+         id="tspan_dw4">? 32 : 16</tspan></text>
   </g>
 </svg>
