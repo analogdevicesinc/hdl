@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2023, 2025 Analog Devices, Inc.
+## Copyright (c) 2018 - 2023, 2025 - 2026 Analog Devices, Inc.
 ## SPDX short identifier: BSD-1-Clause
 ####################################################################################
 
@@ -8,38 +8,12 @@ HDL_PROJECT_PATH := $(subst scripts/project-xilinx.mk,,$(lastword $(MAKEFILE_LIS
 HDL_LIBRARY_PATH := $(HDL_PROJECT_PATH)../library/
 
 include $(HDL_PROJECT_PATH)../quiet.mk
+include $(HDL_PROJECT_PATH)scripts/project-params.mk
 
-# Parse the config file and convert it to environment variables
-PARAMS_REPLACE_LIST := JESD LANE # list of words that should be removed from the parameter names
-GEN_SED := '$(foreach name, $(PARAMS_REPLACE_LIST), s/$(name)//g;);s/_//g'
-ifdef CFG
-    include $(CFG)
-    export $(shell sed 's/=.*//' $(CFG) | tr '\n' ' ')
-    PARAMS := $(shell cat $(CFG) | tr '\n' ' ')
-    DIR_NAME := $(basename $(notdir $(CFG)))
-endif
-
-VIVADO := vivado -tempDir .Xil -mode batch -source
-
-# Parse the variables passed to make and convert them to the filename format
-ifeq ($(shell expr $(MAKELEVEL) % 2),0)
-  CMD_VARIABLES := $(shell echo $(-*-command-variables-*-) | tac -s ' ')
+ifneq ($(DIR_NAME),)
+    VIVADO := vivado -tempDir $(DIR_NAME)/.Xil -log $(DIR_NAME)/vivado.log -journal $(DIR_NAME)/vivado.jou -mode batch -source
 else
-  CMD_VARIABLES := $(shell echo $(MAKEOVERRIDES))
-endif
-
-ifneq ($(strip $(CMD_VARIABLES)), )
-    PARAMS := $(shell echo $(CMD_VARIABLES) | sed -e 's/[=]/_/g')
-    GEN_NAME := $(shell echo $(PARAMS) | sed -e $(GEN_SED) | sed -e 's/[ .]/_/g')
-    DIR_NAME := $(if $(strip $(DIR_NAME)),$(DIR_NAME)_$(GEN_NAME),$(GEN_NAME))
-endif
-
-ifneq ($(strip $(DIR_NAME)), )
-    PROJECT_NAME := $(DIR_NAME)/$(PROJECT_NAME)
-    $(shell test -d $(DIR_NAME) || mkdir $(DIR_NAME))
-    ADI_PROJECT_DIR := $(DIR_NAME)/
-    export ADI_PROJECT_DIR
-	VIVADO := vivado -tempDir $(DIR_NAME)/.Xil -log $(DIR_NAME)/vivado.log -journal $(DIR_NAME)/vivado.jou -mode batch -source
+    VIVADO := vivado -tempDir .Xil -mode batch -source
 endif
 
 CLEAN_TARGET := *.cache
@@ -67,7 +41,7 @@ ifneq ($(strip $(DIR_NAME)), )
 endif
 CLEAN_TARGET += .Xil
 
-CLEAN_DIRS := $(dir $(wildcard */*_vivado.log))
+CLEAN_DIRS := $(sort $(dir $(wildcard */*_vivado.log */build_params.txt)))
 
 # Common dependencies that all projects have
 M_DEPS += system_project.tcl
@@ -114,6 +88,7 @@ $(EXTERNAL_DEPS):
 MODE ?= "default"
 
 $(PROJECT_NAME).sdk/system_top.xsa: $(M_DEPS)
+	@$(adi_project_dir_setup)
 	@if [ $(MODE) = incr ]; then \
 		if [ -f */impl_1/system_top_routed.dcp ]; then \
 			echo Found previous run result at `ls */impl_1/system_top_routed.dcp`; \
