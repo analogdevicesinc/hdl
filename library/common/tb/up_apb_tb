@@ -1,0 +1,8 @@
+#!/bin/bash
+
+SOURCE="up_apb_tb.v"
+SOURCE+=" ../up_apb.v"
+SOURCE+=" ../../util_apb_pipe/util_apb_pipe_stage.v"
+
+cd `dirname $0`
+source run_tb.sh

@@ -257,6 +257,110 @@ proc sysid_gen_sys_init_file {{custom_string {}} {address_bits {9}}} {
   close $sys_mem_file;
 }
 
+## Generates the system ROM init file as sysid_gen_sys_init_file, with options.
+#
+# \opt[custom_string] -custom_string "MII", default empty
+# \opt[address_bits]  -address_bits 10, default 9
+# \opt[board]         -board mpfs_video_kit, for board names with '_';
+#                     default the part after the last '_' of the project name,
+#                     as sysid_gen_sys_init_file
+# \opt[project]       -project fmcomms2, default the project name without its
+#                     _<board> suffix
+# \opt[output_dir]    -output_dir <dir>, where the file is written, default
+#                     the current directory
+#
+# \return - the path of the generated file
+#
+
+proc adi_gen_sysid_init_file {args} {
+  global project_name
+
+  array set opt {
+    custom_string {}
+    address_bits  9
+    board         {}
+    project       {}
+    output_dir    {}
+  }
+  if {[llength $args] % 2} {
+    error "adi_gen_sysid_init_file: an option without a value in '$args'"
+  }
+  foreach {key value} $args {
+    set name [string range $key 1 end]
+    if {[string index $key 0] ne "-" || ![info exists opt($name)]} {
+      error "adi_gen_sysid_init_file: unknown option '$key'"
+    }
+    set opt($name) $value
+  }
+
+  # the names, checked before anything is written
+  set rename [expr {$opt(board) ne {} || $opt(project) ne {}}]
+  if {$rename} {
+    if {![info exists project_name]} {
+      set project_name [current_project]
+    }
+    set project_tail [lindex [split $project_name /] end]
+    if {$opt(board) eq {}} {
+      set opt(board) [lindex [split $project_tail _] end]
+    }
+    if {$opt(project) eq {}} {
+      set suffix "_$opt(board)"
+      set start [expr {[string length $project_tail] - [string length $suffix]}]
+      if {$start > 0 && [string range $project_tail $start end] eq $suffix} {
+        set opt(project) [string range $project_tail 0 [expr {$start - 1}]]
+      } else {
+        set opt(project) $project_tail
+      }
+    }
+    foreach field {project board} {
+      if {[string length $opt($field)] > 32} {
+        error "adi_gen_sysid_init_file: the $field name '$opt($field)' is longer than 32 characters"
+      }
+    }
+  }
+
+  # sysid_gen_sys_init_file writes into the current directory (or into
+  # ADI_PROJECT_DIR in it)
+  set saved_pwd [pwd]
+  if {$opt(output_dir) ne {}} {
+    cd $opt(output_dir)
+  }
+  set failed [catch {sysid_gen_sys_init_file $opt(custom_string) $opt(address_bits)} result]
+  if {[info exists ::env(ADI_PROJECT_DIR)]} {
+    set file_path [pwd]/$::env(ADI_PROJECT_DIR)mem_init_sys.txt
+  } else {
+    set file_path [file join [pwd] mem_init_sys.txt]
+  }
+  cd $saved_pwd
+  if {$failed} {
+    error $result $::errorInfo
+  }
+
+  if {!$rename} {
+    return $file_path
+  }
+
+  # rewrite the project and board name fields (32 bytes each, not in any
+  # checksum) at the offsets of the header table (words 2 and 3)
+  set fh [open $file_path r]
+  set words [split [string trim [read $fh]] \n]
+  close $fh
+  scan [lindex $words 2] %x projname_offset
+  scan [lindex $words 3] %x boardname_offset
+  foreach {offset name} [list $projname_offset $opt(project) $boardname_offset $opt(board)] {
+    set name_hex [hexstr_flip [stringtohex $name 32]]
+    for {set i 0} {$i < 8} {incr i} {
+      lset words [expr {$offset + $i}] [string range $name_hex [expr {$i * 8}] [expr {$i * 8 + 7}]]
+    }
+  }
+  set fh [open $file_path w]
+  puts $fh [join $words \n]
+  close $fh
+
+  puts "adi_gen_sysid_init_file: project $opt(project), board $opt(board)"
+  return $file_path
+}
+
 ## Generates a file used for initializing the PR ROM.
 #
 # \param[custom_string] - string input

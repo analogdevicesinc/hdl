@@ -1,0 +1,18 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+## SPDX short identifier: ADIBSD
+###############################################################################
+
+include "fmcomms2_dma_memory.bfm"
+
+procedure main;
+
+  debug 1
+  timeout 100000
+  wait 10000
+  call check_tx_buffer
+  wait 20000
+  call read_rx_buffer
+  flush
+
+return

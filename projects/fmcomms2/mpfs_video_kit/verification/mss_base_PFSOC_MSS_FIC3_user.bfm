@@ -1,0 +1,16 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+## SPDX short identifier: ADIBSD
+###############################################################################
+
+# Persistent replacement for Libero's generated FIC3 user BFM.
+include "fmcomms2_fic3_loopback.bfm"
+
+procedure main;
+
+  debug 1
+  timeout 200000
+  wait 5000
+  call fmcomms2_fic3_loopback
+
+return

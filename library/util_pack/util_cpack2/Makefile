@@ -22,4 +22,8 @@ XILINX_DEPS += ../../interfaces/fifo_wr_rtl.xml
 
 INTEL_DEPS += util_cpack2_hw.tcl
 
+MICROCHIP_DEPS += util_cpack2.v
+MICROCHIP_DEPS += util_cpack2_mc.v
+MICROCHIP_DEPS += util_cpack2_mc.tcl
+
 include ../../scripts/library.mk

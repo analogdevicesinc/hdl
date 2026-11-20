@@ -19,4 +19,8 @@ XILINX_DEPS += util_upack2_ip.tcl
 
 INTEL_DEPS += util_upack2_hw.tcl
 
+MICROCHIP_DEPS += util_upack2.v
+MICROCHIP_DEPS += util_upack2_mc.v
+MICROCHIP_DEPS += util_upack2_mc.tcl
+
 include ../../scripts/library.mk

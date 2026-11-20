@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd `dirname $0`
+exec bash ../../../common/tb/run_tb_microchip.sh --top ad_data_out_tb --dir run/ad_data_out_tb \
+	ad_data_out_tb.v \
+	../ad_data_out.v \
+	../ad_iod_delay_ctrl.v \
+	../../../util_cdc/sync_bits.v \
+	../../../util_cdc/sync_data.v \
+	"$@"

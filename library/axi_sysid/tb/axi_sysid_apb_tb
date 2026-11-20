@@ -1,0 +1,9 @@
+#!/bin/bash
+
+SOURCE="axi_sysid_apb_tb.v"
+SOURCE+=" ../axi_sysid.v"
+SOURCE+=" ../../common/up_apb.v"
+SOURCE+=" ../../common/up_axi.v"
+
+cd `dirname $0`
+source ../../common/tb/run_tb.sh

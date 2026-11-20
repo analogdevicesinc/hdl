@@ -7,6 +7,7 @@
 LIBRARY_NAME := axi_dmac
 
 GENERIC_DEPS += ../common/ad_mem_asym.v
+GENERIC_DEPS += ../common/up_apb.v
 GENERIC_DEPS += ../common/up_axi.v
 GENERIC_DEPS += address_generator.v
 GENERIC_DEPS += axi_dmac.v
@@ -72,5 +73,13 @@ LATTICE_DEPS += ../util_cdc/sync_gray.v
 LATTICE_DEPS += axi_dmac_ltt.tcl
 
 LATTICE_INTERFACE_DEPS += interfaces_ltt
+
+MICROCHIP_DEPS += ../common/ad_mem.v
+MICROCHIP_DEPS += ../util_axis_fifo/util_axis_fifo.v
+MICROCHIP_DEPS += ../util_axis_fifo/util_axis_fifo_address_generator.v
+MICROCHIP_DEPS += ../util_cdc/sync_bits.v
+MICROCHIP_DEPS += ../util_cdc/sync_event.v
+MICROCHIP_DEPS += ../util_cdc/sync_gray.v
+MICROCHIP_DEPS += axi_dmac_mc.tcl
 
 include ../scripts/library.mk

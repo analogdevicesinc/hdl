@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1444" height="948" viewBox="0 0 1444 948" font-family="Arial, Helvetica, sans-serif">
+<defs><marker id="aA01414" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#A01414"/></marker><marker id="sA01414" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M10 0 L0 5 L10 10 z" fill="#A01414"/></marker><marker id="a0F3296" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0F3296"/></marker><marker id="s0F3296" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M10 0 L0 5 L10 10 z" fill="#0F3296"/></marker><marker id="aE56F1A" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#E56F1A"/></marker><marker id="sE56F1A" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M10 0 L0 5 L10 10 z" fill="#E56F1A"/></marker><marker id="a8D00FF" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#8D00FF"/></marker><marker id="s8D00FF" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M10 0 L0 5 L10 10 z" fill="#8D00FF"/></marker><marker id="a000000" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#000000"/></marker><marker id="s000000" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M10 0 L0 5 L10 10 z" fill="#000000"/></marker></defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<g transform="translate(0 70)">
+<rect x="10" y="-58" width="16" height="12" fill="#D2E6EB" stroke="#D2E6EB" stroke-width="0"/>
+<text x="32" y="-48" font-size="12" text-anchor="start" fill="#000000"><tspan x="32" dy="0">Transmit path</tspan></text>
+<rect x="10" y="-36" width="16" height="12" fill="#FFCCCC" stroke="#FFCCCC" stroke-width="0"/>
+<text x="32" y="-26" font-size="12" text-anchor="start" fill="#000000"><tspan x="32" dy="0">Receive path</tspan></text>
+<path d="M130 -52 L160 -52" fill="none" stroke="#915F00" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="166" y="-48" font-size="12" text-anchor="start" fill="#000000"><tspan x="166" dy="0">Clock domain</tspan></text>
+<rect x="8" y="-16" width="1134" height="882" fill="#FFFFFF" stroke="#000000" stroke-width="1.6"/>
+<text x="1128" y="14" font-size="18" font-weight="bold" text-anchor="end" fill="#000000"><tspan x="1128" dy="0">PolarFire SoC Video Kit</tspan></text>
+<path d="M22 222 L995 222 L995 820 L22 820 L22 222" fill="none" stroke="#915F00" stroke-width="1.2" stroke-dasharray="5,4"/>
+<path d="M175 222 L175 820" fill="none" stroke="#915F00" stroke-width="1.2" stroke-dasharray="5,4"/>
+<path d="M400 222 L400 820" fill="none" stroke="#915F00" stroke-width="1.2" stroke-dasharray="5,4"/>
+<text x="28" y="800" font-size="11" font-weight="bold" text-anchor="start" fill="#000000"><tspan x="28" dy="0">sys_clk = 100 MHz</tspan><tspan x="28" dy="13.2">(PF_CCC)</tspan></text>
+<text x="181" y="813.2" font-size="11" font-weight="bold" text-anchor="start" fill="#8D00FF"><tspan x="181" dy="0">61.44 MHz</tspan></text>
+<text x="406" y="800" font-size="11" font-weight="bold" text-anchor="start" fill="#E56F1A"><tspan x="406" dy="0">245.76 MHz (2R2T mode)</tspan><tspan x="406" dy="13.2">122.88 MHz (1R1T mode)</tspan></text>
+<rect x="16" y="72" width="676" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<rect x="16" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="31.25" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 31.25 107)"><tspan x="31.25" dy="0">FIC0</tspan><tspan x="31.25" dy="13.2">(AXI4)</tspan></text>
+<rect x="52" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="67.25" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 67.25 107)"><tspan x="67.25" dy="0">FIC1</tspan><tspan x="67.25" dy="13.2">(AXI4)</tspan></text>
+<rect x="88" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="109.85" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 109.85 107)"><tspan x="109.85" dy="0">Interrupts</tspan></text>
+<rect x="124" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="139.25" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 139.25 107)"><tspan x="139.25" dy="0">FIC3</tspan><tspan x="139.25" dy="13.2">(APB)</tspan></text>
+<text x="300" y="104" font-size="20" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="300" dy="0">PolarFire SoC MSS</tspan></text>
+<text x="300" y="124" font-size="12" text-anchor="middle" fill="#000000"><tspan x="300" dy="0">4x U54 + E51 RISC-V</tspan></text>
+<rect x="440" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="461.85" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 461.85 107)"><tspan x="461.85" dy="0">DDR</tspan></text>
+<rect x="476" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="497.85" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 497.85 107)"><tspan x="497.85" dy="0">Ethernet</tspan></text>
+<rect x="512" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="533.85" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 533.85 107)"><tspan x="533.85" dy="0">SD/eMMC</tspan></text>
+<rect x="548" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="569.85" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 569.85 107)"><tspan x="569.85" dy="0">UART</tspan></text>
+<rect x="584" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="605.85" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 605.85 107)"><tspan x="605.85" dy="0">SPI</tspan></text>
+<rect x="620" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="641.85" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 641.85 107)"><tspan x="641.85" dy="0">I2C</tspan></text>
+<rect x="656" y="72" width="36" height="70" fill="#EBEBEB" stroke="#000000" stroke-width="1.2"/>
+<text x="677.85" y="107" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 677.85 107)"><tspan x="677.85" dy="0">GPIO</tspan></text>
+<rect x="442" y="-8" width="32" height="50" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="461.85" y="17" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 461.85 17)"><tspan x="461.85" dy="0">LPDDR4</tspan></text>
+<path d="M458 42 L458 72" fill="none" stroke="#000000" stroke-width="1.2" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<rect x="478" y="-8" width="32" height="50" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="491.25" y="17" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 491.25 17)"><tspan x="491.25" dy="0">SGMII</tspan><tspan x="491.25" dy="13.2">PHY</tspan></text>
+<path d="M494 42 L494 72" fill="none" stroke="#000000" stroke-width="1.2" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<rect x="514" y="-8" width="32" height="50" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="527.25" y="17" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 527.25 17)"><tspan x="527.25" dy="0">SD</tspan><tspan x="527.25" dy="13.2">card</tspan></text>
+<path d="M530 42 L530 72" fill="none" stroke="#000000" stroke-width="1.2" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<rect x="550" y="-8" width="32" height="50" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="563.25" y="17" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 563.25 17)"><tspan x="563.25" dy="0">USB</tspan><tspan x="563.25" dy="13.2">UART</tspan></text>
+<path d="M566 42 L566 72" fill="none" stroke="#000000" stroke-width="1.2" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<path d="M602 142 L602 172 L1072 172 L1072 200" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<path d="M638 142 L638 165 L1088 165 L1088 200" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<path d="M674 142 L674 158 L1104 158 L1104 200" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<rect x="124" y="180" width="236" height="24" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="242" y="196.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="242" dy="0">util_apb_pipe + CoreAPB3</tspan></text>
+<path d="M142 142 L142 180" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<rect x="820" y="180" width="80" height="24" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="860" y="196.2" font-size="12" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="860" dy="0">axi_sysid</tspan></text>
+<path d="M360 187 L820 187" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<path d="M360 199 L620 199 L620 236" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<path d="M165 204 L165 250" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<path d="M132 204 L132 625 L150 625" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<path d="M98 166 L98 142" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)"/>
+<text x="102" y="170" font-size="11" font-weight="bold" text-anchor="end" fill="#000000" transform="rotate(-90 102 170)"><tspan x="102" dy="0">TX_IRQ</tspan></text>
+<path d="M114 166 L114 142" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)"/>
+<text x="118" y="170" font-size="11" font-weight="bold" text-anchor="end" fill="#000000" transform="rotate(-90 118 170)"><tspan x="118" dy="0">RX_IRQ</tspan></text>
+<path d="M160 430 L160 452" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)"/>
+<text x="164" y="456" font-size="11" font-weight="bold" text-anchor="end" fill="#000000" transform="rotate(-90 164 456)"><tspan x="164" dy="0">TX_IRQ</tspan></text>
+<path d="M160 595 L160 573" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)"/>
+<text x="164" y="569" font-size="11" font-weight="bold" text-anchor="start" fill="#000000" transform="rotate(-90 164 569)"><tspan x="164" dy="0">RX_IRQ</tspan></text>
+<rect x="50" y="250" width="40" height="180" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="74.2" y="340" font-size="12" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 74.2 340)"><tspan x="74.2" dy="0">AXI4 INTERCONNECT</tspan></text>
+<rect x="50" y="595" width="40" height="180" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="74.2" y="685" font-size="12" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 74.2 685)"><tspan x="74.2" dy="0">AXI4 INTERCONNECT</tspan></text>
+<path d="M70 142 L70 250" fill="none" stroke="#0F3296" stroke-width="2" marker-end="url(#a0F3296)" marker-start="url(#s0F3296)"/>
+<path d="M50 640 L34 640 L34 142" fill="none" stroke="#A01414" stroke-width="2" marker-end="url(#aA01414)" marker-start="url(#sA01414)"/>
+<rect x="46" y="480" width="74" height="46" fill="#FFFFCC" stroke="#A0A014" stroke-width="1.2"/>
+<text x="83" y="500.25" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="83" dy="0">PF_CCC</tspan><tspan x="83" dy="13.2">100 MHz</tspan></text>
+<rect x="560" y="236" width="425" height="549" fill="#D0FFDC" stroke="#0F9642" stroke-width="1.6"/>
+<text x="748" y="258" font-size="18" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="748" dy="0">AD9361 CORE</tspan></text>
+<text x="628" y="213" font-size="11" text-anchor="start" fill="#000000"><tspan x="628" dy="0">axi_ad9361</tspan></text>
+<rect x="835" y="258" width="130" height="512" fill="#FFFFFF" stroke="#0F3296" stroke-width="1.4"/>
+<rect x="850" y="268" width="100" height="144" fill="#D2E6EB" stroke="#0F3296" stroke-width="1.2"/>
+<text x="895" y="340" font-size="13" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 895 340)"><tspan x="895" dy="0">TX INTERFACE</tspan></text>
+<text x="914" y="340" font-size="11" text-anchor="middle" fill="#000000" transform="rotate(-90 914 340)"><tspan x="914" dy="0">IOD DDR out + FB_CLK</tspan></text>
+<rect x="850" y="618" width="100" height="144" fill="#FFCCCC" stroke="#A01414" stroke-width="1.2"/>
+<text x="895" y="690" font-size="13" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 895 690)"><tspan x="895" dy="0">RX INTERFACE</tspan></text>
+<text x="914" y="690" font-size="11" text-anchor="middle" fill="#000000" transform="rotate(-90 914 690)"><tspan x="914" dy="0">IOD DDR in + delay</tspan></text>
+<rect x="850" y="430" width="100" height="56" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="900" y="455.25" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="900" dy="0">IOD delay</tspan><tspan x="900" dy="13.2">control</tspan></text>
+<rect x="845" y="504" width="110" height="104" fill="#FFFFCC" stroke="#A0A014" stroke-width="1.2"/>
+<text x="900" y="520" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="900" dy="0">ad_data_clk</tspan></text>
+<path d="M905 562 L927 551 L927 573 Z" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<path d="M860 562 L882 551 L882 573 Z" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<path d="M905 562 L882 562" fill="none" stroke="#000000" stroke-width="1.2" marker-end="url(#a000000)"/>
+<text x="916" y="590" font-size="11" text-anchor="middle" fill="#000000"><tspan x="916" dy="0">INBUF_DIFF</tspan></text>
+<text x="871" y="543" font-size="11" text-anchor="middle" fill="#000000"><tspan x="871" dy="0">CLKINT</tspan></text>
+<path d="M1060 562 L927 562" fill="none" stroke="#E56F1A" stroke-width="1.4" marker-end="url(#aE56F1A)"/>
+<text x="1027" y="556" font-size="11" font-weight="bold" text-anchor="middle" fill="#E56F1A"><tspan x="1027" dy="0">DATA_CLK</tspan></text>
+<rect x="582" y="280" width="240" height="144" fill="#D2E6EB" stroke="#0F3296" stroke-width="1"/>
+<rect x="578" y="276" width="240" height="144" fill="#D2E6EB" stroke="#0F3296" stroke-width="1"/>
+<rect x="574" y="272" width="240" height="144" fill="#D2E6EB" stroke="#0F3296" stroke-width="1"/>
+<rect x="570" y="268" width="240" height="144" fill="#D2E6EB" stroke="#0F3296" stroke-width="1"/>
+<text x="690" y="289" font-size="14" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="690" dy="0">TX CHANNEL</tspan></text>
+<text x="648" y="316" font-size="11" font-weight="bold" text-anchor="end" fill="#000000"><tspan x="648" dy="0">DMA</tspan></text>
+<path d="M650 312 L668 312" fill="none" stroke="#000000" stroke-width="1"/>
+<text x="648" y="334" font-size="11" font-weight="bold" text-anchor="end" fill="#000000"><tspan x="648" dy="0">DDS</tspan></text>
+<path d="M650 330 L668 330" fill="none" stroke="#000000" stroke-width="1"/>
+<text x="648" y="352" font-size="11" font-weight="bold" text-anchor="end" fill="#000000"><tspan x="648" dy="0">PATTERN</tspan></text>
+<path d="M650 348 L668 348" fill="none" stroke="#000000" stroke-width="1"/>
+<text x="648" y="370" font-size="11" font-weight="bold" text-anchor="end" fill="#000000"><tspan x="648" dy="0">PRBS</tspan></text>
+<path d="M650 366 L668 366" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M668 300 L684 310 L684 366 L668 376 Z" fill="#EBEBEB" stroke="#000000"/>
+<path d="M684 338 L704 338" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#a000000)"/>
+<rect x="704" y="318" width="80" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="744" y="335.25" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="744" dy="0">IQ</tspan><tspan x="744" dy="13.2">Correction</tspan></text>
+<path d="M784 338 L810 338" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M816 332 L840 332 L840 327 L850 340 L840 353 L840 348 L816 348 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="828" y="344" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="828" dy="0">48b</tspan></text>
+<rect x="582" y="630" width="240" height="144" fill="#FFCCCC" stroke="#A01414" stroke-width="1"/>
+<rect x="578" y="626" width="240" height="144" fill="#FFCCCC" stroke="#A01414" stroke-width="1"/>
+<rect x="574" y="622" width="240" height="144" fill="#FFCCCC" stroke="#A01414" stroke-width="1"/>
+<rect x="570" y="618" width="240" height="144" fill="#FFCCCC" stroke="#A01414" stroke-width="1"/>
+<text x="690" y="639" font-size="14" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="690" dy="0">RX CHANNEL</tspan></text>
+<rect x="606" y="710" width="46" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="629" y="727.25" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="629" dy="0">IQ</tspan><tspan x="629" dy="13.2">Corr</tspan></text>
+<rect x="700" y="710" width="48" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="724" y="727.25" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="724" dy="0">DC</tspan><tspan x="724" dy="13.2">Filter</tspan></text>
+<rect x="768" y="700" width="38" height="44" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="787" y="719.25" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="787" dy="0">PN</tspan><tspan x="787" dy="13.2">MON</tspan></text>
+<path d="M582 676 L596 662 L596 740 L582 726 Z" fill="#EBEBEB" stroke="#000000"/>
+<path d="M676 676 L690 662 L690 740 L676 726 Z" fill="#EBEBEB" stroke="#000000"/>
+<path d="M810 672 L690 672" fill="none" stroke="#000000" stroke-width="1"/>
+<circle cx="787" cy="672" r="2.8" fill="#000000"/>
+<path d="M787 672 L787 700" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#a000000)"/>
+<circle cx="760" cy="672" r="2.8" fill="#000000"/>
+<path d="M760 672 L760 730 L748 730" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M700 730 L690 730" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M676 701 L664 701" fill="none" stroke="#000000" stroke-width="1"/>
+<circle cx="664" cy="701" r="2.8" fill="#000000"/>
+<path d="M664 701 L664 672 L596 672" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M664 701 L664 730 L652 730" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M606 730 L596 730" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M582 701 L570 701" fill="none" stroke="#000000" stroke-width="1" marker-end="url(#a000000)"/>
+<path d="M850 664 L826 664 L826 659 L816 672 L826 685 L826 680 L850 680 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="838" y="676" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="838" dy="0">48b</tspan></text>
+<rect x="150" y="250" width="60" height="180" fill="#D2E6EB" stroke="#0F3296" stroke-width="1.2"/>
+<text x="185.6" y="340" font-size="16" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 185.6 340)"><tspan x="185.6" dy="0">AXI_DMAC</tspan></text>
+<rect x="260" y="250" width="60" height="180" fill="#D2E6EB" stroke="#0F3296" stroke-width="1.2"/>
+<text x="295.6" y="340" font-size="16" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 295.6 340)"><tspan x="295.6" dy="0">UTIL_UPACK2</tspan></text>
+<rect x="370" y="250" width="60" height="180" fill="#D2E6EB" stroke="#0F3296" stroke-width="1.2"/>
+<text x="405.6" y="340" font-size="16" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 405.6 340)"><tspan x="405.6" dy="0">UTIL_RFIFO</tspan></text>
+<rect x="150" y="595" width="60" height="180" fill="#FFCCCC" stroke="#A01414" stroke-width="1.2"/>
+<text x="185.6" y="685" font-size="16" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 185.6 685)"><tspan x="185.6" dy="0">AXI_DMAC</tspan></text>
+<rect x="260" y="595" width="60" height="180" fill="#FFCCCC" stroke="#A01414" stroke-width="1.2"/>
+<text x="295.6" y="685" font-size="16" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 295.6 685)"><tspan x="295.6" dy="0">UTIL_CPACK2</tspan></text>
+<rect x="370" y="595" width="60" height="180" fill="#FFCCCC" stroke="#A01414" stroke-width="1.2"/>
+<text x="405.6" y="685" font-size="16" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 405.6 685)"><tspan x="405.6" dy="0">UTIL_WFIFO</tspan></text>
+<path d="M90 332 L136 332 L136 327 L150 340 L136 353 L136 348 L90 348 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="113" y="344" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="113" dy="0">64b</tspan></text>
+<path d="M210 332 L246 332 L246 327 L260 340 L246 353 L246 348 L210 348 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="228" y="344" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="228" dy="0">64b</tspan></text>
+<path d="M150 677 L104 677 L104 672 L90 685 L104 698 L104 693 L150 693 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="127" y="689" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="127" dy="0">64b</tspan></text>
+<path d="M260 677 L224 677 L224 672 L210 685 L224 698 L224 693 L260 693 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="242" y="689" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="242" dy="0">64b</tspan></text>
+<path d="M320 282 L356 282 L356 277 L370 290 L356 303 L356 298 L320 298 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="338" y="294" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="338" dy="0">16b</tspan></text>
+<path d="M430 282 L556 282 L556 277 L570 290 L556 303 L556 298 L430 298 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="493" y="294" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="493" dy="0">16b</tspan></text>
+<path d="M370 632 L334 632 L334 627 L320 640 L334 653 L334 648 L370 648 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="352" y="644" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="352" dy="0">16b</tspan></text>
+<path d="M570 632 L444 632 L444 627 L430 640 L444 653 L444 648 L570 648 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="507" y="644" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="507" dy="0">16b</tspan></text>
+<path d="M320 315 L356 315 L356 310 L370 323 L356 336 L356 331 L320 331 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="338" y="327" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="338" dy="0">16b</tspan></text>
+<path d="M430 315 L556 315 L556 310 L570 323 L556 336 L556 331 L430 331 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="493" y="327" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="493" dy="0">16b</tspan></text>
+<path d="M370 665 L334 665 L334 660 L320 673 L334 686 L334 681 L370 681 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="352" y="677" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="352" dy="0">16b</tspan></text>
+<path d="M570 665 L444 665 L444 660 L430 673 L444 686 L444 681 L570 681 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="507" y="677" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="507" dy="0">16b</tspan></text>
+<path d="M320 348 L356 348 L356 343 L370 356 L356 369 L356 364 L320 364 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="338" y="360" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="338" dy="0">16b</tspan></text>
+<path d="M430 348 L556 348 L556 343 L570 356 L556 369 L556 364 L430 364 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="493" y="360" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="493" dy="0">16b</tspan></text>
+<path d="M370 698 L334 698 L334 693 L320 706 L334 719 L334 714 L370 714 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="352" y="710" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="352" dy="0">16b</tspan></text>
+<path d="M570 698 L444 698 L444 693 L430 706 L444 719 L444 714 L570 714 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="507" y="710" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="507" dy="0">16b</tspan></text>
+<path d="M320 381 L356 381 L356 376 L370 389 L356 402 L356 397 L320 397 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="338" y="393" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="338" dy="0">16b</tspan></text>
+<path d="M430 381 L556 381 L556 376 L570 389 L556 402 L556 397 L430 397 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="493" y="393" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="493" dy="0">16b</tspan></text>
+<path d="M370 731 L334 731 L334 726 L320 739 L334 752 L334 747 L370 747 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="352" y="743" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="352" dy="0">16b</tspan></text>
+<path d="M570 731 L444 731 L444 726 L430 739 L444 752 L444 747 L570 747 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="507" y="743" font-size="11" font-weight="bold" text-anchor="middle" fill="#FFFFFF"><tspan x="507" dy="0">16b</tspan></text>
+<rect x="1060" y="200" width="56" height="590" fill="#FFFFFF" stroke="#000000" stroke-width="1.6"/>
+<text x="1092.9" y="495" font-size="14" font-weight="bold" text-anchor="middle" fill="#000000" transform="rotate(-90 1092.9 495)"><tspan x="1092.9" dy="0">FMC CONNECTOR (HPC)</tspan></text>
+<path d="M965 332 L1046 332 L1046 327 L1060 340 L1046 353 L1046 348 L965 348 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<text x="1027" y="280" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="1027" dy="0">FRAME</tspan><tspan x="1027" dy="13.2">TX_D[5:0]</tspan><tspan x="1027" dy="13.2">ENABLE</tspan><tspan x="1027" dy="13.2">TXNRX</tspan></text>
+<path d="M1060 672 L979 672 L979 667 L965 680 L979 693 L979 688 L1060 688 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<text x="1027" y="643" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="1027" dy="0">FRAME</tspan><tspan x="1027" dy="13.2">RX_D[5:0]</tspan></text>
+<text x="1027" y="371" font-size="11" text-anchor="middle" fill="#0F3296"><tspan x="1027" dy="0">LVDS DDR</tspan></text>
+<text x="1027" y="707" font-size="11" text-anchor="middle" fill="#A01414"><tspan x="1027" dy="0">LVDS DDR</tspan></text>
+<rect x="1156" y="200" width="272" height="590" fill="#EBEBEB" stroke="#C86464" stroke-width="1.6"/>
+<text x="1278" y="226" font-size="16" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="1278" dy="0">FMCOMMS2/3/4</tspan></text>
+<rect x="1228" y="310" width="104" height="410" fill="#FFCCCC" stroke="#C86464" stroke-width="1.2"/>
+<text x="1280" y="503.1" font-size="14" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="1280" dy="0">AD9361</tspan><tspan x="1280" dy="16.8">(AD9364 on</tspan><tspan x="1280" dy="16.8">FMCOMMS4)</tspan></text>
+<path d="M1116 332 L1214 332 L1214 327 L1228 340 L1214 353 L1214 348 L1116 348 Z" fill="#0F3296" stroke="#0F3296" stroke-width="0.8"/>
+<path d="M1228 672 L1130 672 L1130 667 L1116 680 L1130 693 L1130 688 L1228 688 Z" fill="#A01414" stroke="#A01414" stroke-width="0.8"/>
+<path d="M1228 562 L1116 562" fill="none" stroke="#E56F1A" stroke-width="1.4" marker-end="url(#aE56F1A)"/>
+<text x="1186" y="556" font-size="11" font-weight="bold" text-anchor="middle" fill="#E56F1A"><tspan x="1186" dy="0">DATA_CLK</tspan></text>
+<text x="1186" y="577" font-size="11" text-anchor="middle" fill="#E56F1A"><tspan x="1186" dy="0">245.76 or</tspan><tspan x="1186" dy="13.2">122.88 MHz</tspan></text>
+<rect x="1350" y="234" width="70" height="28" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="1385" y="251.85" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="1385" dy="0">EEPROM</tspan></text>
+<path d="M1116 248 L1350 248" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<text x="1182" y="243" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="1182" dy="0">I2C</tspan></text>
+<path d="M1116 267 L1296 267 L1296 310" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<text x="1182" y="262" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="1182" dy="0">SPI</tspan></text>
+<path d="M1116 286 L1252 286 L1252 310" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)" marker-start="url(#s000000)"/>
+<text x="1182" y="281" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="1182" dy="0">GPIO</tspan></text>
+<path d="M950 395 L1060 395" fill="none" stroke="#E56F1A" stroke-width="1.4" marker-end="url(#aE56F1A)"/>
+<path d="M1116 395 L1228 395" fill="none" stroke="#E56F1A" stroke-width="1.4" marker-end="url(#aE56F1A)"/>
+<text x="1027" y="389" font-size="11" font-weight="bold" text-anchor="middle" fill="#E56F1A"><tspan x="1027" dy="0">FB_CLK</tspan></text>
+<text x="1186" y="389" font-size="11" font-weight="bold" text-anchor="middle" fill="#E56F1A"><tspan x="1186" dy="0">FB_CLK</tspan></text>
+<text x="1186" y="410" font-size="11" text-anchor="middle" fill="#E56F1A"><tspan x="1186" dy="0">245.76 or</tspan><tspan x="1186" dy="13.2">122.88 MHz</tspan></text>
+<rect x="1232" y="744" width="80" height="30" fill="#FFFFFF" stroke="#000000" stroke-width="1.2"/>
+<text x="1272" y="762.85" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="1272" dy="0">40 MHz XO</tspan></text>
+<text x="1382" y="320" font-size="11" text-anchor="middle" fill="#606060"><tspan x="1382" dy="0">AD9361 / AD9364</tspan></text>
+<path d="M1272 744 L1272 720" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)"/>
+<path d="M1332 340 L1422 340" fill="none" stroke="#0F3296" stroke-width="2" marker-end="url(#a0F3296)"/>
+<text x="1378" y="334" font-size="11" font-weight="bold" text-anchor="middle" fill="#0F3296"><tspan x="1378" dy="0">TX1A / TXA</tspan></text>
+<rect x="1422" y="334" width="12" height="12" fill="#0F3296" stroke="#0F3296" stroke-width="1"/>
+<path d="M1332 420 L1422 420" fill="none" stroke="#0F3296" stroke-width="2" marker-end="url(#a0F3296)"/>
+<text x="1378" y="414" font-size="11" font-weight="bold" text-anchor="middle" fill="#0F3296"><tspan x="1378" dy="0">TX2A / TXB</tspan></text>
+<rect x="1422" y="414" width="12" height="12" fill="#0F3296" stroke="#0F3296" stroke-width="1"/>
+<path d="M1422 600 L1332 600" fill="none" stroke="#A01414" stroke-width="2" marker-end="url(#aA01414)"/>
+<text x="1378" y="594" font-size="11" font-weight="bold" text-anchor="middle" fill="#A01414"><tspan x="1378" dy="0">RX1A / RXA</tspan></text>
+<rect x="1422" y="594" width="12" height="12" fill="#A01414" stroke="#A01414" stroke-width="1"/>
+<path d="M1422 680 L1332 680" fill="none" stroke="#A01414" stroke-width="2" marker-end="url(#aA01414)"/>
+<text x="1378" y="674" font-size="11" font-weight="bold" text-anchor="middle" fill="#A01414"><tspan x="1378" dy="0">RX2A / RXB</tspan></text>
+<rect x="1422" y="674" width="12" height="12" fill="#A01414" stroke="#A01414" stroke-width="1"/>
+<text x="180" y="412" font-size="11" text-anchor="middle" fill="#000000"><tspan x="180" dy="0">m_axis</tspan><tspan x="180" dy="13.2">_aclk</tspan></text>
+<text x="180" y="609" font-size="11" text-anchor="middle" fill="#000000"><tspan x="180" dy="0">fifo_wr_clk</tspan></text>
+<text x="290" y="423" font-size="11" text-anchor="middle" fill="#000000"><tspan x="290" dy="0">clk</tspan></text>
+<text x="290" y="609" font-size="11" text-anchor="middle" fill="#000000"><tspan x="290" dy="0">clk</tspan></text>
+<text x="385" y="426" font-size="11" text-anchor="start" fill="#000000" transform="rotate(-90 385 426)"><tspan x="385" dy="0">din_clk</tspan></text>
+<text x="421" y="426" font-size="11" text-anchor="start" fill="#000000" transform="rotate(-90 421 426)"><tspan x="421" dy="0">dout_clk</tspan></text>
+<text x="385" y="599" font-size="11" text-anchor="end" fill="#000000" transform="rotate(-90 385 599)"><tspan x="385" dy="0">dout_clk</tspan></text>
+<text x="421" y="599" font-size="11" text-anchor="end" fill="#000000" transform="rotate(-90 421 599)"><tspan x="421" dy="0">din_clk</tspan></text>
+<rect x="425" y="472" width="90" height="82" fill="#FFFFCC" stroke="#A0A014" stroke-width="1.2"/>
+<text x="470" y="488" font-size="11" font-weight="bold" text-anchor="middle" fill="#000000"><tspan x="470" dy="0">util_clkdiv*</tspan></text>
+<text x="429" y="519" font-size="11" text-anchor="start" fill="#000000"><tspan x="429" dy="0">clk_out</tspan></text>
+<text x="511" y="506" font-size="11" text-anchor="end" fill="#000000"><tspan x="511" dy="0">clk</tspan></text>
+<text x="511" y="532" font-size="11" text-anchor="end" fill="#000000"><tspan x="511" dy="0">clk_sel</tspan></text>
+<path d="M860 562 L418 562 L418 595" fill="none" stroke="#E56F1A" stroke-width="1.4" marker-end="url(#aE56F1A)"/>
+<circle cx="545" cy="562" r="2.8" fill="#E56F1A"/>
+<path d="M545 562 L545 465 L418 465 L418 430" fill="none" stroke="#E56F1A" stroke-width="1.4" marker-end="url(#aE56F1A)"/>
+<circle cx="545" cy="502" r="2.8" fill="#E56F1A"/>
+<path d="M545 502 L515 502" fill="none" stroke="#E56F1A" stroke-width="1.4" marker-end="url(#aE56F1A)"/>
+<text x="800" y="556" font-size="11" font-weight="bold" text-anchor="middle" fill="#E56F1A"><tspan x="800" dy="0">l_clk</tspan></text>
+<path d="M560 528 L551 528 A6 6 0 0 0 539 528 L515 528" fill="none" stroke="#000000" stroke-width="1.4" marker-end="url(#a000000)"/>
+<text x="566" y="524" font-size="11" text-anchor="start" fill="#000000"><tspan x="566" dy="0">adc_r1_mode &amp;&amp;</tspan><tspan x="566" dy="13.2">dac_r1_mode</tspan></text>
+<path d="M425 515 L195 515" fill="none" stroke="#8D00FF" stroke-width="1.4"/>
+<circle cx="382" cy="515" r="2.8" fill="#8D00FF"/>
+<path d="M382 515 L382 430" fill="none" stroke="#8D00FF" stroke-width="1.4" marker-end="url(#a8D00FF)"/>
+<path d="M382 515 L382 595" fill="none" stroke="#8D00FF" stroke-width="1.4" marker-end="url(#a8D00FF)"/>
+<circle cx="290" cy="515" r="2.8" fill="#8D00FF"/>
+<path d="M290 515 L290 430" fill="none" stroke="#8D00FF" stroke-width="1.4" marker-end="url(#a8D00FF)"/>
+<path d="M290 515 L290 595" fill="none" stroke="#8D00FF" stroke-width="1.4" marker-end="url(#a8D00FF)"/>
+<path d="M195 515 L195 430" fill="none" stroke="#8D00FF" stroke-width="1.4" marker-end="url(#a8D00FF)"/>
+<path d="M195 515 L195 595" fill="none" stroke="#8D00FF" stroke-width="1.4" marker-end="url(#a8D00FF)"/>
+<text x="18" y="838" font-size="11" font-weight="bold" text-anchor="start" fill="#000000"><tspan x="18" dy="0">* The clock divider will divide the input frequency by 2 when in 1R1T mode, and by 4 in 2R2T mode, to obtain the desired maximum frequency per channel: 61.44MHz.</tspan></text>
+<text x="18" y="855" font-size="11" font-weight="bold" text-anchor="start" fill="#000000"><tspan x="18" dy="0">Register maps on APB (REGMAP_INTERFACE = 1); the IO interface modules use the PolarFire IOD (DDR registers and delay lines); 48b = I0, Q0, I1, Q1 (1R1T: I0, Q0).</tspan></text>
+</g>
+</svg>
