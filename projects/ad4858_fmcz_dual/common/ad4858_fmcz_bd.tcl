@@ -283,7 +283,6 @@ ad_cpu_interconnect 0x44d00000 axi_pwm_gen_1
 ad_cpu_interconnect 0x44e00000 ad4858_dma_1
 ad_cpu_interconnect 0x44000000 adc_clkgen
 
-ad_mem_hp1_interconnect sys_cpu_clk  sys_ps8/S_AXI_HP1
 ad_mem_hp1_interconnect $sys_dma_clk ad4858_dma_0/m_dest_axi
 ad_connect $sys_dma_resetn           ad4858_dma_0/m_dest_axi_aresetn
 ad_mem_hp1_interconnect $sys_dma_clk ad4858_dma_1/m_dest_axi

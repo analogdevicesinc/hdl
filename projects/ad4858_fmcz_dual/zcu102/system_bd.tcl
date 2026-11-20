@@ -12,6 +12,8 @@ set_property name sys_200m_clk [get_bd_nets sys_250m_clk]
 set_property name sys_200m_reset [get_bd_nets sys_250m_reset]
 set_property name sys_200m_resetn [get_bd_nets sys_250m_resetn]
 
+ad_mem_hp1_interconnect sys_cpu_clk sys_ps8/S_AXI_HP1
+
 source ../common/ad4858_fmcz_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
