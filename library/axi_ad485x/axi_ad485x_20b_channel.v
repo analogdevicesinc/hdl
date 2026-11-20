@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -101,7 +101,6 @@ module axi_ad485x_20b_channel #(
   wire                   adc_dfmt_se_s;
   wire                   adc_dfmt_type_s;
   wire                   adc_dfmt_enable_s;
-  wire                   adc_pn_err_s;
 
   wire                   adc_valid_f2;
   wire        [31:0]     adc_data_f2;
