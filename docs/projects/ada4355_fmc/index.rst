@@ -304,6 +304,11 @@ A more comprehensive build guide can be found in the :ref:`build_hdl` user guide
 Resources
 -------------------------------------------------------------------------------
 
+Systems related
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-  :external+system-level:doc:`EVAL-ADA4356EBZ user guide <solutions/reference-designs/eval-ada4355-fmc/eval-ada4356ebz>`
+
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
