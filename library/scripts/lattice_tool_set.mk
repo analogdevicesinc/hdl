@@ -9,10 +9,10 @@ CYGPATH_VERSION := $(shell command -v cygpath --version)
 
 ifeq ($(LATTICE_DEFAULT_PATHS),1)
 ifneq ($(CYGPATH_VERSION),)
-LATTICE_DEFAULT_INTERFACE_PATH := $(shell cygpath -H)/$(shell whoami)/PropelIPLocal/interfaces
-LATTICE_DEFAULT_IP_PATH := $(shell cygpath -H)/$(shell whoami)/PropelIPLocal
+export LATTICE_DEFAULT_INTERFACE_PATH := $(shell cygpath -H)/$(shell whoami)/PropelIPLocal/interfaces
+export LATTICE_DEFAULT_IP_PATH := $(shell cygpath -H)/$(shell whoami)/PropelIPLocal
 else
-LATTICE_DEFAULT_INTERFACE_PATH := ~/PropelIPLocal/interfaces
-LATTICE_DEFAULT_IP_PATH := ~/PropelIPLocal
+export LATTICE_DEFAULT_INTERFACE_PATH := $(HOME)/PropelIPLocal/interfaces
+export LATTICE_DEFAULT_IP_PATH := $(HOME)/PropelIPLocal
 endif
 endif
