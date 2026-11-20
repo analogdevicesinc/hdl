@@ -48,12 +48,7 @@ ad_ip_parameter adl5580_spi CONFIG.C_SCK_RATIO 16
 ad_ip_parameter ltc2664_spi CONFIG.C_SCK_RATIO 16
 
 #system ID
-
-ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0   CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
-ad_ip_parameter rom_sys_0   CONFIG.ROM_ADDR_BITS 9
-
-sysid_gen_sys_init_file
+ad_sysid_init
 
 ad_ip_parameter util_adc_xcvr CONFIG.RX_CLK25_DIV 30
 ad_ip_parameter util_adc_xcvr CONFIG.CPLL_CFG0 0x1fa

@@ -61,11 +61,7 @@ ad_ip_parameter axi_apollo_tx_jesd/tx CONFIG.NUM_OUTPUT_PIPELINE 1
 ad_ip_parameter axi_spi CONFIG.C_SCK_RATIO 16
 
 #system ID
-ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/mem_init_sys.txt"
-ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
-
-sysid_gen_sys_init_file
+ad_sysid_init
 
 if {$ad_project_params(JESD_MODE) == "64B66B"} {
   # Set higher swing for the diff driver, other case 16.5Gbps won't work
