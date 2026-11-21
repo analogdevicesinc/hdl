@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2020-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2020-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -203,14 +203,11 @@ module system_top (
 
   // internal signals
 
-  wire              sys_ddr_cal_success;
-  wire              sys_ddr_cal_fail;
   wire              sys_hps_resetn;
   wire              sys_resetn_s;
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
   wire    [  7:0]   spi_csn_s;
-  wire              dac_fifo_bypass;
   wire              spi_mosi;
   wire              spi0_miso;
 
@@ -283,17 +280,13 @@ module system_top (
   assign adrv9009_reset_b_c = gpio_o[37];
   assign gpio_i[38] = adrv9009_gpint_c;
 
-  assign dac_fifo_bypass = gpio_o[32];
-
   assign gpio_i[63:45] = gpio_o[63:45];
   assign gpio_i[43:39] = gpio_o[43:39];
   assign gpio_i[37:32] = gpio_o[37:32];
 
   // board stuff (max-v-u21)
 
-  assign gpio_i[31:14] = gpio_o[31:14];
-  assign gpio_i[13:13] = sys_ddr_cal_success;
-  assign gpio_i[12:12] = sys_ddr_cal_fail;
+  assign gpio_i[31:12] = gpio_o[31:12];
   assign gpio_i[11: 4] = gpio_bd_i;
   assign gpio_i[ 3: 0] = gpio_o[3:0];
 
@@ -325,8 +318,6 @@ module system_top (
     .sys_ddr_mem_mem_dbi_n (sys_ddr_dbi_n),
     .sys_ddr_oct_oct_rzqin (sys_ddr_rzq),
     .sys_ddr_ref_clk_clk (sys_ddr_ref_clk),
-    .sys_ddr_status_local_cal_success (sys_ddr_cal_success),
-    .sys_ddr_status_local_cal_fail (sys_ddr_cal_fail),
     .sys_gpio_bd_in_port (gpio_i[31:0]),
     .sys_gpio_bd_out_port (gpio_o[31:0]),
     .sys_gpio_in_export (gpio_i[63:32]),
@@ -402,7 +393,6 @@ module system_top (
     .sys_spi_SCLK (spi_clk),
     .sys_spi_SS_n (spi_csn_s),
     .tx_serial_data_tx_serial_data ({tx_serial_data_d,tx_serial_data_c}),
-    .tx_fifo_bypass_bypass (dac_fifo_bypass),
     .fmcomms8_gpio_export (fmcomms8_gpio),
     .core_clk_c_clk (core_clk_c),
     .core_clk_d_clk (core_clk_d),
