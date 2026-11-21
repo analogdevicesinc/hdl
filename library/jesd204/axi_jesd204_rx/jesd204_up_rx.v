@@ -193,15 +193,15 @@ module jesd204_up_rx #(
         up_cfg_buffer_early_release <= up_wdata[16];
         up_cfg_buffer_delay <= up_wdata[9:2];
       end
+      12'h92: begin
+        up_cfg_frame_align_err_threshold <= up_wdata[7:0];
+      end
       endcase
     end else if (up_wreq == 1'b1) begin
       case (up_waddr)
       12'h91: begin
         up_ctrl_err_statistics_mask <= up_wdata[14:8];
         up_ctrl_err_statistics_reset <= up_wdata[0];
-      end
-      12'h92: begin
-        up_cfg_frame_align_err_threshold <= up_wdata[7:0];
       end
       endcase
     end

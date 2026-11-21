@@ -307,6 +307,8 @@ module axi_jesd204_rx_regmap_tb;
     /* Check JESD RX configuration */
     write_reg_and_update('h240, 32'h103fc);
     check_all_registers();
+    write_reg_and_update('h248, 32'h0a);
+    check_all_registers();
 
     /* Reset core */
     write_reg_and_update('hc0, 32'h0);
@@ -317,6 +319,7 @@ module axi_jesd204_rx_regmap_tb;
     invert_register('h210); /* octets per frame, octets per multiframe */
     invert_register('h218); /* links enable */
     invert_register('h240); /* char replacement, scrambler */
+    invert_register('h248); /* frame align error threshold */
 
     check_all_registers();
 
