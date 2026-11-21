@@ -126,6 +126,13 @@ set_property -dict [list \
 ] \
 [ipx::get_user_parameters I2C_MOD -of_objects $cc]
 
+## OUT_REG
+set_property -dict [list \
+  "value_validation_type" "list" \
+  "value_validation_list" "0 1" \
+] \
+[ipx::get_user_parameters OUT_REG -of_objects $cc]
+
 ## Customize IP Layout
 ## Remove the automatically generated GUI page
 ipgui::remove_page -component $cc [ipgui::get_pagespec -name "Page 0" -component $cc]
@@ -150,6 +157,13 @@ set_property -dict [list \
 	"display_name" "I2C divider" \
   "tooltip" "\[I2C_MOD\] Further divide (two power) open drain speed to achieve a lower I2C. Set 0 to achieve 1.56MHz at (clk=100MHz, Clock cycles per bit=8), 1 for 781kHz." \
 ] [ipgui::get_guiparamspec -name "I2C_MOD" -component $cc]
+
+ipgui::add_param -name "OUT_REG" -component $cc -parent $general_group
+set_property -dict [list \
+  "widget" "checkBox" \
+  "display_name" "Register the outputs" \
+  "tooltip" "\[OUT_REG\] Register SCL, SDO and T. Delays the bus by one clock cycle." \
+] [ipgui::get_guiparamspec -name "OUT_REG" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

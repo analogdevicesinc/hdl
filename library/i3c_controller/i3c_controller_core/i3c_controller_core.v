@@ -40,7 +40,8 @@
 
 module i3c_controller_core #(
   parameter MAX_DEVS = 16,
-  parameter I2C_MOD = 0
+  parameter I2C_MOD = 0,
+  parameter OUT_REG = 0
 ) (
   input         clk,
   input         reset_n,
@@ -122,6 +123,10 @@ module i3c_controller_core #(
   wire trp_scl;
   wire trp_sdo;
   wire trp_t;
+
+  wire scl_s;
+  wire sdo_s;
+  wire t_s;
 
   i3c_controller_framing #(
     .MAX_DEVS(MAX_DEVS)
@@ -222,9 +227,37 @@ module i3c_controller_core #(
 
   assign bus_nop = nop && !trp_hold;
 
-  assign i3c_scl = trp_hold ? trp_scl : bit_mod_scl;
-  assign i3c_sdo = trp_hold ? trp_sdo : bit_mod_sdo;
-  assign i3c_t   = trp_hold ? trp_t   : bit_mod_t;
+  assign scl_s = trp_hold ? trp_scl : bit_mod_scl;
+  assign sdo_s = trp_hold ? trp_sdo : bit_mod_sdo;
+  assign t_s   = trp_hold ? trp_t   : bit_mod_t;
+
+  generate
+    if (OUT_REG) begin: g_out_reg
+      reg scl_r;
+      reg sdo_r;
+      reg t_r;
+
+      always @(posedge clk) begin
+        if (!reset_n) begin
+          scl_r <= 1'b1;
+          sdo_r <= 1'b1;
+          t_r   <= 1'b1;
+        end else begin
+          scl_r <= scl_s;
+          sdo_r <= sdo_s;
+          t_r   <= t_s;
+        end
+      end
+
+      assign i3c_scl = scl_r;
+      assign i3c_sdo = sdo_r;
+      assign i3c_t   = t_r;
+    end else begin: g_out_comb
+      assign i3c_scl = scl_s;
+      assign i3c_sdo = sdo_s;
+      assign i3c_t   = t_s;
+    end
+  endgenerate
 
   assign ibi = {ibi_da, ibi_mdb};
   assign ibi_valid = ibi_tick;

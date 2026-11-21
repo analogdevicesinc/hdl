@@ -41,6 +41,8 @@ delete_bd_objs [get_bd_nets axi_iic_ard_iic2intc_irpt] [get_bd_intf_nets axi_gp0
 
 source ../common/ad4062_bd.tcl
 
+ad_ip_parameter i3c/core CONFIG.OUT_REG 1
+
 set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
 
 #system ID
