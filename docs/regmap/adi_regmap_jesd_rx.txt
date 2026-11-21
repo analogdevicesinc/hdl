@@ -9,7 +9,7 @@ ENDTITLE
 REG
 0x00
 VERSION
-Version of the peripheral. Follows semantic versioning. Current version 1.03.a.
+Version of the peripheral. Follows semantic versioning. Current version 1.08.a.
 ENDREG
 
 FIELD
@@ -19,7 +19,7 @@ RO
 ENDFIELD
 
 FIELD
-[15:8] 0x00000003
+[15:8] 0x00000008
 VERSION_MINOR
 RO
 ENDFIELD
@@ -367,16 +367,17 @@ SYSREF LMFC offset
 ENDREG
 
 FIELD
-[31:10] 0x00000000
+[31:8] 0x00000000
 RESERVED
 RO
 ENDFIELD
 
 FIELD
-[9:0] 0x00000000
+[7:0] 0x00000000
 SYSREF_LMFC_OFFSET
 RW
-Offset between SYSREF event and internal LMFC event in octets.
+Offset between SYSREF event and internal LMFC event, in device clock cycles
+(beats of the transport layer data path width).
 ENDFIELD
 
 ############################################################################################
@@ -472,9 +473,18 @@ JESD204B link configuration.
 ENDREG
 
 FIELD
-[31:2] 0x00000000
+[31:4] 0x00000000
 RESERVED
 RO
+ENDFIELD
+
+FIELD
+[3:2] 0x00000000
+HEADER_MODE
+RW
+Sync header usage (0 = CRC-12, 1 = CRC-3, 2 = FEC, 3 = stand-alone command channel).
+CRC-3 and the command channel are not implemented. FEC requires the core to be built
+with ENABLE_FEC=1. Valid for 64B/66B link. Available starting from version 1.08.a;
 ENDFIELD
 
 FIELD
@@ -567,7 +577,7 @@ FIELD
 [9:2] 0x00000000
 BUFFER_DELAY
 RW
-Buffer release opportunity offset from LMFC.
+Buffer release opportunity offset from LMFC, in device clock cycles.
 ENDFIELD
 
 FIELD
@@ -586,9 +596,25 @@ JESD204B error statistics configuration.
 ENDREG
 
 FIELD
-[31:15] 0x00000000
+[31:17] 0x00000000
 RESERVED
 RO
+ENDFIELD
+
+FIELD
+[16] 0x00000000
+MASK_FEC_TRAPPED_ERROR
+RW
+If set, FEC multiblocks with a corrected (trapped) error burst are not counted.
+Valid for 64B/66B link with FEC. Available starting from version 1.08.a;
+ENDFIELD
+
+FIELD
+[15] 0x00000000
+MASK_FEC_UNTRAPPED_ERROR
+RW
+If set, FEC multiblocks with an uncorrectable (untrapped) error are not counted.
+Valid for 64B/66B link with FEC. Available starting from version 1.08.a;
 ENDFIELD
 
 FIELD
@@ -604,7 +630,7 @@ FIELD
 MASK_UNEXPECTED_EOMB
 RW
 If set, unexpected end of multiblock errors are not counted;
-Valid for 64B/66B encoder.
+Valid for 64B/66B encoder. Never reported when HEADER_MODE is FEC.
 ENDFIELD
 
 FIELD
@@ -795,7 +821,7 @@ FIELD
 ERROR_REGISTER
 RO
 This register shows the number of total errors for this lane. Errors counted depend on the configuration
-in LINK_CONF3. It must always be manually reset.
+in LINK_CONF3. It is cleared when the link enters the DATA state and can be reset manually through LINK_CONF3.
 ENDFIELD
 
 ############################################################################################
