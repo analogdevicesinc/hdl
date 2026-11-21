@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2017-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2017-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -56,7 +56,7 @@
     $finish;
   end
 
-  always @(*) #10 clk <= ~clk;
+  always #10 clk <= ~clk;
   always @(posedge clk) begin
     if (trigger_reset == 1'b1) begin
       reset_shift <= 3'b111;

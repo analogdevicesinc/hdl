@@ -328,7 +328,7 @@ module axi_jesd204_tx_regmap_tb;
   end
 
   reg core_clk = 1'b0;
-  always @(*) #4 core_clk <= ~core_clk;
+  always #4 core_clk <= ~core_clk;
 
   axi_jesd204_tx #(
     .NUM_LANES(NUM_LANES),
