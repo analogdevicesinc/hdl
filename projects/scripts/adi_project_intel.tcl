@@ -166,9 +166,12 @@ proc adi_project {project_name {parameter_list {}}} {
   puts $QFILE "set_module_property NAME {system_bd}"
   puts $QFILE "set_project_property DEVICE_FAMILY {$family}"
   puts $QFILE "set_project_property DEVICE $device"
-  puts $QFILE "foreach {param value} {$parameter_list} { set ad_project_params(\$param) \$value }"
+  puts $QFILE "set ad_project_param_list {$parameter_list}"
+  puts $QFILE "foreach {param value} \$ad_project_param_list { set ad_project_params(\$param) \$value }"
   if {[info exists ::env(ADI_PROJECT_DIR)]} {
-    puts $QFILE "source ../system_qsys.tcl"
+    puts $QFILE "cd .."
+    puts $QFILE "source system_qsys.tcl"
+    puts $QFILE "cd \$ad_project_dir"
   } else {
     puts $QFILE "source system_qsys.tcl"
   }

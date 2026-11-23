@@ -102,21 +102,13 @@ ad_ip_parameter  dac_dma               CONFIG.DMA_DATA_WIDTH_SRC 128
 ad_ip_parameter  util_dac_jesd204_xcvr CONFIG.TX_LANE_INVERT     240
 
 #system ID
-ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
-ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
 set ADI_DAC_DEVICE $::env(ADI_DAC_DEVICE)
 set ADI_DAC_MODE $::env(ADI_DAC_MODE)
-set sys_cstring "JESD:M=$ad_project_params(JESD_M)\
-L=$ad_project_params(JESD_L)\
-S=$ad_project_params(JESD_S)\
-NP=$ad_project_params(JESD_NP)\
-LINKS=$ad_project_params(NUM_LINKS)\
-DAC_DEVICE=$ADI_DAC_DEVICE\
+set sys_cstring "DAC_DEVICE=$ADI_DAC_DEVICE\
 DAC_MODE=$ADI_DAC_MODE\
 ADI_LANE_RATE=$ADI_LANE_RATE\
 DAC_OFFLOAD:TYPE=$dac_offload_type\
 SIZE=$dac_offload_size"
 
-sysid_gen_sys_init_file $sys_cstring
+ad_sysid_init $sys_cstring

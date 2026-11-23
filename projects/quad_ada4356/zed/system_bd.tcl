@@ -30,16 +30,9 @@ source ../common/quad_ada4356_fmc_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
 #system ID
-
-set mem_init_sys_path [get_env_param ADI_PROJECT_DIR ""]mem_init_sys.txt;
-ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
-ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
+ad_sysid_init
 
 # build variant, shown by 'dmesg | grep sysid'
-set sys_cstring "TDD_SUPPORT=$TDD_SUPPORT"
-
-sysid_gen_sys_init_file $sys_cstring
 
 # closes the DMA -> HP1 arbiter path on the 7 ns clock
 set_property strategy Flow_RunPostRoutePhysOpt [get_runs impl_1]

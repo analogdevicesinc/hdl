@@ -51,27 +51,7 @@ if {$INTF_CFG != "RX"} {
 }
 
 #system ID
-ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 10
-ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "$mem_init_sys_file_path/mem_init_sys.txt"
-ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 10
-
-set sys_cstring "$ad_project_params(JESD_MODE)\
-RX:RATE=$ad_project_params(RX_LANE_RATE)\
-M=$ad_project_params(RX_JESD_M)\
-L=$ad_project_params(RX_JESD_L)\
-S=$ad_project_params(RX_JESD_S)\
-NP=$ad_project_params(RX_JESD_NP)\
-LINKS=$ad_project_params(RX_NUM_LINKS)\
-KS/CH=$ad_project_params(RX_KS_PER_CHANNEL)\
-TX:RATE=$ad_project_params(TX_LANE_RATE)\
-M=$ad_project_params(TX_JESD_M)\
-L=$ad_project_params(TX_JESD_L)\
-S=$ad_project_params(TX_JESD_S)\
-NP=$ad_project_params(TX_JESD_NP)\
-LINKS=$ad_project_params(TX_NUM_LINKS)\
-KS/CH=$ad_project_params(TX_KS_PER_CHANNEL)"
-
-sysid_gen_sys_init_file $sys_cstring 10
+ad_sysid_init
 
 # 204C params 16.5Gbps..24.75Gpbs
 if {$ad_project_params(JESD_MODE) == "64B66B"} {
