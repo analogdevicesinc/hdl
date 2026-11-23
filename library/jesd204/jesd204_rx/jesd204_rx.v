@@ -213,6 +213,11 @@ module jesd204_rx #(
 
   wire                   lmfc_edge_synced;
 
+  wire                   event_unexpected_lane_state_error_int;
+  wire                   event_unexpected_lane_state_error_device;
+
+  assign event_unexpected_lane_state_error = event_unexpected_lane_state_error_int;
+
   always @(posedge device_clk) begin
     if (lmfc_counter == device_cfg_buffer_delay ||
         device_cfg_buffer_early_release == 1'b1) begin
@@ -233,8 +238,21 @@ module jesd204_rx #(
     .out_resetn(1'b1),
     .out_bits(dev_all_buffer_ready_n));
 
+  sync_event #(
+    .NUM_OF_EVENTS (1),
+    .ASYNC_CLK(ASYNC_CLK)
+  ) i_sync_lane_state_error (
+    .in_clk(clk),
+    .in_event(event_unexpected_lane_state_error_int),
+    .out_clk(device_clk),
+    .out_event(event_unexpected_lane_state_error_device));
+
+  // Deassert the buffer_release_n signal as soon as an unexpected lane state
+  // error occurred, to prevent the possibility of sending stale data from the
+  // elastic buffer if the error occurred immediately after a buffer release
+  // opportunity.
   always @(posedge device_clk) begin
-    if (device_reset == 1'b1) begin
+    if ((device_reset == 1'b1) || (event_unexpected_lane_state_error_device == 1'b1)) begin
       buffer_release_n <= 1'b1;
     end else begin
       if (buffer_release_opportunity == 1'b1) begin
@@ -483,7 +501,7 @@ module jesd204_rx #(
       always @(posedge clk) begin
         unexpected_lane_state_error_d <= unexpected_lane_state_error;
       end
-      assign event_unexpected_lane_state_error = unexpected_lane_state_error & ~unexpected_lane_state_error_d;
+      assign event_unexpected_lane_state_error_int = unexpected_lane_state_error & ~unexpected_lane_state_error_d;
 
       /* Delay matching based on the number of pipeline stages */
       reg [NUM_LANES-1:0] ifs_ready_d1 = 1'b0;
@@ -556,7 +574,7 @@ module jesd204_rx #(
 
         .status_state(status_ctrl_state),
         .event_data_phase(event_data_phase),
-        .event_unexpected_lane_state_error(event_unexpected_lane_state_error));
+        .event_unexpected_lane_state_error(event_unexpected_lane_state_error_int));
 
       for (i = 0; i < NUM_LANES; i = i + 1) begin: gen_lane
 

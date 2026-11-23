@@ -55,7 +55,6 @@ module elastic_buffer #(
   parameter ASYNC_CLK = 0
 ) (
   input clk,
-  input reset,
 
   input device_clk,
   input device_reset,

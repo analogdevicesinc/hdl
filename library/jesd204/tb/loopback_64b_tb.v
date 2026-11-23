@@ -50,15 +50,15 @@
 
 module loopback_64b_tb;
   parameter VCD_FILE = "loopback_64b_tb.vcd";
-  parameter NUM_LANES = 4;
-  parameter NUM_LINKS = 1;
+  parameter NUM_LANES = 8;
+  parameter NUM_LINKS = 2;
   parameter OCTETS_PER_FRAME = 8;
   parameter FRAMES_PER_MULTIFRAME = 32;
   parameter ENABLE_SCRAMBLER = 1;
   parameter BUFFER_EARLY_RELEASE = 0;
   parameter LANE_DELAY = 1;
   // Skew in beats between two adjacent lanes. 1 is the historical behaviour.
-  parameter LANE_SKEW = 1;
+  parameter LANE_SKEW = 0;
   parameter BUFFER_READY_PIPELINE = 1;
   parameter DATA_PATH_WIDTH = 8;
 

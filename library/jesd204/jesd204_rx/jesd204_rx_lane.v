@@ -320,7 +320,6 @@ module jesd204_rx_lane #(
     .ASYNC_CLK(ASYNC_CLK)
   ) i_elastic_buffer (
     .clk(clk),
-    .reset(reset),
 
     .device_clk(device_clk),
     .device_reset(device_reset),

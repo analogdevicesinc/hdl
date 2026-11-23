@@ -91,6 +91,8 @@ module jesd204_rx_lane_64b #(
   input                                  cfg_lane_disable
 );
 
+  (* dont_touch = "yes" *) reg [7:0] cfg_beats_per_multiframe_r;
+
   reg  [11:0] crc12_calculated_prev;
 
   reg  [2:1]  buffer_not_ready_r;
@@ -98,8 +100,6 @@ module jesd204_rx_lane_64b #(
   reg  [5:0]  ctrl_err_statistics_mask_r;
 
   reg         emb_lock_r = 1'b0;
-
-  (* dont_touch = "yes" *) reg [7:0] cfg_beats_per_multiframe_r;
 
   wire [63:0] phy_data_r;
   wire [11:0] crc12_received_r;
@@ -373,7 +373,6 @@ module jesd204_rx_lane_64b #(
     .ASYNC_CLK(ASYNC_CLK)
   ) i_elastic_buffer (
     .clk(clk),
-    .reset(reset),
 
     .device_clk(device_clk),
     .device_reset(device_reset),

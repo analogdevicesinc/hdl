@@ -108,6 +108,33 @@ set_property ASYNC_REG TRUE \
    [get_cells -quiet -hier *cdc_sync_stage2_reg* \
     -filter {NAME =~ *i_sync_lmfc/i_sync_in* && IS_SEQUENTIAL}]
 
+# sync event i_sync_lane_state_error
+set_false_path -quiet \
+  -from $link_clk \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_lane_state_error/i_sync_out* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE \
+   [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_lane_state_error/i_sync_out* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE \
+   [get_cells -quiet -hier *cdc_sync_stage2_reg* \
+    -filter {NAME =~ *i_sync_lane_state_error/i_sync_out* && IS_SEQUENTIAL}]
+
+set_false_path -quiet \
+  -from $device_clk \
+  -to [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_lane_state_error/i_sync_in* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE \
+   [get_cells -quiet -hier *cdc_sync_stage1_reg* \
+    -filter {NAME =~ *i_sync_lane_state_error/i_sync_in* && IS_SEQUENTIAL}]
+
+set_property ASYNC_REG TRUE \
+   [get_cells -quiet -hier *cdc_sync_stage2_reg* \
+    -filter {NAME =~ *i_sync_lane_state_error/i_sync_in* && IS_SEQUENTIAL}]
+
 # elastic buffer distributed RAM
 set_false_path -quiet \
   -from $link_clk \
