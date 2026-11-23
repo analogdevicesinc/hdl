@@ -191,7 +191,7 @@ The **axi_hdmi_tx** core support the following video input connections:
 * 36 bits with HSYNC, VSYNC and DE (:git-hdl:`hdl_2017_r1:projects/adv7511/vc707` development board)
 * 24 bits with HSYNC, VSYNC and DE (:git-hdl:`projects/adv7511/zc706` development board)
 * 16 bits with HSYNC, VSYNC and DE (:git-hdl:`projects/adv7511/zed`)
-* 16 bits with embedded SYNC (TX interface of the :git-hdl:`IMAGEON <hdl_2023_r2:projects/imageon>` board)
+* 16 bits with embedded SYNC (TX interface of the IMAGEON board)
 
 Software support
 -------------------------------------------------------------------------------
@@ -207,5 +207,5 @@ References
 
 * HDL IP core at :git-hdl:`library/axi_hdmi_tx`
 * :external+kuiper:ref:`ADI Kuiper Linux Quick Start Guide <quick-start>`
-* :ref:`FMC-IMAGEON Xilinx Reference Design <imageon>`
+* :git-hdl:`FMC-IMAGEON Xilinx Reference Design <hdl_2023_r2:projects/imageon>`
 * :ref:`ADV7511 Xilinx Evaluation Boards Reference Design <adv7511>`
