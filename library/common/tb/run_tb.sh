@@ -1,5 +1,5 @@
 ##############################################################################
-## Copyright (C) 2014-2024 Analog Devices, Inc. All rights reserved.
+## Copyright (C) 2014-2024, 2026 Analog Devices, Inc. All rights reserved.
 ### SPDX short identifier: BSD-1-Clause
 ##############################################################################
 
@@ -18,8 +18,21 @@ case "$SIMULATOR" in
 		;;
 
 	xsim)
-		# XSim flow
-		xvlog -log ${NAME}_xvlog.log --sourcelibdir . ${SOURCE} || exit 1
+		# XSim flow; SystemVerilog sources need their own xvlog -sv pass
+		V_SOURCE=""
+		SV_SOURCE=""
+		for f in ${SOURCE}; do
+			case "$f" in
+				*.sv) SV_SOURCE+=" $f" ;;
+				*) V_SOURCE+=" $f" ;;
+			esac
+		done
+		if [[ -n "$V_SOURCE" ]]; then
+			xvlog -log ${NAME}_xvlog.log --sourcelibdir . ${V_SOURCE} || exit 1
+		fi
+		if [[ -n "$SV_SOURCE" ]]; then
+			xvlog -sv -log ${NAME}_xvlog_sv.log --sourcelibdir . ${SV_SOURCE} || exit 1
+		fi
 		xelab -log ${NAME}_xelab.log -debug all ${NAME} || exit 1
 		if [[ "$MODE" == "-gui" ]]; then
 			echo "log_wave -r *" > xsim_gui_cmd.tcl
