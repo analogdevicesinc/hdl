@@ -100,7 +100,6 @@ module jesd204_tx_gearbox #(
     wire                 mem_wr_en;
     wire [MEM_W-1:0]     mem_wr_data;
 
-
     if (OUT_DATA_PATH_WIDTH < IN_DATA_PATH_WIDTH) begin
 
       assign mem_wr_en = 1'b1;
