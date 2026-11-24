@@ -36,7 +36,6 @@
 `timescale 1ps/1ps
 
 module hsci_phy_top (
-
   input wire          pll_inclk,
   input wire   [0:1]  hsci_pll_reset,
 
@@ -75,51 +74,51 @@ module hsci_phy_top (
   output logic [0:3]  vtc_rdy_bsc_rx,
   output logic [0:3]  dly_rdy_bsc_rx,
   output logic [0:1]  rst_seq_done
-
 );
-   //TX
-   logic [7:0]       hsci_mosi_data_br [0:3];
-   logic [7:0]       hsci_mosi_data    [0:3];
 
-   // RX
-   logic [7:0]       hsci_miso_data_br [0:3];
-   logic [7:0]       hsci_miso_data    [0:3];
-   logic [7:0]       hsci_miso_clk_d   [0:3];
-   logic             fifo_empty_6;
-   logic             fifo_empty_8;
-   logic             fifo_empty_45;
-   logic             fifo_empty_47;
-   logic             fifo_empty_0;
-   logic             fifo_empty_2;
-   logic             fifo_empty_39;
-   logic             fifo_empty_41;
+  //TX
+  logic [7:0]       hsci_mosi_data_br [0:3];
+  logic [7:0]       hsci_mosi_data    [0:3];
 
-   assign hsci_mosi_data[0] = hsci_mosi_data_0;
-   assign hsci_mosi_data[1] = hsci_mosi_data_1;
-   assign hsci_mosi_data[2] = hsci_mosi_data_2;
-   assign hsci_mosi_data[3] = hsci_mosi_data_3;
+  // RX
+  logic [7:0]       hsci_miso_data_br [0:3];
+  logic [7:0]       hsci_miso_data    [0:3];
+  logic [7:0]       hsci_miso_clk_d   [0:3];
+  logic             fifo_empty_6;
+  logic             fifo_empty_8;
+  logic             fifo_empty_45;
+  logic             fifo_empty_47;
+  logic             fifo_empty_0;
+  logic             fifo_empty_2;
+  logic             fifo_empty_39;
+  logic             fifo_empty_41;
 
-   assign hsci_miso_data_0  = hsci_miso_data[0];
-   assign hsci_miso_data_1  = hsci_miso_data[1];
-   assign hsci_miso_data_2  = hsci_miso_data[2];
-   assign hsci_miso_data_3  = hsci_miso_data[3];
+  assign hsci_mosi_data[0] = hsci_mosi_data_0;
+  assign hsci_mosi_data[1] = hsci_mosi_data_1;
+  assign hsci_mosi_data[2] = hsci_mosi_data_2;
+  assign hsci_mosi_data[3] = hsci_mosi_data_3;
 
-   function integer hssio_i;
-     input integer i;
-     hssio_i = i > 1 ? 1 : 0;
-   endfunction
+  assign hsci_miso_data_0  = hsci_miso_data[0];
+  assign hsci_miso_data_1  = hsci_miso_data[1];
+  assign hsci_miso_data_2  = hsci_miso_data[2];
+  assign hsci_miso_data_3  = hsci_miso_data[3];
 
-   genvar i, j;
-   generate
-   for (i = 0; i < 4; i ++) begin
-     for (j = 0; j < 8; j ++) begin
-       assign hsci_mosi_data_br[i][7 - j] = hsci_mosi_data[i][j];
-       assign hsci_miso_data[i][7 - j] = (rst_seq_done[hssio_i(i)]) ? hsci_miso_data_br[i][j] : 8'h0;
-     end
-   end
-   endgenerate
+  function integer hssio_i;
+    input integer i;
+    hssio_i = i > 1 ? 1 : 0;
+  endfunction
 
-   high_speed_selectio_wiz_0 hssio_wiz_0 (
+  genvar i, j;
+  generate
+  for (i = 0; i < 4; i ++) begin
+    for (j = 0; j < 8; j ++) begin
+      assign hsci_mosi_data_br[i][7 - j] = hsci_mosi_data[i][j];
+      assign hsci_miso_data[i][7 - j] = (rst_seq_done[hssio_i(i)]) ? hsci_miso_data_br[i][j] : 8'h0;
+    end
+  end
+  endgenerate
+
+  high_speed_selectio_wiz_0 hssio_wiz_0 (
     .fifo_rd_clk_6                  (hsci_pclk[0]),
     .fifo_rd_clk_8                  (hsci_pclk[0]),
     .fifo_rd_clk_45                 (hsci_pclk[0]),
