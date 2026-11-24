@@ -1,0 +1,87 @@
+##############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: BSD-1-Clause
+##
+## Enforces the README template on project READMEs (see
+## .github/scripts/check_readme_template.py for the full rule set).
+##############################################################################
+
+name: README template check
+
+on:
+  pull_request:
+    branches:
+      - main
+      - 'hdl_[0-9]*_r*'  # release branches, e.g. hdl_2026_r1
+  workflow_dispatch:
+
+jobs:
+  check-readme-template:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          # Need history to diff against the PR base commit.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Determine files to check
+        id: files
+        run: |
+          set -eu
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "mode=all" >> "$GITHUB_OUTPUT"
+          else
+            # PR mode: check (a) project READMEs modified by this PR, plus
+            # (b) the expected README path for every newly-added project or
+            # carrier directory, so PRs that forget the README on a new
+            # project still fail with `README.md not found`.
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+            # (a) modified READMEs
+            git diff --name-only "$BASE_SHA" "$HEAD_SHA" \
+              | awk '/^projects\/.+\/README\.md$/' > changed_readmes.txt
+
+            # (b) expected READMEs for newly-added project/carrier dirs,
+            # skipping the `common` and `scripts` subdirs that aren't projects.
+            # An added `projects/<p>/<c>/*.tcl` queues both `<p>/README.md` and
+            # `<p>/<c>/README.md`; an added `projects/<p>/*.tcl` queues just
+            # `<p>/README.md`. If the queued path IS the file the PR added,
+            # it's already in (a) and `sort -u` folds the duplicate.
+            git diff --name-only --diff-filter=A "$BASE_SHA" "$HEAD_SHA" \
+              | awk -F/ '
+                  /^projects\/(common|scripts)\// { next }
+                  /^projects\// && NF >= 4 {
+                      print "projects/" $2 "/README.md"
+                      print "projects/" $2 "/" $3 "/README.md"
+                  }
+                  /^projects\// && NF == 3 { print "projects/" $2 "/README.md" }
+                ' \
+              | sort -u >> changed_readmes.txt
+            sort -u changed_readmes.txt -o changed_readmes.txt
+            if [ -s changed_readmes.txt ]; then
+              echo "mode=diff" >> "$GITHUB_OUTPUT"
+            else
+              echo "mode=none" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      - name: Run template check (all READMEs)
+        if: steps.files.outputs.mode == 'all'
+        run: python3 .github/scripts/check_readme_template.py --all
+
+      - name: Run template check (changed READMEs only)
+        if: steps.files.outputs.mode == 'diff'
+        run: |
+          # Pipe the file list in so paths with spaces, etc., survive.
+          xargs -a changed_readmes.txt python3 .github/scripts/check_readme_template.py
+
+      - name: Nothing to check
+        if: steps.files.outputs.mode == 'none'
+        run: echo "No project README changes in this PR; skipping."
