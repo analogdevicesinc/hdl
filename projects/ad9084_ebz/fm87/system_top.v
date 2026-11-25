@@ -197,7 +197,14 @@ module system_top #(
   wire          apollo_spi_sdo;
   wire          apollo_spi_sdio;
 
-  wire refclk_fgt_2;
+  wire          refclk_fgt_2;
+  wire          refclk_ready;
+  wire          refclk_ready_rx;
+  wire          refclk_ready_tx;
+  wire          refclk_fgt_2_en;
+  wire          refclk_fgt_2_enabled;
+  wire  [ 2:0]  syspll_refclk_ready;
+  wire          syspll_refclk_status;
 
   assign spi2_cs[5:0] = spi_csn[5:0];
   assign spi2_sclk    = spi_clk;
@@ -241,8 +248,18 @@ module system_top #(
   assign trig_b[1]  = gpio_o[61];
   assign resetb     = gpio_o[62];
 
+  // F-Tile RefClk #2 / System PLL ready control, set by software once the
+  // HMC7044 output is stable (bit 56: RX, bit 57: TX)
+  assign refclk_ready_rx      = gpio_o[56];
+  assign refclk_ready_tx      = gpio_o[57];
+  assign refclk_ready         = refclk_ready_rx & refclk_ready_tx;
+  assign refclk_fgt_2_en      = refclk_ready;
+  assign syspll_refclk_ready  = {2'b00, refclk_ready & refclk_fgt_2_enabled};
+  assign gpio_i[55]           = syspll_refclk_status;
+
   // Unused GPIOs
-  assign gpio_i[63:54] = gpio_o[63:54];
+  assign gpio_i[63:56] = gpio_o[63:56];
+  assign gpio_i[   54] = gpio_o[   54];
   assign gpio_i[52:49] = gpio_o[52:49];
   assign gpio_i[31:29] = gpio_o[31:29];
 
@@ -376,6 +393,10 @@ module system_top #(
     .rx_device_clk_clk (device_clk),
     .ref_clk_in_in_refclk_fgt_2 (fpga_refclk_in),
     .ref_clk_fgt_2_clk (refclk_fgt_2),
+    .en_refclk_fgt_2_en_refclk_fgt_2 (refclk_fgt_2_en),
+    .refclk_fgt_enabled_2_refclk_fgt_enabled_2 (refclk_fgt_2_enabled),
+    .refclock_ready_refclock_ready (syspll_refclk_ready),
+    .refclock_status_refclock_status (syspll_refclk_status),
     .apollo_gpio_export ({syncinb_a1_n_gpio,  // 19
                           syncinb_a1_p_gpio,  // 18
                           syncoutb_a1_n_gpio, // 17
