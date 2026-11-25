@@ -266,7 +266,7 @@ ADRV9371/Arria 10
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - HDL Project: :git-hdl:`projects/adrv9371x/a10soc`
-- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_arria10_socdk_adrv9371.dts`
+- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_arria10_socdk_adrv9371.dts`
 
 Building the Linux Kernel image and the Devicetree
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -476,7 +476,7 @@ ARRADIO/Terasic C5 SoC
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - HDL Project: :git-hdl:`projects/arradio/c5soc`
-- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_sockit_arradio.dts`
+- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_sockit_arradio.dts`
 
 Building the Linux Kernel image and the Devicetree
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -726,7 +726,7 @@ CN0540/DE10Nano
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - HDL Project: :git-hdl:`projects/cn0540/de10nano`
-- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/socfpga_cyclone5_de10_nano_cn0540.dts`
+- ADI's Linux kernel: :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_cn0540.dts`
 
 Building the Linux Kernel image and the Devicetree
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -801,7 +801,6 @@ clone the ``u-boot-socfpga`` image. Before that, create a new BSP settings file:
    $cd software/bootloader ; pwd
     ~/hdl/projects/cn0540/de10nano/software/bootloader
    $git clone https://github.com/altera-opensource/u-boot-socfpga.git
-   $git checkout socfpga_v2021.10
 
 Then run the qts filter and build the preloader and bootloader images:
 
@@ -812,7 +811,7 @@ Then run the qts filter and build the preloader and bootloader images:
     ~/hdl/projects/cn0540/de10nano/software/bootloader
    $cd u-boot-socfpga ; pwd
     ~/hdl/projects/cn0540/de10nano/software/bootloader/u-boot-socfpga
-   $./arch/arm/mach-socfpga/qts-filter.sh cyclone5 ../../../../../board/altera/cyclone5-socdk/qts/
+   $python2 ./tools/cv_bsp_generator/cv_bsp_generator.py -i ./../../../hps_isw_handoff/system_bd_sys_hps -o ./board/altera/cyclone5-socdk/qts
    $make socfpga_cyclone5_defconfig
    $make
 
@@ -940,7 +939,7 @@ AD9081/Agilex 7
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - HDL Project: :git-hdl:`projects/ad9081_fmca_ebz/fm87`
-- ADI's Linux kernel: :git-linux:`../agilex/arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts`
+- ADI's Linux kernel: :git-linux:`agilex:arch/arm64/boot/dts/intel/socfpga_agilex_socdk_ad9081_jesd204c.dts`
 
 Get aarch64-none-linux-gnu and set CROSS_COMPILE and ARCH variables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

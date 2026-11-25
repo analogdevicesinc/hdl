@@ -115,34 +115,24 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
--  Zynq-7000: if PS7 is used, then offset is 54
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Zynq-7000
+====================  ============  =======  ==========
+spi_sdi               IN            34       88
+gain1_o               OUT           33       87
+gain0_o               OUT           32       86
+====================  ============  =======  ==========
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+.. admonition:: Legend
+   :class: note
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - spi_sdi
-     - IN
-     - 34
-     - 88
-   * - gain1_o
-     - OUT
-     - 33
-     - 87
-   * - gain0_o
-     - OUT
-     - 32
-     - 86
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000 = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -185,8 +175,8 @@ Systems related
 Here you can find the quick start guides available for these evaluation boards:
 
 - :dokuwiki:`[Wiki] EVAL-CN0363-PMDZ user guide <resources/eval/user-guides/eval-cn0363-pmdz>`
-- :dokuwiki:`[Wiki] EVAL-CN0363-PMDZ Zed quick start guide <resources/eval/user-guides/eval-cn0363-pmdz/quickstart/zynq>`
-- :dokuwiki:`[Wiki] CN0363 Colorimeter Application user guide <resources/tools-software/linux-software/colorimeter>`
+- :external+system-level:ref:`[Wiki] EVAL-CN0363-PMDZ Zed quick start guide <eval-cn0363-pmdz-quickstart-zynq>`
+- :external+system-level:ref:`[Wiki] CN0363 Colorimeter Application user guide <eval-cn0363-pmdz-colorimeter>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -202,7 +192,7 @@ Hardware related
 
 - :dokuwiki:`EVAL-CN0363-PMDZ Introduction <resources/eval/user-guides/eval-cn0363-pmdz/introduction>`
 - :dokuwiki:`EVAL-CN0363-PMDZ Hardware <resources/eval/user-guides/eval-cn0363-pmdz/hardware>`
-- :dokuwiki:`EVAL-CN0363-PMDZ Hardware Setup <resources/eval/user-guides/eval-cn0363-pmdz/prerequisites>`
+- :external+system-level:ref:`EVAL-CN0363-PMDZ Hardware Setup <eval-cn0363-pmdz-prerequisites>`
 
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -275,7 +265,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`CN0363 Linux driver source code <drivers/iio/adc/ad_adc.c>`
-- :dokuwiki:`CN0363 Linux Driver [Wiki] <resources/eval/user-guides/eval-cn0363-pmdz/software/linux/drivers>`
+- :external+linux:doc:`CN0363 Linux Driver <drivers/iio-adc/ad7173>`
 
 .. include:: ../common/more_information.rst
 

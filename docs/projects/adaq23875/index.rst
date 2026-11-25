@@ -9,7 +9,7 @@ an analog front-end and an FMC digital interface for :adi:`ADAQ23875`/
 successive approximation register (SAR) ADC with a resolution of 18/16 bits and
 sampling rate up to 15MSPS.
 
-The ADAQ2387x family includes an on-board reference oscillator and a
+The ADAQ2387X family includes an on-board reference oscillator and a
 retiming circuit to minimize signal-to-noise ratio (SNR) degradation due to
 the FPGA additive jitter.
 
@@ -125,34 +125,6 @@ axi_ltc2387_dma      0x44A3_0000
 axi_pwm_gen          0x44A6_0000
 ==================== ===============
 
-GPIOs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - testpat_cntrl
-     - IN
-     - 32
-     - 86
-     - 110
-   * - pd_cntrl
-     - IN
-     - 33
-     - 87
-     - 111
-
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -193,7 +165,7 @@ ADC_RES=18):
 
 The built project will be found in a folder called TWOS0_ADCRES18.
 
-Example configuration for :adi:`EVAL-ADAQ23875`/:adi:`EVAL-ADQ23876` in
+Example configuration for :adi:`EVAL-ADAQ23875`/:adi:`EVAL-ADAQ23876` in
 two-lane mode (TWOLANES=1, ADC_RES=16):
 
 .. shell:: bash
@@ -272,9 +244,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] LTC2387 SAR ADC IIO Linux driver page <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
-- :git-linux:`ADAQ23875/ADAQ23876 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts>`
-- :git-linux:`ADAQ23878 Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23878.dts>`
+- :external+linux:doc:`LTC2387 SAR ADC IIO Linux driver page <drivers/iio-adc/ltc2387>`
+- :git-linux:`ADAQ23875/ADAQ23876 Linux device tree <add_adaq2387x_support:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23875.dts>`
+- :git-linux:`ADAQ23878 Linux device tree <add_adaq2387x_support:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq23878.dts>`
 - :git-linux:`LTC2387 Linux driver <drivers/iio/adc/ltc2387.c>`
 
 .. include:: ../common/more_information.rst

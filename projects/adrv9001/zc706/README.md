@@ -16,7 +16,7 @@ make
 The overwritable parameter from the environment:
 
 - CMOS_LVDS_N - specific to the type of the data and clock signals
-  - 0 - Differential data and clock signals 
+  - 0 - Differential data and clock signals
   - 1 - Single-ended data and clock signals (default)
 
 ### Example configurations

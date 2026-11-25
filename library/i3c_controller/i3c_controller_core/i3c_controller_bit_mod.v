@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -34,9 +34,7 @@
 // ***************************************************************************
 /**
  * Modulates the SDA and SCL lanes.
- * SCL high time is fixed at 40ns in I3C mode:
- * * 4 clock cycles at 100MHz clk.
- * * 2 clock cycles at 50MHz clk.
+ * SCL high time is fixed at 40ns in I3C mode at 100MHz clk (4 clock cycles).
  * I3C Open drain is 1.5625MHz,while I2C speed depends on I2C_MOD, e.g.:
  * * I2C_MOD = 0 : 1.5626MHz
  * * I2C_MOD = 2:    390.6kHz

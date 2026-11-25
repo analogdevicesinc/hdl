@@ -1,5 +1,3 @@
-<!-- no_no_os -->
-
 # AD9081-FMCA-EBZ/VCU118 HDL Project
 
 - VADJ with which it was tested in hardware: 1.8V
@@ -221,3 +219,5 @@ PLL_TYPE=QPLL0 \
 REF_CLK=500 \
 LANE_RATE=10
 ```
+
+Corresponding No-OS project: [ad9081](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad9081)

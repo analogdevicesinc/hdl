@@ -117,7 +117,7 @@ parameters:
 - F: 2 octets per frame in case of ``L=2``, and 4 in case of ``L=1``
 
 For more details, check *Table 19, JESD204B Output Configurations* from the
-:adi:`AD6676 data sheet`.
+:adi:`AD6676 datasheet <media/en/technical-documentation/data-sheets/AD6676.pdf>`
 
 Deframer paramaters: L=2, M=2, F=2, S=1, NP=16
 
@@ -160,70 +160,32 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - adc_oen
-     - INOUT
-     - 41
-     - 95
-     - 119
-   * - adc_sela
-     - INOUT
-     - 40
-     - 94
-     - 118
-   * - adc_selb
-     - INOUT
-     - 39
-     - 93
-     - 117
-   * - adc_s0
-     - INOUT
-     - 38
-     - 92
-     - 116
-   * - adc_s1
-     - INOUT
-     - 37
-     - 91
-     - 115
-   * - adc_resetb
-     - INOUT
-     - 36
-     - 90
-     - 114
-   * - adc_agc1
-     - INOUT
-     - 35
-     - 89
-     - 113
-   * - adc_agc2
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - adc_agc3
-     - INOUT
-     - 33
-     - 87
-     - 111
-   * - adc_agc4
-     - INOUT
-     - 32
-     - 86
-     - 110
+==============  =========  =======  =========  ==========
+GPIO signal     Direction  HDL no.  Zynq-7000  Microblaze
+==============  =========  =======  =========  ==========
+adc_oen         INOUT      41       95         41
+adc_sela        INOUT      40       94         40
+adc_selb        INOUT      39       93         39
+adc_s0          INOUT      38       92         38
+adc_s1          INOUT      37       91         37
+adc_resetb      INOUT      36       90         36
+adc_agc1        INOUT      35       89         35
+adc_agc2        INOUT      34       88         34
+adc_agc3        INOUT      33       87         33
+adc_agc4        INOUT      32       86         32
+==============  =========  =======  =========  ==========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, Microblaze are Software GPIOs, to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -344,10 +306,10 @@ Software related
 - Linux driver :git-linux:`drivers/iio/adc/ad6676.c`
 - AD6676EVB VC707 Linux device tree :git-linux:`arch/microblaze/boot/dts/vc707_ad6676evb.dts`
 - AD6676EVB ZC706 Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad6676-fmc.dts`
-- :dokuwiki:`AD6676 Linux device driver documentation <resources/tools-software/linux-drivers/iio-adc/ad6676>`
+- :external+linux:doc:`AD6676 Linux device driver documentation <drivers/iio-adc/ad6676>`
 - AD6676 no-OS driver :git-no-os:`drivers/adc/ad6676`
 - AD6676 no-OS project :git-no-os:`projects/ad6676-ebz`
-- :dokuwiki:`AD6676 No-OS driver documentation <resources/eval/user-guides/ad6676-ebz/software/baremetal>`
+- :external+no-OS:doc:`AD6676 No-OS driver documentation <projects/adc/ad6676-ebz>`
 
 .. include:: ../common/more_information.rst
 

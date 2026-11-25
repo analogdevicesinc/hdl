@@ -1,6 +1,6 @@
 # AD719X-ASDZ HDL Project
 
-- Evaluation boards product page:
+- Evaluation boards product pages:
   - [EVAL-AD7190](https://www.analog.com/eval-ad7190asdz)
   - [EVAL-AD7192](https://www.analog.com/eval-ad7192asdz)
   - [EVAL-AD7193](https://www.analog.com/eval-ad7193asdz)
@@ -9,8 +9,8 @@
   - [EVAL-AD4131-8](https://www.analog.com/eval-ad4131-8)
   - [EVAL-AD4130-8](https://www.analog.com/eval-ad4130-8)
   - [EVAL-AD4129-8](https://www.analog.com/eval-ad4129-8)
-- System documentation: TO BE ADDED
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad719x_asdz/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-ad719x/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad719x_asdz/
 - Evaluation board VIO: 3.3V
 
 ## Supported parts

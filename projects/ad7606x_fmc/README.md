@@ -8,8 +8,8 @@
   - [EVAL-AD7607](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7607.html)
   - [EVAL-AD7608](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7608.html)
   - [EVAL-AD7609](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/eval-ad7609.html)
-- System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad7606x_fmc/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-ad7606x/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad7606x_fmc/
 - Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts
@@ -18,7 +18,7 @@
 |--------------------------------------------------------------|-----------------------------------------------------------------------|
 | [AD7606B](https://www.analog.com/en/products/ad7606b)        | 8 Channels, 16-bit, 800 kSPS Bipolar Input, Simultaneous sampling ADC |
 | [AD7606C-16](https://www.analog.com/en/products/ad7606c-16)  | 8 Channels, 16-bit, 1 MSPS Bipolar Input, Simultaneous sampling ADC   |
-| [AD7606C-18](https://www.analog.com/en/products/ad7606c-18.) | 8 Channels, 18-bit, 1 MSPS Bipolar Input, Simultaneous sampling ADC   |
+| [AD7606C-18](https://www.analog.com/en/products/ad7606c-18) | 8 Channels, 18-bit, 1 MSPS Bipolar Input, Simultaneous sampling ADC   |
 | [AD7605-4](https://www.analog.com/en/products/ad7605-4)      | 4 Channels, 16-bit, 300 kSPS Bipolar Input, Simultaneous sampling ADC |
 | [AD7606](https://www.analog.com/en/products/ad7606)          | 8 Channels, 16-bit, 200 kSPS Bipolar Input, Simultaneous sampling ADC |
 | [AD7606-6](https://www.analog.com/en/products/ad7606-6)      | 6 Channels, 16-bit, 200 kSPS Bipolar Input, Simultaneous sampling ADC |

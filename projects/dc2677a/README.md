@@ -1,8 +1,8 @@
 # DC2677A HDL Project
 
 - Evaluation board product page: [DC2677A](https://www.analog.com/dc2677a)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/dc2677a
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/dc2677a/index.html
+- System documentation: https://developer.analog.com/docs/hdl/projects/dc2677a/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/dc2677a/
 - Evaluation board VADJ range: 2.5V - 3.3V
 
 ## Supported parts

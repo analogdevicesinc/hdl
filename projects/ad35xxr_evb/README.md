@@ -1,8 +1,8 @@
 # AD35XXR-EVB HDL Project
 
 - Evaluation board product page: [EVAL-AD3552R](https://www.analog.com/eval-ad3552r)
-- System documentation: TO BE ADDED
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad35xxr_evb/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-ad35xxr/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad35xxr_evb/
 - Evaluation board VADJ range: 1.2V - 1.8V
 
 ## Supported parts

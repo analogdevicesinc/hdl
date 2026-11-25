@@ -17,7 +17,7 @@ If other configurations are desired, then the parameters from the HDL project (s
 
 The overwritable parameters from the environment:
 
-- ADI_DAC_DEVICE: **AD9172**; desired device (currently supported: AD9144, AD9154, AD917x); 
+- ADI_DAC_DEVICE: **AD9172**; desired device (currently supported: AD9144, AD9154, AD917x);
 - ADI_DAC_MODE: **04**; configuration mode of JESD parameters supported by the device (check **common/config.tcl**);
 - L: **4**; TX number of lanes per link
 
@@ -29,6 +29,6 @@ This specific command is equivalent to running `make` only:
 
 ```
 make ADI_DAC_DEVICE=AD9172 ADI_DAC_MODE=04
-``` 
+```
 
 Corresponding device tree: [socfpga_arria10_socdk_ad9172_fmc.dts](https://github.com/analogdevicesinc/linux/blob/2019_R1_altera/arch/arm/boot/dts/socfpga_arria10_socdk_ad9172_fmc.dts)

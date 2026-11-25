@@ -86,34 +86,24 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-- Zynq-7000: if PS7 is used, then offset is 54
+==================  =========  =======  =========
+GPIO signal         Direction  HDL no.  Zynq-7000
+==================  =========  =======  =========
+ad5529r_ardz_alarm  IN         34       88
+ad5529r_ardz_reset  OUT        33       87
+ad5529r_ardz_clear  OUT        32       86
+==================  =========  =======  =========
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+.. admonition:: Legend
+   :class: note
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - ad5529r_clear
-     - OUT
-     - 32
-     - 86
-   * - ad5529r_reset
-     - OUT
-     - 33
-     - 87
-   * - ad5529r_alarm
-     - IN
-     - 34
-     - 88
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 is Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -149,7 +139,7 @@ the HDL repository, and then build the project as follows:
 
 .. shell::
 
-   $cd hdl/projects/ad5529r/coraz7s
+   $cd hdl/projects/ad5529r_ardz/coraz7s
    $make
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -173,7 +163,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-hdl:`ad5529r HDL project source code <projects/ad5529r>`
+- :git-hdl:`ad5529r HDL project source code <projects/ad5529r_ardz>`
 
 .. list-table::
    :widths: 30 40 30

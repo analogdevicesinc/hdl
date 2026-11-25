@@ -1,14 +1,14 @@
 # DAC-FMC-EBZ HDL Project
 
-- Evaluation board product page: 
+- Evaluation boards product pages:
   - [EVAL-AD9135](https://www.analog.com/eval-AD9135)
   - [EVAL-AD9136](https://www.analog.com/eval-AD9136)
   - [EVAL-AD9144](https://www.analog.com/eval-AD9144)
   - [EVAL-AD9152](https://www.analog.com/eval-AD9152)
   - [EVAL-AD9154](https://www.analog.com/eval-AD9154)
   - [EVAL-AD917x](https://www.analog.com/eval-AD9172)
-- System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/dac_fmc_ebz/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/dac-fmc-ebz/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/dac_fmc_ebz/
 - Evaluation board VADJ range: 1.8V - 2.5V
 
 ## Supported parts

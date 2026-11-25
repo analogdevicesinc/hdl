@@ -125,44 +125,31 @@ The SPI signals are controlled by a separate AXI based SPI core.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 The device control and monitor signals are interfaced to a GPIO module.
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+- Zynq-7000: if PS7 is used, then offset is 54
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - pl_muxout
-     - OUT
-     - 17
-     - 71
-   * - phaser_enable
-     - IN
-     - 14
-     - 68
-   * - gpio_resetb
-     - INOUT
-     - 13
-     - 67
-   * - gpio_en_agc
-     - INOUT
-     - 12
-     - 66
-   * - gpio_ctl[3:0]
-     - INOUT
-     - 11:8
-     - 65:62
-   * - gpio_status[7:0]
-     - INOUT
-     - 7:0
-     - 61:54
+=================  ============  =======  =========
+GPIO signal        Direction     HDL no.  Zynq-7000
+=================  ============  =======  =========
+pl_muxout          OUT           17       71
+phaser_enable      IN            14       68
+gpio_resetb        INOUT         13       67
+gpio_en_agc        INOUT         12       66
+gpio_ctl[3:0]      INOUT         11:8     65:62
+gpio_status[7:0]   INOUT         7:0      61:54
+=================  ============  =======  =========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO number
+   - Zynq-7000 = Software GPIO to be used in device trees
 
 .. note::	 
 
@@ -271,7 +258,7 @@ Hardware related
 - Product datasheet: :adi:`AD9363`
 
 - :dokuwiki:`[Wiki] About AD9361/AD9363/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/ad9361>`
-- :dokuwiki:`[Wiki] About I/Q rotation <resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation>`
+- :external+system-level:ref:`[Wiki] About I/Q rotation <fmcomms2 common iq-rotation>`
 - :dokuwiki:`[Wiki] Configuration options for <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options>`
 - :dokuwiki:`[Wiki] Tuning the AD9361/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning>`
 
@@ -316,9 +303,9 @@ Software related
 
 - :dokuwiki:`[Wiki] Linux Drivers <university/tools/pluto/drivers/linux>`
 - :dokuwiki:`[Wiki] Windows Drivers <university/tools/pluto/drivers/linux>`
-- :dokuwiki:`[Wiki] AD936x IIO Oscilloscope plugin description <resources/tools-software/linux-software/fmcomms2_plugin>`
+- :external+system-level:doc:`AD936X IIO Oscilloscope plugin description <solutions/reference-designs/fmcomms2/software/ad9361_plugin>`
 
-- :dokuwiki:`[Wiki] Pluto Support <university/tools/pluto/help_support>`
+- :external+system-level:ref:`[Wiki] Pluto Support <pluto help_support>`
 - :dokuwiki:`[Wiki] ADALM-PLUTO Troubleshooting <university/tools/pluto/troubleshooting>`
 
 .. include:: ../common/more_information.rst

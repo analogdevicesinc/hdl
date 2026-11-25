@@ -69,25 +69,19 @@ axi_sysid                 0x0001_8000
 GPIO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 40 30 30
-   :header-rows: 2
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  DE10-Nano
+====================  ============  =======  ==========
+ltc2308_cs            OUT           41       9
+====================  ============  =======  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-   * -
-     - (from FPGA view)
-     - DE10-Nano
-   * - ltc2308_cs
-     - OUT
-     - 41
-   * - gpio_bd[5:0]
-     - IN
-     - 13:8
-   * - gpio_bd_o[7:0]
-     - OUT
-     - 7:0
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - DE10-Nano = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,7 +155,7 @@ Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - :git-linux:`ADV7513 driver source code <drivers/gpu/drm/bridge/adv7511>`
-- :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
+- :external+linux:doc:`ADV7511 driver docs <drivers/drm/adv7511>`
 
 .. include:: ../common/more_information.rst
 

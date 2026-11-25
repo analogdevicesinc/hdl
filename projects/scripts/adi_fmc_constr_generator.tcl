@@ -44,7 +44,7 @@ proc gen_fmc_constr {{fmc_index1 fmc} {fmc_index2 {}}} {
   variable io_standard_max 0
   variable file_index 0
 
-  set platform [expr [regexp {a10gx|a10soc|s10soc} [file tail [pwd]]] ? "{intel}" : "{xilinx}"]
+  set platform [expr [regexp {a10soc|s10soc} [file tail [pwd]]] ? "{intel}" : "{xilinx}"]
 
   if {[string match $platform xilinx]} {
 

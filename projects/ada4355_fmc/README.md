@@ -1,8 +1,8 @@
 # ADA4355-FMC HDL Project
 
 - Evaluation board product page: [EVAL-ADA4355](https://www.analog.com/eval-ada4355.html)
-- System documentation: to be added
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ada4355_fmc/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-ada4355-fmc/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ada4355_fmc/
 - Evaluation board VADJ: 2.5V
 
 ## Supported parts

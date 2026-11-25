@@ -21,8 +21,8 @@ from the precision ADC.
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD4060`
-- :adi:`EVAL-AD4062`
+- :adi:`EVAL-AD4060-ARDZ <eval-ad4060-eval-ad4062>`
+- :adi:`EVAL-AD4062-ARDZ <eval-ad4060-eval-ad4062>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -127,53 +127,23 @@ For the ADC, check the part datasheet and the set address pins.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
--  Cora Z7S: the offset is 54
+===========  =========  =======  =========  =========
+GPIO signal  Direction  HDL no.  Zynq-7000  DE10-Nano
+===========  =========  =======  =========  =========
+adc_gp1      INOUT      33       87         1
+adc_gp0      INOUT      32       86         0
+===========  =========  =======  =========  =========
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+.. admonition:: Legend
+   :class: note
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - adc_gp1
-     - INOUT
-     - 33
-     - 87
-   * - adc_gp0
-     - INOUT
-     - 32
-     - 86
-
--  DE10-Nano: the offset is 32
-
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     -
-   * - adc_gp1
-     - INPUT
-     - 33
-     - 1
-   * - adc_gp0
-     - INPUT
-     - 32
-     - 0
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, DE10-Nano are Software GPIOs, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -233,7 +203,7 @@ Hardware related
 HDL related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--  :git-hdl:`AD4062-ARDZ HDL project source code <projects/ad4062-ardz>`
+-  :git-hdl:`AD4062-ARDZ HDL project source code <projects/ad4062_ardz>`
 
 .. list-table::
    :widths: 30 35 35

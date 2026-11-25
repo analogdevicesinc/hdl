@@ -124,45 +124,26 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - reset
-     - INOUT
-     - 36
-     - 90
-     - 114
-   * - dac_0_ldac
-     - INOUT
-     - 35
-     - 89
-     - 113
-   * - dac_1_ldac
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - dac_1_alert
-     - IN
-     - 33
-     - 87
-     - 111
-   * - dac_0_alert
-     - IN
-     - 32
-     - 86
-     - 110
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Zynq-7000
+====================  ============  =======  ==========
+reset                 INOUT         36       90
+dac_0_ldac            INOUT         35       89
+dac_1_ldac            INOUT         34       88 
+dac_1_alert           IN            33       87
+dac_0_alert           IN            32       86
+====================  ============  =======  ==========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000 = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -270,8 +251,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver page <resources/tools-software/linux-drivers/iio-dac/axi-ad3552r>`
-- :dokuwiki:`[Wiki] LTC2387 SAR ADC IIO Linux driver page <resources/tools-software/linux-drivers/iio-adc/ltc2387>`
+- :external+linux:doc:`AD3552R Dual Channel, 16-Bit, 33 MUPS, Multispan, Multi-IO SPI DAC Linux device driver page <drivers/iio-dac/ad3552r-hs>`
+- :external+linux:doc:`LTC2387 SAR ADC IIO Linux driver page <drivers/iio-adc/ltc2387>`
 
 - Python support:
 

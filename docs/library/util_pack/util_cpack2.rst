@@ -40,6 +40,23 @@ Configuration Parameters
 
 .. hdl-parameters::
 
+The INTERFACE_TYPE parameter refers to the upstream interface type: 1 means
+FIFO interface, 0 means AXI Stream interface. 
+
+The PARALLEL_OR_SERIAL_N parameter refers to how the prefix sum is being
+implemented inside the IP: 1 means a log-depth structure, 0 means a serial
+structure. The former may pass timing easier at higher frequencies, while the
+latter may use fewer resources. Choosing one or the other does not affect the
+IP functionality.
+
+The PIPELINE_STAGES parameter refers to how or if pipeline stages are added to
+the design: 0 means no pipeline added, 1 means a pipeline after every 2 MUX
+stages, 2 means a pipeline after every MUX stage.
+
+.. note::
+   Pipelining is not supported in AXI Stream interface mode (i.e. if
+   INTERFACE_TYPE=0). In this case, the PIPELINE_STAGES parameter is ignored.
+
 Interface
 --------------------------------------------------------------------------------
 

@@ -1,8 +1,8 @@
 # FMCOMMS5 HDL Project
 
 - Evaluation board product page: [EVAL-AD-FMCOMMS5-EBZ](https://www.analog.com/eval-ad-fmcomms5-ebz)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-fmcomms5-ebz
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/fmcomms5/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/fmcomms5/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/fmcomms5/
 - Evaluation board VADJ range: 1.8V - 2.5V
 
 ## Supported parts

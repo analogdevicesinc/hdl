@@ -1,8 +1,8 @@
 # AD9265-FMC HDL Project
 
 - Evaluation board product page: [EVAL-AD9265](https://www.analog.com/eval-ad9265)
-- System documentation: https://wiki.analog.com/resources/eval/ad9265-fmc-125ebz
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9265_fmc/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-ad9265/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad9265_fmc/
 - Evaluation board VADJ: 2.5V
 
 ## Supported parts

@@ -1,4 +1,4 @@
-<!-- no_dts, no_no_os -->
+<!-- no_no_os -->
 
 # AD469X-EVB/CORAZ7S HDL Project
 

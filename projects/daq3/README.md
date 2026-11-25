@@ -1,9 +1,9 @@
 # DAQ3 HDL Project
 
 - Evaluation board product page: [EVAL-FMCDAQ3-EBZ](https://www.analog.com/eval-fmcdaq3-ebz)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/daq3/index.html
-- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://analogdevicesinc.github.io/hdl/library/jesd204/xgt_wizard/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/ad-fmcdaq3-ebz/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/daq3/
+- Transceiver configuration support for Xilinx carriers (xcvr_wizard): https://developer.analog.com/docs/hdl/library/jesd204/xgt_wizard/
 - Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts

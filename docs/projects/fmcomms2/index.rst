@@ -22,7 +22,7 @@ The :adi:`AD9361` and :adi:`AD9364` chips operate in the 70MHz to 6GHz range,
 covering most licensed and unlicensed bands. The boards, due to discrete
 external components may have less performance on some of the RF input/output
 connectors (for example - the :adi:`FMCOMMS2 <EVAL-AD-FMCOMMS2>` and specific
-connectors on the :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` are specifically tuned
+connectors on the :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>` are specifically tuned
 to 2.4GHz). The :adi:`AD9361` and :adi:`AD9364` both supports channel
 bandwidths from less than 200kHz to 56MHz by both changing sample rate, and by
 changing digital filters, and decimation inside the device itself.
@@ -36,14 +36,14 @@ Supported boards
 -------------------------------------------------------------------------------
 
 - :adi:`FMCOMMS2 <EVAL-AD-FMCOMMS2>`
-- :adi:`FMCOMMS3 <EVAL-AD-FMCOMMS3>`
+- :adi:`FMCOMMS3 <AD-FMCOMMS3-EBZ>`
 - :adi:`FMCOMMS4 <EVAL-AD-FMCOMMS4-EBZ>`
 
 Supported devices
 -------------------------------------------------------------------------------
 
 - :adi:`AD9361`, in :adi:`FMCOMMS2 <EVAL-AD-FMCOMMS2>`,
-  :adi:`FMCOMMS3 <EVAL-AD-FMCOMMS3>`
+  :adi:`FMCOMMS3 <AD-FMCOMMS3-EBZ>`
 - :adi:`AD9364`, in :adi:`FMCOMMS4 <EVAL-AD-FMCOMMS4-EBZ>`
 
 Supported carriers
@@ -178,77 +178,40 @@ The SPI signals are controlled by a separate AXI based SPI core.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 The device control and monitor signals are interfaced to a GPIO module.
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+===================  ============  =======  =========  ===================  ==========
+GPIO signal          Direction     HDL no.  Zynq-7000  Zynq UltraScale+ MP  Microblaze
+===================  ============  =======  =========  ===================  ==========
+gpio_muxout_tx*      INOUT         50       104        128                  --
+gpio_muxout_rx*      INOUT         49       103        127                  --
+up_txnrx             IN            48       102        126                  48
+up_enable            IN            47       101        125                  47                  
+gpio_resetb          OUT           46       100        124                  46
+gpio_sync            OUT           45        99        123                  45
+gpio_en_agc          OUT           44        98        122                  44
+gpio_ctl[3:0]        OUT           43:40    97:94      121:118              43:40
+gpio_status[7:0]     IN            39:32    93:86      117:110              39:32
+===================  ============  =======  =========  ===================  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - gpio_muxout_tx*
-     - INOUT
-     - 50
-     - 104
-     - 128
-   * - gpio_muxout_rx*
-     - INOUT
-     - 49
-     - 103
-     - 127
-   * - up_txnrx
-     - IN
-     - 48
-     - 102
-     - 126
-   * - up_enable
-     - IN
-     - 47
-     - 101
-     - 125
-   * - gpio_resetb
-     - OUT
-     - 46
-     - 100
-     - 124
-   * - gpio_sync
-     - OUT
-     - 45
-     - 99
-     - 123
-   * - gpio_en_agc
-     - OUT
-     - 44
-     - 98
-     - 122
-   * - gpio_ctl[3:0]
-     - OUT
-     - 43:40
-     - 97:94
-     - 121:118
-   * - gpio_status[7:0]
-     - IN
-     - 39:32
-     - 93:86
-     - 117:110
+.. admonition:: Legend
+   :class: note
 
-.. note::
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, Zynq UltraScale+ MP, Microblaze are Software GPIOs, to be used in
+     device trees
+   - **\*** - used only in :git-hdl:`Zed <projects/fmcomms2/zed/system_top.v>`,
+     :git-hdl:`ZC706 <projects/fmcomms2/zc706/system_top.v>` and
+     :git-hdl:`ZC702 <projects/fmcomms2/zc702/system_top.v>` projects.
 
-  **\*** - used only in
-  :git-hdl:`Zed <projects/fmcomms2/zed/system_top.v>` and
-  :git-hdl:`ZC702 <projects/fmcomms2/zc702/system_top.v>` projects.
-
-  ``gpio_muxout_tx`` is connected to PMOD JA1.3, used for LO PLL0 TX at ADF4351
-  and ``gpio_muxout_rx`` is connected to PMOD JA1.9, used for LO PLL0 RX at
-  ADF4351.
+     ``gpio_muxout_tx`` is connected to PMOD JA1.3, used for LO PLL0 TX at ADF4351
+     and ``gpio_muxout_rx`` is connected to PMOD JA1.9, used for LO PLL0 RX at
+     ADF4351.
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -302,10 +265,10 @@ Here you can find the quick start guides available for these evaluation boards:
 Other useful information:
 
 - :dokuwiki:`[Wiki] FMCOMMS2 User Guide <resources/eval/user-guides/ad-fmcomms2-ebz>`
-- :dokuwiki:`[Wiki] FMCOMMS2/3/4/5 basic IQ data files <resources/eval/user-guides/ad-fmcomms2-ebz/software/basic_iq_datafiles>`
+- :external+system-level:ref:`[Wiki] FMCOMMS2/3/4/5 basic IQ data files <fmcomms2 common basic-iq-datafiles>`
 - :dokuwiki:`[Wiki] FMCOMMS2/4/5 Specifications <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/card_specification>`
 - :dokuwiki:`[Wiki] Configuration options for AD9361/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options>`
-- :dokuwiki:`[Wiki] AD9361 filter response <resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal-filter>`
+- :external+system-level:ref:`[Wiki] AD9361 filter response <fmcomms2 software baremetal-filter>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -317,7 +280,7 @@ Hardware related
   - :adi:`AD9364`
 
 - :dokuwiki:`[Wiki] About AD9361/AD9363/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/ad9361>`
-- :dokuwiki:`[Wiki] About I/Q rotation <resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation>`
+- :external+system-level:ref:`[Wiki] About I/Q rotation <fmcomms2 common iq-rotation>`
 - :dokuwiki:`[Wiki] Configuration options for <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options>`
 - :dokuwiki:`[Wiki] Tuning the AD9361/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning>`
 
@@ -389,10 +352,10 @@ Software related
    - :git-linux:`FMCOMMS4 ZCU102 (revB) Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB-ad9364-fmcomms4.dts>`
    - :git-linux:`FMCOMMS4 ZCU102 (rev10) Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9364-fmcomms4.dts>`
 
-- :dokuwiki:`[Wiki] AD9361 no-OS software documentation <resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal>`
-- :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
-- :dokuwiki:`[Wiki] FMCOMMS2/3/4/5 Linux support <resources/eval/user-guides/ad-fmcomms2-ebz/software/linux>`
-- :dokuwiki:`[Wiki] AD936x IIO Oscilloscope plugin description <resources/tools-software/linux-software/fmcomms2_plugin>`
+- :external+no-OS:doc:`AD9361 no-OS software documentation <drivers/rf-transceiver/ad9361>`
+- :external+linux:doc:`AD9361 Linux device driver documentation <drivers/iio-transceiver/ad9361>`
+- :external+system-level:doc:`FMCOMMS2/3/4/5 Linux support <solutions/reference-designs/fmcomms2/software/linux>`
+- :external+system-level:doc:`AD936X IIO Oscilloscope plugin description <solutions/reference-designs/fmcomms2/software/ad9361_plugin>`
 
 .. include:: ../common/more_information.rst
 

@@ -1,4 +1,4 @@
-<!-- no_dts, no_no_os -->
+<!-- no_dts -->
 
 # ADRV9001-DUAL/ZCU102 HDL Project
 
@@ -39,3 +39,5 @@ make CMOS_LVDS_N=0 \
 USE_RX_CLK_FOR_TX1=0 \
 USE_RX_CLK_FOR_TX2=0
 ```
+
+Corresponding No-OS project: [adrv9001](https://github.com/analogdevicesinc/no-OS/tree/main/projects/adrv9001)

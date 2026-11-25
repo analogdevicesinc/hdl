@@ -210,8 +210,8 @@ Software Support
 
 * Linux device trees at:
 
-  * :git-linux:`arch/arm/boot/dts/zynq-zc706-adv7511-ad9265-fmc-125ebz.dts`
-  * :git-linux:`arch/arm/boot/dts/zynq-zed-adv7511-ad9265-fmc-125ebz.dts`
+  * :git-linux:`arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad9265-fmc-125ebz.dts`
+  * :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad9265-fmc-125ebz.dts`
 
 * No-OS device driver at :git-no-os:`drivers/adc/ad9265`
 * No-OS project at :git-no-os:`projects/ad9265-fmc-125ebz`

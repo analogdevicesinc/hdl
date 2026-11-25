@@ -87,38 +87,24 @@ axi_iic_fmc*              0x4162_0000
 GPIO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-- Zynq-7000: if PS7 EMIOs are used, then offset is 54
-
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
-
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - gpio_bd[31:0] *
-     - INOUT
-     - 31:0
-     - 85:54
-   * - gpio_bd[14:0] **
-     - INOUT
-     - 14:0
-     - 68:54
-   * - gpio_bd[15:0] \***
-     - INOUT
-     - 15:0
-     - 69:54
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Zynq-7000
+====================  ============  =======  ==========
+gpio_bd[31:0] *       INOUT         31:0     85:54
+gpio_bd[14:0] **      INOUT         14:0     68:54
+gpio_bd[15:0] \***    INOUT         15:0     69:54
+====================  ============  =======  ==========
 
 .. admonition:: Legend
    :class: note
 
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000 = Software GPIO to be used in device trees
    - ``*``  instantiated only for Zed carrier
    - ``**`` instantiated only for ZC706 carrier
    - ``***`` instantiated only for ZC702 carrier
@@ -215,7 +201,7 @@ Software related
 - :git-linux:`ADV7511 - ZED dts source code <arch/arm/boot/dts/xilinx/zynq-zed-adv7511.dts>`
 - :git-linux:`ADV7511 - ZC706 dts source code <arch/arm/boot/dts/xilinx/zynq-zc706-adv7511.dts>`
 - :git-linux:`ADV7511 - ZC702 dts source code <arch/arm/boot/dts/xilinx/zynq-zc702-adv7511.dts>`
-- :dokuwiki:`ADV7511 driver docs <resources/tools-software/linux-drivers/drm/adv7511>`
+- :external+linux:doc:`ADV7511 driver docs <drivers/drm/adv7511>`
 - :git-no-OS:`ADV7511 no-OS project source code <projects/adv7511>`
 
 .. include:: ../common/more_information.rst

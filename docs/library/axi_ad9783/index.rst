@@ -47,7 +47,7 @@ The axi_ad9783 cores architecture contains:
 * :git-hdl:`Transmit <library/axi_ad9783/axi_ad9783_core.v>`
   module, which contains:
 
-  * :git-hdl:`DAC channel processing <axi_ad9783/axi_ad9783_channel.v>` modules, one for each channel
+  * :git-hdl:`DAC channel processing <library/axi_ad9783/axi_ad9783_channel.v>` modules, one for each channel
 
     * Different data generators (:git-hdl:`DDS <library/common/ad_dds.v>`, pattern, PRBS)
     * :git-hdl:`DAC Channel register map <library/common/up_dac_channel.v>`
@@ -305,7 +305,7 @@ work.
 Software Support
 --------------------------------------------------------------------------------
 
-* Linux device driver at :git-linux:`drivers/iio/adc/ad9783.c`
+* Linux device driver at :git-linux:`drivers/iio/frequency/ad9783.c`
 * Linux device tree at :git-linux:`arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9783.dts`
 
 References

@@ -3,7 +3,7 @@
 AD4880-FMC-EVB HDL project
 ================================================================================
 
-The :adi:`EVAL-AD4880-FMC` is designed to demonstrate the :adi:`AD4880`
+The :adi:`EVAL-AD4880-FMCZ <eval-ad4880>` is designed to demonstrate the :adi:`AD4880`
 performance.
 
 The :git-hdl:`AD4880-FMC-EVB HDL project <projects/ad4880_fmc_evb>` supports
@@ -20,8 +20,8 @@ the following :adi:`AD4880` , :adi:`AD4884` features:
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD4880-FMC`
-- :adi:`EVAL-AD4884-FMC`
+- :adi:`EVAL-AD4880-FMCZ <eval-ad4880>`
+- :adi:`EVAL-AD4884-FMCZ <eval-ad4884>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -44,10 +44,10 @@ Supported carriers
    * - Evaluation board
      - Carrier
      - FMC slot
-   * - :adi:`EVAL-AD4880-FMC`
+   * - :adi:`EVAL-AD4880-FMCZ <eval-ad4880>`
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC-LPC
-   * - :adi:`EVAL-AD4884-FMC`
+   * - :adi:`EVAL-AD4884-FMCZ <eval-ad4884>`
      - `ZedBoard <https://digilent.com/shop/zedboard-zynq-7000-arm-fpga-soc-development-board>`__
      - FMC-LPC
 
@@ -123,55 +123,28 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - adcb_gpio3_fmc
-     - OUT
-     - 39
-     - 93
-     - 117
-   * - adcb_gpio2_fmc
-     - OUT
-     - 38
-     - 92
-     - 116
-   * - ad9508_sync
-     - OUT
-     - 37
-     - 91
-     - 115
-   * - pwrgd
-     - IN
-     - 36
-     - 90
-     - 114
-   * - adf435x_lock
-     - IN
-     - 35
-     - 89
-     - 113
-   * - adca_gpio3_fmc
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - adca_gpio2_fmc
-     - INOUT
-     - 33
-     - 87
-     - 111
+==============  =========  =======  =========
+GPIO signal     Direction  HDL no.  Zynq-7000
+==============  =========  =======  =========
+adcb_gpio3_fmc  OUT        39       93
+adcb_gpio2_fmc  OUT        38       92
+ad9508_sync     OUT        37       91
+pwrgd           IN         36       90
+adf435x_lock    IN         35       89
+adca_gpio3_fmc  INOUT      34       88
+adca_gpio2_fmc  INOUT      33       87 
+==============  =========  =======  =========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 = Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -282,9 +255,9 @@ Software related
    -  `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
    -  `PyADI-IIO example <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4880/examples/ad4880_example.py>`__
    -  `PyADI-IIO class <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4880/adi/ad4880.py>`__
-   -  AD4880-FMC-EVB Linux device tree :git-linux:`zynq-zed-adv7511-ad4880.dts
-      <arch/arm/boot/dts/zynq-zed-adv7511-ad4880.dts>`
-   -  AD4880 Linux driver :git-linux:`ad4080.c <drivers/iio/adc/ad4080.c>`
+   -  AD4880-FMC-EVB Linux device tree :git-linux:`zynq-zed-ad4880.dts
+      <main:arch/arm/boot/dts/xilinx/zynq-zed-ad4880.dts>`
+   -  AD4880 Linux driver :git-linux:`ad4080.c <main:drivers/iio/adc/ad4080.c>`
 
 .. include:: ../common/more_information.rst
 

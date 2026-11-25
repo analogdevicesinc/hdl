@@ -21,4 +21,4 @@ All possible values for ADC_N_BITS:
  - 16 -> 16-bit data bus
  - 14 -> 16-bit data bus
 
-Corresponding device tree: [zynq-zed-adv7511-ad4880.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4880.dts)
+Corresponding device tree: [zynq-zed-ad4880.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-ad4880.dts)

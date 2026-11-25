@@ -170,7 +170,7 @@ Examples:
 
 * :git-hdl:`docs/regmap/adi_regmap_spi_engine.txt`
 * :git-hdl:`docs/regmap/adi_regmap_adc.txt`, uses ``WHERE``
-* :git-hdl:`docs/regmap/adi_regmap_axi_ad3552r.txt`, uses ``USING``
+* :git-hdl:`docs/regmap/adi_regmap_axi_ad35xxr.txt`, uses ``USING``
 
 .. _hdl-regmap-using:
 
@@ -490,7 +490,7 @@ Yet, here is the Makefile for the example mentioned before:
 
 
 This example was made starting from the axi_ad9361 IP found in our repo, under the library directory:
-:git-hdl:`ibrary/axi_ad9361`.
+:git-hdl:`library/axi_ad9361`.
 
 Lattice
 --------------------------------------------------------------------------------

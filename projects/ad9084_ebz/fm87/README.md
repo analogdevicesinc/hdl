@@ -1,4 +1,4 @@
-<!-- no_build_example, no_dts, no_no_os -->
+<!-- no_dts, no_no_os -->
 
 # AD9084-EBZ/FM87 HDL Project
 
@@ -15,7 +15,7 @@ cd projects/ad9084_ebz/fm87
 make
 ```
 
-All of the RX/TX link modes can be found in the [AD9084 data sheet](https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad9084-ug-2326.pdf). We offer support for only a few of them.
+All of the RX/TX link modes can be found in the [AD9084 data sheet](https://www.analog.com/media/en/technical-documentation/user-guides/eval-ad9084-ad9088-ug-2326.pdf). We offer support for only a few of them.
 
 The overwritable parameters from the environment are:
 
@@ -30,6 +30,33 @@ The overwritable parameters from the environment are:
 - TX_LANE_RATE :  Lane rate of the Tx link ( FPGA to Apollo )
 - [RX/TX]_JESD_M : Number of converters per link
 - [RX/TX]_JESD_L : Number of lanes per link
+- [RX/TX]_JESD_S : Number of samples per converter per frame
 - [RX/TX]_JESD_NP : Number of bits per sample
 - [RX/TX]_NUM_LINKS : Number of links - only when ASYMMETRIC_A_B_MODE = 0
 - [RX/TX]_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M)
+
+### Example configurations
+
+#### JESD204C, 20.625 Gbps lane rate (default)
+
+This specific command is equivalent to running `make` only:
+
+```
+make JESD_MODE=64B66B \
+REF_CLK_RATE=312.5 \
+DEVICE_CLK_RATE=312.5 \
+RX_LANE_RATE=20.625 \
+TX_LANE_RATE=20.625 \
+RX_JESD_M=4 \
+RX_JESD_L=8 \
+RX_JESD_S=1 \
+RX_JESD_NP=16 \
+RX_NUM_LINKS=2 \
+TX_JESD_M=4 \
+TX_JESD_L=8 \
+TX_JESD_S=1 \
+TX_JESD_NP=16 \
+TX_NUM_LINKS=2 \
+RX_KS_PER_CHANNEL=16 \
+TX_KS_PER_CHANNEL=16
+```

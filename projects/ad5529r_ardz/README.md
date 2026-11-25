@@ -2,7 +2,7 @@
 
 - Evaluation board product page: [EVAL-AD5529](https://www.analog.com/eval-ad5529r)
 - System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad5529r
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad5529r_ardz/
 - Evaluation board VIO: 3.3V
 
 ## Supported parts

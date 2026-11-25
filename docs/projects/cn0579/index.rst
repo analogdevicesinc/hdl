@@ -144,25 +144,23 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Cyclone V
-   * - RESET_N
-     - OUT
-     - 32
-     - 86
-     - 0
+====================  ============  =======  ==========  ===========
+GPIO signal           Direction     HDL no.  Zynq-7000   DE10-Nano
+====================  ============  =======  ==========  ===========
+reset_n               OUT           32       86          0
+====================  ============  =======  ==========  ===========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000, DE10-Nano = Software GPIOs to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -262,7 +260,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] AD7768 IIO Precision ADC Linux Driver <resources/tools-software/linux-drivers/iio-adc/ad7768>`
+- :external+linux:doc:`AD7768 IIO Precision ADC Linux Driver <drivers/iio-adc/ad7768>`
 
 - Python support:
 
@@ -271,7 +269,7 @@ Software related
    - :git-pyadi-iio:`PyADI-IIO CN0579 example <examples/cn0579/cn0579_example.py>`
 
 - CN0579 on Cora Z7s Linux device tree
-   :git-linux:`arch/arm/boot/dts/dts/xilinx/zynq-coraz7s-cn0579_i2c.dts`
+   :git-linux:`arch/arm/boot/dts/xilinx/zynq-coraz7s-cn0579_i2c.dts`
 - CN0579 on DE-10Nano Linux device tree
    :git-linux:`arch/arm/boot/dts/intel/socfpga/socfpga_cyclone5_de10_nano_cn0579_i2c.dts`
 - AD7768 Linux driver :git-linux:`ad7768.c <drivers/iio/adc/ad7768.c>`

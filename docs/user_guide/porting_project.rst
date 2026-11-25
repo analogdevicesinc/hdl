@@ -11,7 +11,7 @@ of human resources, and would increase the required time for testing.
 
 The general rule of thumb is to support a given project with a fairly popular
 carrier (e.g. :xilinx:`ZC706` or
-:intel:`A10SoC <content/www/us/en/products/details/fpga/development-kits/arria/10-sx.html>`),
+`A10SoC <https://www.altera.com/products/devkit/po-3006/arria-10-sx-soc-development-kit>`__),
 which is powerful enough to showcase the board
 features and maximum performance.
 

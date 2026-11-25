@@ -91,6 +91,7 @@ Utilities
    cn0363/index
    common/ad_dds/index
    corundum/index
+   spi_slave/index
    util_axis_fifo/index
    util_axis_fifo_asym/index
    util_extract/index
@@ -101,16 +102,11 @@ Utilities
    util_sigma_delta_spi/index
    util_var_fifo/index
    util_wfifo/index
+   intel/index
    xilinx/index
 
 Obsolete IPs
 -------------------------------------------------------------------------------
-
-.. toctree::
-   :maxdepth: 1
-
-   axi_ad9643/index
-   axi_ad9671/index
 
 The following IPs are obsolete and **not maintained anymore**. The latest
 available sources can be found in the following release branches:

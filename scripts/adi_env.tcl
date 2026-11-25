@@ -46,7 +46,7 @@ if [info exists ::env(ADI_GHDL_DIR)] {
 }
 
 # Define the supported tool version
-set required_vivado_version "2025.1"
+set required_vivado_version "2026.1"
 if {[info exists ::env(REQUIRED_VIVADO_VERSION)]} {
   set required_vivado_version $::env(REQUIRED_VIVADO_VERSION)
 } elseif {[info exists REQUIRED_VIVADO_VERSION]} {
@@ -80,7 +80,7 @@ if {[info exists ::env(QUARTUS_PRO_ISUSED)]} {
 
 # Define the supported tool version
 # If the variable is not defined, set it to standard if the carrier requires it
-set required_quartus_version "26.1.1"
+set required_quartus_version "26.1.0"
 set required_quartus_std_version "25.1std.0"
 if {[info exists ::env(REQUIRED_QUARTUS_VERSION)]} {
   set required_quartus_version $::env(REQUIRED_QUARTUS_VERSION)

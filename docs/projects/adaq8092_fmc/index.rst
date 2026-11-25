@@ -100,40 +100,26 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - en_1p8
-     - OUT
-     - 35
-     - 89
-     - 113
-   * - adc_pd2
-     - OUT
-     - 34
-     - 88
-     - 112
-   * - adc_pd1
-     - OUT
-     - 33
-     - 87
-     - 111
-   * - adc_par_ser
-     - IN
-     - 32
-     - 86
-     - 110
+=============  =========  ========  ==========
+GPIO Signal    Direction  HDL no.   Zynq-7000
+=============  =========  ========  ==========
+en_1p8         OUT        35        89
+adc_pd2        OUT        34        88
+adc_pd1        OUT        33        87
+adc_par_ser    IN         32        86
+=============  =========  ========  ==========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000 = Software GPIO (Linux GPIO numbers) to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -225,7 +211,7 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADAQ8092 14-Bit, 105 MSPS, μModule Linux device driver </resources/tools-software/linux-drivers/iio-adc/adaq8092>`
+- :external+linux:doc:`ADAQ8092 14-Bit, 105 MSPS, μModule Linux device driver <drivers/iio-adc/adaq8092>`
 - :git-linux:`Linux driver adaq8092.c <drivers/iio/adc/adaq8092.c>`
 - :git-linux:`Linux device tree zynq-zed-adv7511-adaq8092.dts <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq8092.dts>`
 - :git-no-os:`No-Os device driver <drivers/adc/adaq8092>`

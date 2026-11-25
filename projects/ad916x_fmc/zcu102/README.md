@@ -25,7 +25,7 @@ If other configurations are desired, then the parameters from the HDL project (s
 
 The overwritable parameters from the environment are:
 
-- ADI_DAC_DEVICE - the target device (AD9161/AD9162/AD9163/AD9164); 
+- ADI_DAC_DEVICE - the target device (AD9161/AD9162/AD9163/AD9164);
 - ADI_LANE_RATE - lane rate of the [TX] link (:warning: must be supported by the device, check the data sheet);
 - ADI_DAC_MODE - predefined configuration of JESD M, L, S, F, HD, N, NP parameters based on the no. of lanes (check **common/config.tcl**);
 - M - number of converters per link
@@ -41,7 +41,7 @@ This specific command is equivalent to running `make` only:
 
 ```
 make ADI_DAC_MODE=08 ADI_DAC_DEVICE=AD9162 ADI_LANE_RATE=12.5
-``` 
+```
 
 For this mode Lane rate = 12.5 Gbps.
 
@@ -53,7 +53,7 @@ This specific command is equivalent to running `make` only:
 
 ```
 make ADI_DAC_MODE=08 ADI_DAC_DEVICE=AD9161 ADI_LANE_RATE=12.5
-``` 
+```
 
 For this mode Lane rate = 12.5 Gbps.
 
@@ -63,7 +63,7 @@ Corresponding device tree: [zynqmp-zcu102-rev10-ad9161-fmc-ebz_m2_s2.dts](https:
 
 ```
 make ADI_DAC_MODE=02 ADI_DAC_DEVICE=AD9163 ADI_LANE_RATE=12.5
-``` 
+```
 
 For this mode Lane rate = 12.5 Gbps.
 
@@ -73,7 +73,7 @@ Corresponding device tree: [zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l2_f2_s1.dts](
 
 ```
 make ADI_DAC_MODE=08 ADI_DAC_DEVICE=AD9163 ADI_LANE_RATE=4.16
-``` 
+```
 
 For this mode Lane rate = 4.16 Gbps.
 
@@ -83,7 +83,7 @@ Corresponding device tree: [zynqmp-zcu102-rev10-ad9163-fmc-ebz_m2_l8.dts](https:
 
 ```
 make ADI_DAC_MODE=08 ADI_DAC_DEVICE=AD9164 ADI_LANE_RATE=12.5
-``` 
+```
 
 For this mode Lane rate = 12.5 Gbps.
 

@@ -28,7 +28,7 @@ Supported carriers
 -------------------------------------------------------------------------------
 
 - :adi:`ADRV1CRR-BOB`
-- :dokuwiki:`ADRV1CRR-FMC <resources/eval/user-guides/pzsdr/carriers/packrf>`
+- :external+system-level:ref:`ADRV1CRR-FMC <pzsdr carriers packrf>`
 - :adi:`ADRV1CRR-FMC`
 - ADRV1CRR-PCI (OBSOLETE)
 - ADRV1CRR-USB (OBSOLETE)
@@ -117,46 +117,27 @@ The SPI signals are controlled by a separate AXI based SPI core.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-- Zynq-7000: if PS7 is used, then offset is 54
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Zynq-7000
+====================  ============  =======  ==========
+gpio_clksel           INOUT         51       105
+gpio_resetb           INOUT         46       100
+gpio_sync             INOUT         45       99
+gpio_en_agc           INOUT         44       98
+gpio_ctl[3:0]         INOUT         43:40    97:94
+gpio_status[7:0]      INOUT         39:32    93:86
+====================  ============  =======  ==========
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+.. admonition:: Legend
+   :class: note
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - gpio_clksel
-     - INOUT
-     - 51
-     - 105
-   * - gpio_resetb
-     - INOUT
-     - 46
-     - 100
-   * - gpio_sync
-     - INOUT
-     - 45
-     - 99
-   * - gpio_en_agc
-     - INOUT
-     - 44
-     - 98
-   * - gpio_ctl[3:0]
-     - INOUT
-     - 43:40
-     - 97:94
-   * - gpio_status[7:0]
-     - INOUT
-     - 39:32
-     - 93:86
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000 = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -351,7 +332,7 @@ Software related
 - :git-linux:`ADRV9361-Z7035 ccfmc_lvds Linux device tree - TDD mode <arch/arm/boot/dts/xilinx/zynq-adrv9361-z7035-fmc-rfcard-tdd.dts>`
 
 - :dokuwiki:`[Wiki] ADRV9361-Z7035 User Guide - Software documentation<resources/eval/user-guides/adrv936x_rfsom/user-guide/software>`
-- :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
+- :external+linux:doc:`AD9361 Linux device driver documentation <drivers/iio-transceiver/ad9361>`
 
 .. include:: ../common/more_information.rst
 

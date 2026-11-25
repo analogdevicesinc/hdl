@@ -117,7 +117,7 @@ parameters:
 - F: 2 octets per frame
 
 For more details, check *Table 27, JESD204B Output Configurations* from the
-:adi:`AD9694 data sheet`.
+:adi:`AD9694 data sheet <AD9694>`.
 
 Deframer paramaters: L=4, M=4, F=2, S=1, NP=16
 
@@ -176,35 +176,25 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - fdb
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - fda
-     - INOUT
-     - 33
-     - 87
-     - 111
-   * - pwdn
-     - INOUT
-     - 32
-     - 86
-     - 110
+============  =========  =======  ===================
+GPIO signal   Direction  HDL no.  Zynq UltraScale+ MP
+============  =========  =======  ===================
+fdb           INOUT      34       112
+fda           INOUT      33       111
+pwdn          INOUT      32       110
+============  =========  =======  ===================
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq UltraScale+ MP is Software GPIO, to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -312,7 +302,7 @@ Software related
 
 - Linux driver :git-linux:`drivers/iio/adc/ad9208.c` (common for AD9694 as well)
 - AD9694-500EBZ ZCU102 Linux device tree :git-linux:`arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9694.dts`
-- :dokuwiki:`AD9208 Linux device driver documentation <resources/tools-software/linux-drivers/iio-adc/ad9208>`
+- :external+linux:doc:`AD9208 Linux device driver documentation <drivers/iio-adc/ad9208>`
 
 .. include:: ../common/more_information.rst
 

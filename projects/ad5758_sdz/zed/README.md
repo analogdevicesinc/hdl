@@ -1,4 +1,4 @@
-<!-- no_build_example, no_dts, no_no_os -->
+<!-- no_build_example, no_dts -->
 
 # AD5758-SDZ/ZED HDL Project
 
@@ -10,3 +10,5 @@
 cd projects/ad5758_sdz/zed
 make
 ```
+
+Corresponding No-OS project: [ad5758-sdz](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad5758-sdz)

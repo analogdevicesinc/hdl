@@ -17,7 +17,7 @@ for a reference voltage of 2.5V. :adi:`AD3530`/ :adi:`AD3530R` has 8 channels
 :adi:`AD3536R` have an on-chip, buffered, 2.5V reference available at the VREF
 pin, capable of sourcing external loads up to +5mA.
 
-Each DAC channel has its own Input register and DAC register. The DAC Register 
+Each DAC channel has its own Input register and DAC register. The DAC Register
 stores digital code equivalent to the DAC output voltage while the Input
 Register acts as a temporary staging register before being passed on the DAC
 Register. With the LDAC function, one or more DAC registers could be updated in
@@ -52,7 +52,6 @@ Supported boards
 - :adi:`EVAL-AD3530R`
 - :adi:`EVAL-AD3531R`
 - :adi:`EVAL-AD3532R`
-- :adi:`EVAL-AD3536R`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -107,31 +106,24 @@ LDACB        PMOD P9           J18/FMC_LA05_P T14              AE17
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-- Zynq-7000: if PS7 is used, then the offset is 54
-- All supported boards uses the same HDL GPIO EMIO Number
+===========  =========  =======  =========  =========
+GPIO signal  Direction  HDL no.  Zynq-7000  DE10-Nano
+===========  =========  =======  =========  =========
+dac_resetb   OUT        33       87         1
+dac_ldacb    OUT        34       88         2
+===========  =========  =======  =========  =========
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+.. admonition:: Legend
+   :class: note
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - RESETB
-     - OUT
-     - 33
-     - 87
-   * - LDACB
-     - OUT
-     - 34
-     - 88
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000, DE10-Nano are Software GPIOs, to be used in device trees
+
 
 Building the HDL project
 -------------------------------------------------------------------------------
@@ -210,10 +202,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-no-os:`AD353XR No-OS project source code <projects/ad353xr>`
-- :git-no-os:`AD353XR No-OS Driver source code <drivers/afe/ad353xr>`
-- :dokuwiki:`AD353XR No-OS Driver documentation <resources/tools-software/uc-drivers/ad353xr>`
-- :dokuwiki:`AD353XR IIO Application <resources/tools-software/product-support-software/ad353xr_mbed_iio_application>`
+- :git-no-os:`AD353XR No-OS Driver source code <drivers/dac/ad3530r>`
+- `AD353XR No-OS Driver documentation <https://analogdevicesinc.github.io/no-OS/drivers/dac/ad3530r/index.html>`__
+- `AD353XR IIO Application <https://analogdevicesinc.github.io/precision-converters-firmware/source/projects/ad353xr_iio/ad353xr_iio.html>`__
 
 .. include:: ../common/more_information.rst
 

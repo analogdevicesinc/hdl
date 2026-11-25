@@ -1,8 +1,8 @@
 # ADAQ8092-FMC HDL Project
 
 - Evaluation board product page: [EVAL-ADAQ8092](https://www.analog.com/EVAL-ADAQ8092)
-- System documentation: https://wiki.analog.com/resources/eval/user-guide/adaq8092-eval-board
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adaq8092_fmc/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-adaq8092-fmc/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/adaq8092_fmc/
 - Evaluation board VADJ range: 1.8V - 2.5V
 
 ## Supported parts

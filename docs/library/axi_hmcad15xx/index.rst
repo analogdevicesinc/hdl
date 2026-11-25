@@ -6,7 +6,7 @@ AXI HMCAD15XX
 .. hdl-component-diagram::
 
 The :git-hdl:`AXI HMCAD15XX <library/axi_hmcad15xx>` IP core can be used to
-interface the :adi:`HMCAD1511, HMCAD1520` devices.
+interface the :adi:`HMCAD1511`, :adi:`HMCAD1520` devices.
 This documentation only covers the IP core and requires one to be
 familiar with the device, for a complete and better understanding.
 
@@ -117,7 +117,7 @@ The axi_hmcad15xx operates as follows:
   :git-hdl:`ad_serdes_in<library/xilinx/common/ad_serdes_in.v>` module with
   a 1:8 ratio.
 * The data lanes are processed by
-  :git-hdl:`sample_assembly<library/hmcad15xx/sample_assembly.v>` based
+  :git-hdl:`sample_assembly<library/axi_hmcad15xx/sample_assembly.v>` based
   on resolution and frame_data. For 8-bit resolution data gets packed into
   8-bit words, for 12/14 bit resolution data gets packed into 16-bit words.
 * 14-bit resoltion works only in Quad Channel Mode.
@@ -233,12 +233,12 @@ Software Guidelines
   \* The register already exist in ADC Common. This is just a detailed
      explanation.
 
-Software Suppport
+Software Support
 --------------------------------------------------------------------------------
 
-  - :git-linux:`HMCAD15XX Linux driver <drivers/iio/adc/hmcad15xx.c>`
-  - :git-linux:`HMCAD15XX-FMC-EVB Linux device tree <arch/arm/boot/dts/xilinx/zynq-zed-adv7511-hmcad15xx.dts>`
-  - :git-linux:`ADMX6020M device tree (8-bit) <arch/arm/boot/dts/xilinx/zynq-admx6020m.dts>`
+  - :git-linux:`HMCAD15XX Linux driver <gui+sharkbyte_pr:drivers/iio/adc/hmcad15xx.c>`
+  - :git-linux:`HMCAD15XX-FMC-EVB Linux device tree <gui+sharkbyte_pr:arch/arm/boot/dts/xilinx/zynq-zed-adv7511-hmcad15xx.dts>`
+  - :git-linux:`ADMX6020M device tree (8-bit) <gui+sharkbyte_pr:arch/arm/boot/dts/xilinx/zynq-admx6020m.dts>`
 
 References
 -------------------------------------------------------------------------------

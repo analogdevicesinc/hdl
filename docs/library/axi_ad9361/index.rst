@@ -251,7 +251,7 @@ The axi_ad9361 cores architecture contains:
 
 * :git-hdl:`TDD control module <library/axi_ad9361/axi_ad9361_tdd.v>` for
   TDD mode, see more information on the :ref:`axi_ad9361 tdd` page.
-* :git-hdl:`AXI control and status <common/up_axi.v>` modules.
+* :git-hdl:`AXI control and status <library/common/up_axi.v>` modules.
 
 Device (AD9361) Interface Description
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

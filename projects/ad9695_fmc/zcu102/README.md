@@ -23,7 +23,7 @@ If other configurations are desired, then the parameters from the HDL project (s
 
 The overwritable parameters from the environment:
 
-- JESD_MODE: link layer encoder mode used; 
+- JESD_MODE: link layer encoder mode used;
   - 8B10B - 8b10b link layer defined in JESD204B
 - RX_JESD_M: RX number of converters
 - RX_JESD_L: RX number of lanes

@@ -83,7 +83,10 @@ module ad_data_in #(
 
   // do not instantiate an IDELAYCTRL if no IDELAY is instantiated
   localparam  IODELAY_CTRL_ENABLED = (IODELAY_ENABLE & IODELAY_CTRL);
-  localparam  IODELAY_CTRL_SIM_DEVICE = (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) ? "ULTRASCALE" :
+  // UG571 lists IDELAYCTRL's SIM_DEVICE as 7SERIES/ULTRASCALE only, but UG974's
+  // 2026.1 template adds ULTRASCALE_PLUS; Vivado 2026.1's DRC is stricter and
+  // requires SIM_DEVICE to match the actual architecture.
+  localparam  IODELAY_CTRL_SIM_DEVICE = (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS" :
     (FPGA_TECHNOLOGY == ULTRASCALE) ? "ULTRASCALE" : "7SERIES";
 
   localparam  IODELAY_SIM_DEVICE = (FPGA_TECHNOLOGY == ULTRASCALE_PLUS) ? "ULTRASCALE_PLUS" :

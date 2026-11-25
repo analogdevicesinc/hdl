@@ -1,5 +1,3 @@
-<!-- no_no_os-->
-
 # PULSAR-ADC/ZED HDL Project
 
 - VIO with which it was tested in hardware: 3.3V
@@ -75,3 +73,5 @@ make FMC_N_PMOD=0
 ```
 
 Corresponding device tree: [zynq-zed-adv7511-adaq4003.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zed-adv7511-adaq4003.dts)
+
+Corresponding No-OS project: [pulsar-adc](https://github.com/analogdevicesinc/no-OS/tree/main/projects/pulsar-adc)

@@ -18,11 +18,11 @@ The overwritable parameters from the environment are:
 - LVDS_CMOS_N - selects the interface type to be used:
   - 0 - CMOS interface (default)
   - 1 - LVDS interface
-  
+
 - THREE_W_SPI - selects the SPI configuration to be used:
   - 0 - 4 wire SPI (default)
   - 1 - 3 wire SPI
-  
+
 - DEVICE - selects the device to be used:
   - AD4851
   - AD4852

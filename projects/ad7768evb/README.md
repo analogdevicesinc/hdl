@@ -1,8 +1,8 @@
 # AD7768EVB HDL Project
 
 - Evaluation board product page: [EVAL-AD7768](https://www.analog.com/eval-ad7768)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad7768-ebz/software/baremetal
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad7768evb/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-ad7768-evb/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad7768evb/
 - Evaluation board VADJ: 3.3V
 
 ## Supported parts

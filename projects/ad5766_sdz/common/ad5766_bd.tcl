@@ -55,13 +55,14 @@ current_bd_instance /spi
 
         ad_ip_parameter execution CONFIG.NUM_OF_CS 1
         ad_ip_parameter axi CONFIG.OFFLOAD_EN 1
-        ad_ip_parameter interconnect CONFIG.NUM_OF_SDIO 2
+        ad_ip_parameter interconnect CONFIG.NUM_OF_SDIO 1
 
         ad_connect  axi/spi_engine_offload_ctrl0 axi_ad5766/spi_engine_offload_ctrl
         ad_connect  axi/spi_engine_ctrl interconnect/s0_ctrl
         ad_connect  axi_ad5766/spi_engine_ctrl interconnect/s1_ctrl
         ad_connect  axi_ad5766/m_interconnect_ctrl interconnect/s_interconnect_ctrl
         ad_connect  interconnect/m_ctrl execution/ctrl
+        ad_connect  interconnect/m_offload_active_ctrl execution/s_offload_active_ctrl
         ad_connect  m_spi execution/spi
         ad_connect  dma_data axi_ad5766/dma_data
         ad_connect  dma_enable axi_ad5766/dma_enable

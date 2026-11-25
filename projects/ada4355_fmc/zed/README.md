@@ -1,4 +1,4 @@
-<!-- no_build_example, no_dts, no_no_os -->
+<!-- no_dts, no_no_os -->
 
 # ADA4355-FMC/ZED HDL Project
 

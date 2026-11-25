@@ -199,7 +199,7 @@ FMCDAQ2
        :git-hdl:`zc706 <hdl_2015_r1:projects/daq2/zc706>`
      - :git-hdl:`axi_ad9144 <hdl_2015_r1:library/axi_ad9144>`
        :git-hdl:`axi_ad9680 <hdl_2015_r1:library/axi_ad9680>`
-       :git-hdl:`axi_adcfifo <hdl_2015_r1:library/xilinx/axi_adcfifo>`
+       :git-hdl:`axi_adcfifo <hdl_2015_r1:library/axi_adcfifo>`
        :git-hdl:`axi_clkgen <hdl_2015_r1:library/axi_clkgen>`
        :git-hdl:`axi_dmac <hdl_2015_r1:library/axi_dmac>`
        :git-hdl:`axi_hdmi_tx <hdl_2015_r1:library/axi_hdmi_tx>`
@@ -230,7 +230,7 @@ FMCDAQ3
      - :git-hdl:`zc706 <hdl_2015_r1:projects/daq3/zc706>`
      - :git-hdl:`axi_ad9152 <hdl_2015_r1:library/axi_ad9152>`
        :git-hdl:`axi_ad9680 <hdl_2015_r1:library/axi_ad9680>`
-       :git-hdl:`axi_adcfifo <hdl_2015_r1:library/xilinx/axi_adcfifo>`
+       :git-hdl:`axi_adcfifo <hdl_2015_r1:library/axi_adcfifo>`
        :git-hdl:`axi_clkgen <hdl_2015_r1:library/axi_clkgen>`
        :git-hdl:`axi_dmac <hdl_2015_r1:library/axi_dmac>`
        :git-hdl:`axi_hdmi_tx <hdl_2015_r1:library/axi_hdmi_tx>`
@@ -259,7 +259,7 @@ FMCADC2/FMCADC3
    * - :adi:`AD-FMCADC3-EBZ <eval-ad-fmcadc3-ebz>`
      -
      - :git-hdl:`zc706 <hdl_2015_r1:projects/fmcadc2/zc706>`
-     - :git-hdl:`axi_adcfifo <hdl_2015_r1:library/xilinx/axi_adcfifo>`
+     - :git-hdl:`axi_adcfifo <hdl_2015_r1:library/axi_adcfifo>`
        :git-hdl:`axi_clkgen <hdl_2015_r1:library/axi_clkgen>`
        :git-hdl:`axi_dmac <hdl_2015_r1:library/axi_dmac>`
        :git-hdl:`axi_hdmi_tx <hdl_2015_r1:library/axi_hdmi_tx>`
@@ -286,7 +286,7 @@ FMCADC4
      - :git-hdl:`fmcadc4 <hdl_2015_r1:projects/fmcadc4>`
      - :git-hdl:`zc706 <hdl_2015_r1:projects/fmcadc4/zc706>`
      - :git-hdl:`axi_ad9680 <hdl_2015_r1:library/axi_ad9680>`
-       :git-hdl:`axi_adcfifo <hdl_2015_r1:library/xilinx/axi_adcfifo>`
+       :git-hdl:`axi_adcfifo <hdl_2015_r1:library/axi_adcfifo>`
        :git-hdl:`axi_clkgen <hdl_2015_r1:library/axi_clkgen>`
        :git-hdl:`axi_dmac <hdl_2015_r1:library/axi_dmac>`
        :git-hdl:`axi_hdmi_tx <hdl_2015_r1:library/axi_hdmi_tx>`
@@ -525,4 +525,4 @@ Help & Support
 * The :ref:`carriers (abbreviations can be found here) <build_hdl>` are commonly available FPGA evaluation boards.
 * The :ref:`HDL user guide <user_guide>` contains all the documentation, build instructions and register map tables.
 * The following quick links allows you to browse the github repository for a list of current `branches <http://github.com/analogdevicesinc/hdl/branches/active>`__, :git-hdl:`library components <master:library>`, and :git-hdl:`projects <master:projects>`.
-* Questions? We can help with `FPGA questions <https://ez.analog.com/community/fpga>`__, `Linux driver questions <https://ez.analog.com/community/linux-device-drivers/linux-software-drivers>`__, `No-OS Drivers questions <https://ez.analog.com/community/linux-device-drivers/microcontroller-no-os-drivers>`__.
+* Questions? We can help with `FPGA questions <https://ez.analog.com/community/fpga>`__, `Linux driver questions <https://ez.analog.com/linux-software-drivers/>`__, `No-OS Drivers questions <https://ez.analog.com/microcontroller-no-os-drivers/>`__.

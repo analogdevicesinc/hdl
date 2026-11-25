@@ -68,7 +68,33 @@ set ADI_POST_ROUTE_SCRIPT [file normalize $ad_hdl_dir/projects/scripts/auto_timi
 #   [RX/TX]_B_JESD_L : Number of lanes per link for B side
 #   [RX/TX]_B_JESD_NP : Number of bits per sample for B side
 #   [RX/TX]_B_KS_PER_CHANNEL: Number of samples stored in internal buffers in kilosamples per converter (M) for B side
+#   AION_ENABLE : If set, adds and enables the AION core in the design; the adf4030
+#                 then sources sysref and drives the trigger pins
+#   FSRC_ENABLE : When set, fractional sample rate conversion is inserted in
+#                 both directions: RX deletes the samples Apollo marked invalid
+#                 and compacts what is left, TX leaves holes where Apollo will
+#                 not read
+#   FSRC_ACCUM_WIDTH : Width of the FSRC rate accumulator, which sets the
+#                 granularity of the achievable ratio
 #
+#   Transceiver configuration, generated with the xcvr_wizard project:
+#   LANE_RATE : Lane rate of the QPLL0 (side A) configuration [gbps], defaults to TX_LANE_RATE
+#   REF_CLK   : Reference clock [MHz], defaults to LANE_RATE/66 for 64B66B or LANE_RATE/40 for 8B10B
+#   PLL_TYPE  : The PLL used for driving the link [CPLL/QPLL1/QPLL0]
+#
+
+global xcvr_config_paths
+
+set xcvr_jesd_mode [get_env_param JESD_MODE 64B66B]
+set xcvr_lane_rate [get_env_param LANE_RATE [get_env_param TX_LANE_RATE 20.625]]
+set xcvr_ref_clk_ratio [expr {$xcvr_jesd_mode == "64B66B" ? 66 : 40}]
+
+set xcvr_config_paths [adi_xcvr_project [list \
+  LANE_RATE $xcvr_lane_rate \
+  REF_CLK   [get_env_param REF_CLK [format %g [expr {$xcvr_lane_rate * 1000.0 / $xcvr_ref_clk_ratio}]]] \
+  PLL_TYPE  [get_env_param PLL_TYPE QPLL0] \
+  JESD_MODE $xcvr_jesd_mode \
+]]
 
 adi_project ad9084_ebz_vcu118 0 [list \
   JESD_MODE           [get_env_param JESD_MODE       64B66B ] \
@@ -100,6 +126,9 @@ adi_project ad9084_ebz_vcu118 0 [list \
   RX_B_KS_PER_CHANNEL [get_env_param RX_B_KS_PER_CHANNEL 32 ] \
   TX_B_KS_PER_CHANNEL [get_env_param TX_B_KS_PER_CHANNEL 32 ] \
   DO_HAS_BYPASS       [get_env_param DO_HAS_BYPASS        0 ] \
+  AION_ENABLE         [get_env_param AION_ENABLE          0 ] \
+  FSRC_ENABLE         [get_env_param FSRC_ENABLE          0 ] \
+  FSRC_ACCUM_WIDTH    [get_env_param FSRC_ACCUM_WIDTH    56 ] \
 ]
 
 adi_project_files ad9084_ebz_vcu118 [list \

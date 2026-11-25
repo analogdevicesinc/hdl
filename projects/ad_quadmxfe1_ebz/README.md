@@ -2,7 +2,7 @@
 
 - Evaluation board product page: [QUAD-MxFE](https://www.analog.com/quad-mxfe)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/quadmxfe
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad_quadmxfe1_ebz/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad_quadmxfe1_ebz/
 - Evaluation board VADJ: 1.8V
 
 ## Supported parts

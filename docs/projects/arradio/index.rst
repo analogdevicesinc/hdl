@@ -22,7 +22,7 @@ The purpose of the ARRADIO board is to provide an RF platform which shows the
 maximum performance of the :adi:`AD9361`. It's expected that the RF performance
 of this platform can meet the datasheet specifications without issues at 2.4 GHz.
 This is due to the external Johanson Technology's
-`2450BL15B050E <https://www.johansontechnology.com/datasheets/baluns/JTI_Balun-2450BL15B050_12-03.pdf>`__ 
+`2450BL15B050E <https://www.johansontechnology.com/docs/4331/johanson-baluns-integrated-passive-components.pdf>`__ 
 2.45 GHz Balun that is on the board. This balun is rated for an operating
 frequency of 2400~2500 MHz.
 
@@ -114,40 +114,28 @@ The SPI signals are controlled by a separate AXI based SPI core.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 The device control and monitor signals are interfaced to a GPIO module.
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+====================  ============  =======  ==========
+GPIO signal           Direction     HDL no.  Cyclone V
+====================  ============  =======  ==========
+gpio_status[7:0]      IN            23:16    23:16
+gpio_ctl[3:0]         OUT           11:8     11:8
+ad9361_resetb         OUT           4        4
+ad9361_en_agc         OUT           3        3
+ad9361_sync           OUT           2        2
+====================  ============  =======  ==========
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Linux Cyclone V
-   * - gpio_status[7:0]
-     - IN
-     - 23:16
-     - 23:16
-   * - gpio_ctl[3:0]
-     - OUT
-     - 11:8
-     - 11:8
-   * - ad9361_resetb
-     - OUT
-     - 4
-     - 4
-   * - ad9361_en_agc
-     - OUT
-     - 3
-     - 3
-   * - ad9361_sync
-     - OUT
-     - 2
-     - 2
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Cyclone V = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -196,7 +184,7 @@ Systems related
 Here you can find the quick start guides available for this evaluation board:
 
 - :dokuwiki:`ARRADIO <resources/eval/user-guides/arradio>`
-- :dokuwiki:`ARRADIO Terasic C5 SoCkit Quick Start Guide <resources/eval/user-guides/arradio/quickstart/alterasockit>`
+- :external+system-level:ref:`ARRADIO Terasic C5 SoCkit Quick Start Guide <arradio quick-start>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

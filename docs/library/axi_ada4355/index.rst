@@ -26,6 +26,8 @@ Files
      - Verilog source for the AXI ADA4355.
    * - :git-hdl:`library/axi_ada4355/axi_ada4355_if.v`
      - Verilog source for the AXI ADA4355 interface.
+   * - :git-hdl:`library/axi_ada4355/axi_ada4355_regmap.v`
+     - Verilog source for the AXI ADA4355 custom registers.
    * - :git-hdl:`library/axi_ada4355/axi_ada4355_ip.tcl`
      - IP definition file (AMD tools)
    * - :git-hdl:`library/common/up_adc_common.v`
@@ -48,6 +50,12 @@ Configuration Parameters
      - Core ID should be unique for each IP in the system
    * - FPGA_TECHNOLOGY
      - Used to select between FPGA devices, auto set in project.
+   * - IO_DELAY_GROUP
+     - IODELAY group of the core's IDELAY elements. Cores whose pins are in
+       the same IO bank must use the same group.
+   * - IODELAY_CTRL
+     - Instantiate an IDELAYCTRL in this core (1) or not (0). Set it to 1 on
+       exactly one core of each IODELAY group.
    * - BUFMRCE_EN
      - Used to select between pinouts that are differentiated
        by how the frame clock signals are distributed.
@@ -58,7 +66,8 @@ Interface
 .. hdl-interfaces::
 
    * - sync_n
-     - Signals when the clock is disabled and the design should be in reset
+     - Active low. Restarts the receive path: holds the SERDES in reset and,
+       with BUFMRCE_EN=0, the /4 clock divider. Tie it to 1 if unused.
    * - fco_p
      - LVDS input positive side of differential data frame signal
    * - fco_n
@@ -103,6 +112,34 @@ The axi_ada4355 operates as follows:
   :git-hdl:`ad_serdes_in <library/xilinx/common/ad_serdes_in.v>` module with
   a 1:8 ratio.
 * After deserialization, data is aligned using data_frame and a fixed pattern.
+
+Reset of the receive path
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The /4 clock divider (BUFR) picks its phase, and so the ISERDES word
+boundary, from the first DCO edges it sees. If that happens before the
+device clock is stable, for example on a cold boot before the clock
+generator is programmed, the word boundary is arbitrary and no IDELAY
+setting recovers it.
+
+To prevent this, the core holds the receive path in reset from FPGA
+configuration until software sets bit 1 (``MMCM_RSTN``) of the ``RSTN``
+register of the ADC common register map, and the core outputs no data until
+then. Either reset source restarts the receive path:
+
+* ``MMCM_RSTN`` = 0 (the reset value);
+* ``sync_n`` = 0.
+
+With BUFMRCE_EN=0 both sources hold the BUFR divider and the SERDES, so
+``adc_clk`` does not run while either is asserted. With BUFMRCE_EN=1 they hold
+only the SERDES; the BUFR dividers are then released by the core's own
+BUFMRCE sequencer, and ``adc_clk`` runs.
+
+.. important::
+
+   Software must write ``RSTN`` = 0x3 (``RSTN`` and ``MMCM_RSTN``) once the
+   device clock is stable, and must not clear ``MMCM_RSTN`` afterwards. The
+   generic Linux AXI ADC driver probe does this.
 
 Register Map
 --------------------------------------------------------------------------------
@@ -187,6 +224,8 @@ References
 * HDL IP core at :git-hdl:`library/axi_ada4355`
 * HDL project at :git-hdl:`projects/ada4355_fmc`
 * HDL project documentation at :ref:`ada4355_fmc`
+* HDL project at :git-hdl:`projects/quad_ada4356`
+* HDL project documentation at :ref:`quad_ada4356`
 * :adi:`ADA4355`
 * :xilinx:`Zynq-7000 SoC Overview <support/documentation/data_sheets/ds190-Zynq-7000-Overview.pdf>`
 * :xilinx:`Zynq-7000 SoC Packaging and Pinout <support/documentation/user_guides/ug865-Zynq-7000-Pkg-Pinout.pdf>`

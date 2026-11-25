@@ -1,8 +1,8 @@
 # ADRV9364Z7020 HDL Project
 
 - Evaluation board product page: [ADRV9364-Z7020](https://www.analog.com/adrv9364-z7020)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/adrv9364-z7020
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adrv9364z7020/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/adrv9364z7020/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/adrv9364z7020/
 - Evaluation board VADJ: 2.5V
 
 ### ADRV9364Z7020 SOM

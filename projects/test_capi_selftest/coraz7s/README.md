@@ -10,3 +10,5 @@
 cd projects/test_capi_selftest/coraz7s
 make
 ```
+
+Corresponding No-OS project: [capi_selftest](https://github.com/analogdevicesinc/no-OS/tree/main/projects/capi_selftest)

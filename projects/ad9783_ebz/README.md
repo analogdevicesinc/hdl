@@ -2,7 +2,7 @@
 
 - Evaluation board product page: [EVAL-AD9783](https://www.analog.com/eval-ad9783)
 - System documentation: https://wiki.analog.com/resources/fpga/xilinx/interposer/ad9783
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad9783_ebz/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad9783_ebz/
 - Evaluation board VADJ: 5V
 
 ## Supported parts

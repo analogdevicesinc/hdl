@@ -62,7 +62,10 @@ module trigger_channel (
   logic  [15:0]            trigger_duration;
   logic                    adjust_done;
   logic                    trig_edge;
-  logic                    trig_r;
+  (* ASYNC_REG = "TRUE" *) logic trig_r  = 1'b0;
+  (* ASYNC_REG = "TRUE" *) logic trig_d1 = 1'b0;
+  (* ASYNC_REG = "TRUE" *) logic trig_d2 = 1'b0;
+  logic                    trig_d3 = 1'b0;
   logic                    trig_event;
   logic                    out;
   logic  [15:0]            trig_phase;
@@ -117,8 +120,11 @@ module trigger_channel (
   end
 
   always @(posedge clk) begin
-    trig_r <= trigger;
-    trig_edge <= (trigger && !trig_r);
+    trig_r    <= trigger;
+    trig_d1   <= trig_r;
+    trig_d2   <= trig_d1;
+    trig_d3   <= trig_d2;
+    trig_edge <= (trig_d2 && !trig_d3);
   end
 
   always @(posedge clk) begin

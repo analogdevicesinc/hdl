@@ -13,7 +13,7 @@ Evaluating the target device
 
 The aim of this project is to provide support for a family of ADCs which come in
 the form of
-:dokuwiki:`pulsar-adc-pmods <resources/eval/user-guides/circuits-from-the-lab/pulsar-adc-pmods>`.
+:external+system-level:ref:`pulsar-adc-pmods <pulsar-adc pmods>`.
 They all share the same interface and the same PCB, the differences being found
 in their performance. The table below offers a comparison between the timing
 parameters of the SPI interface for these devices. Using this table we can see
@@ -333,11 +333,11 @@ To check the overall performance of the design and also to expose any major
 bugs, the system can be tested using a testbench from :git-testbenches:`/`.
 
 The testbench framework is designed to use the same bd.tcl as the actual project
-:git-testbenches:`main:pulsar_adc_pmdz/system_bd.tcl#L50`
+:git-testbenches:`main:testbenches/project/pulsar_adc_pmdz/system_bd.tcl#L48`
 
 The setup assumes the testbenches repo is cloned inside the hdl repo. To build
 the testbench project simply run :code:`make cfg1` from the
-*hdl/testbenches/pulsar_adc_pmdz/* folder. Besides exposing possible bugs,
+*hdl/testbenches/testbenches/project/pulsar_adc_pmdz/* folder. Besides exposing possible bugs,
 using the testbench will provide the user with an early way of evaluating the
 timing of the design. The testbench can also be a very useful tool for IP
 development.

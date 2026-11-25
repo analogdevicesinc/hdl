@@ -1,8 +1,8 @@
 # AD4880-FMC-EVB HDL Project
 
-- Evaluation board product page: [EVAL-AD4880-FMC](https://www.analog.com/eval-ad4880-fmc)
+- Evaluation board product page: [EVAL-AD4880-FMC](https://www.analog.com/EVAL-AD4880-FMCZ)
 - System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad4880_fmc_evb/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad4880_fmc_evb/
 - Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts

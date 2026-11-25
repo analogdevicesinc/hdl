@@ -1,5 +1,3 @@
-<!-- no_no_os -->
-
 # AD6676EVB/ZC706 HDL Project
 
 - VADJ with which it was tested in hardware: 2.5V
@@ -32,3 +30,5 @@ make RX_JESD_L=2
 ```
 
 Corresponding device tree: [zynq-zc706-adv7511-ad6676-fmc.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-zc706-adv7511-ad6676-fmc.dts)
+
+Corresponding No-OS project: [ad6676-ebz](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad6676-ebz)

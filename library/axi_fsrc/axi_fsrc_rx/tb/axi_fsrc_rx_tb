@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SOURCE="axi_fsrc_rx_tb.v"
+SOURCE+=" ../axi_fsrc_rx.v"
+SOURCE+=" ../axi_fsrc_rx_regmap.v"
+SOURCE+=" ../rx_fsrc_remove_invalid.sv"
+SOURCE+=" ../fill_holes.sv"
+SOURCE+=" ../../../common/up_axi.v"
+SOURCE+=" ../../../util_cdc/sync_bits.v"
+
+cd `dirname $0`
+source ../../../common/tb/run_tb.sh -g2005-sv

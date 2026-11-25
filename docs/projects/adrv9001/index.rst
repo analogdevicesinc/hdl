@@ -164,36 +164,73 @@ The SPI signals are controlled by a separate AXI based SPI core.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 The device control and monitor signals are interfaced to a GPIO module.
 
-====================== ================ ============== ==============
-GPIO signal            Direction        HDL EMIOGPIO   Software GPIO
-                       (from FPGA view)                Zynq MP
-====================== ================ ============== ==============
-tdd_sync_loc           OUT              56             134
-vadj_err               IN               55             133
-mssi_sync              INTERNAL         54             132
-gpio_tx2_enable_in     OUT              51             129
-gpio_tx1_enable_in     OUT              50             128
-gpio_rx2_enable_in     OUT              49             127
-gpio_rx1_enable_in     OUT              48             126
-sm_fan_tach            INOUT            47             125
-reset_trx              INOUT            46             124
-mode                   INOUT            45             123
-gp_int                 INOUT            44             122
-dgpio_11               INOUT            43             121
-dgpio_10               INOUT            42             120
-dgpio_9                INOUT            41             119
-dgpio_8                INOUT            40             118
-dgpio_7                INOUT            39             117
-dgpio_6                INOUT            38             116
-dgpio_5                INOUT            37             115
-dgpio_4                INOUT            36             114
-dgpio_3                INOUT            35             113
-dgpio_2                INOUT            34             112
-dgpio_1                INOUT            33             111
-dgpio_0                INOUT            32             110
-====================== ================ ============== ==============
+====================  =========  =======  =========  ====================
+GPIO signal           Direction  HDL no.  Zynq-7000  Zynq UltraScale+ MP
+====================  =========  =======  =========  ====================
+tdd_sync_loc          OUT        56       110        134
+vadj_err              IN         55       109        133
+mssi_sync             INTERNAL   54       108        132
+gpio_tx2_enable_in    OUT        51       105        129
+gpio_tx1_enable_in    OUT        50       104        128
+gpio_rx2_enable_in    OUT        49       103        127
+gpio_rx1_enable_in    OUT        48       102        126
+sm_fan_tach           INOUT      47       101        125
+reset_trx             INOUT      46       100        124
+mode                  INOUT      45       99         123
+gp_int                INOUT      44       98         122
+dgpio_11              INOUT      43       97         121
+dgpio_10              INOUT      42       96         120
+dgpio_9               INOUT      41       95         119
+dgpio_8               INOUT      40       94         118
+dgpio_7               INOUT      39       93         117
+dgpio_6               INOUT      38       92         116
+dgpio_5               INOUT      37       91         115
+dgpio_4               INOUT      36       90         114
+dgpio_3               INOUT      35       89         113
+dgpio_2               INOUT      34       88         112
+dgpio_1               INOUT      33       87         111
+dgpio_0               INOUT      32       86         110
+====================  =========  =======  =========  ====================
+
+====================  =========  =======  ======
+GPIO signal           Direction  HDL no.  A10SoC
+====================  =========  =======  ======
+vadj_err              IN         55       23
+mssi_sync             INTERNAL   54       22
+gpio_tx2_enable_in    OUT        50       18
+gpio_tx1_enable_in    OUT        49       17
+gpio_rx2_enable_in    OUT        48       16
+gpio_rx1_enable_in    OUT        47       15
+reset_trx             INOUT      46       14
+mode                  INOUT      45       13
+gp_int                INOUT      44       12
+dgpio_11              INOUT      43       11
+dgpio_10              INOUT      42       10
+dgpio_9               INOUT      41       9
+dgpio_8               INOUT      40       8
+dgpio_7               INOUT      39       7
+dgpio_6               INOUT      38       6
+dgpio_5               INOUT      37       5
+dgpio_4               INOUT      36       4
+dgpio_3               INOUT      35       3
+dgpio_2               INOUT      34       2
+dgpio_1               INOUT      33       1
+dgpio_0               INOUT      32       0
+====================  =========  =======  ======
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq UltraScale+ MP, Zynq-7000, A10SoC are Softwares GPIOs, to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -239,10 +276,10 @@ Here you can find the quick start guides available for these evaluation boards:
 
 - :dokuwiki:`[Wiki] ADRV9001/2 Quick Start Guides <resources/eval/user-guides/adrv9002/quickstart>`
 
-  - :dokuwiki:`Zed <resources/eval/user-guides/adrv9002/quickstart/zed>`
+  - :external+system-level:ref:`Zed <adrv9002-zed>`
   - :dokuwiki:`ZC706 <resources/eval/user-guides/adrv9002/quickstart/zynq>`
   - :dokuwiki:`ZCU102 <resources/eval/user-guides/adrv9002/quickstart/zynqmp>`
-  - :dokuwiki:`A10SoC <resources/eval/user-guides/adrv9002/quickstart/a10soc>`
+  - :external+system-level:ref:`A10SoC <adrv9002-a10soc>`
 
 Other useful information:
 
@@ -285,9 +322,9 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :dokuwiki:`[Wiki] ADRV9002 Device Driver Customization <resources/tools-software/linux-drivers/iio-transceiver/adrv9002-customization>`
-- :dokuwiki:`[Wiki] ADRV9002 Integrated Dual RF Transceiver Linux device driver <resources/tools-software/linux-drivers/iio-transceiver/adrv9002>`
-- :dokuwiki:`[Wiki] ADRV9002 No-OS System Level Design <resources/eval/user-guides/adrv9002/no-os-setup>`
+- :external+linux:doc:`ADRV9002 Device Driver Customization <drivers/iio-transceiver/adrv9002-customization>`
+- :external+linux:doc:`ADRV9002 Integrated Dual RF Transceiver Linux device driver <drivers/iio-transceiver/adrv9002>`
+- :external+no-OS:doc:`ADRV9002 No-OS System Level Design <build_guide>`
 
 .. collapsible:: Click here to see the list of Linux device trees available.
 

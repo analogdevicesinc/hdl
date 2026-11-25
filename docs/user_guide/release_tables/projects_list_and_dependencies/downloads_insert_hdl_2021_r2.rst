@@ -44,7 +44,7 @@ AD4630FMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD4630FMC <eval-ad4630-fmc>`
+   * - :adi:`AD4630FMC <EVAL-AD4630-24FMCZ>`
      - :git-hdl:`ad4630_fmc <hdl_2021_r2:projects/ad4630_fmc>`
      - :git-hdl:`zed <hdl_2021_r2:projects/ad4630_fmc/zed>`
      - :ref:`ad4630_fmc_zed <util_hdl_2021_r2_ad4630_fmc_zed>`
@@ -75,7 +75,7 @@ AD469XFMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD469XFMC <eval-ad4696-fmc>`
+   * - :adi:`AD469XFMC <EVAL-AD4696FMCZ>`
      - :git-hdl:`ad469x_fmc <hdl_2021_r2:projects/ad469x_fmc>`
      - :git-hdl:`zed <hdl_2021_r2:projects/ad469x_fmc/zed>`
      - :ref:`ad469x_fmc_zed <util_hdl_2021_r2_ad469x_fmc_zed>`
@@ -220,7 +220,7 @@ AD719XASDZ
      - :ref:`ad719x_asdz_coraz7s <util_hdl_2021_r2_ad719x_asdz_coraz7s>`
      - :git-hdl:`axi_sysid <hdl_2021_r2:library/axi_sysid>`
 
-AD738xFMC
+AD738XFMC
 ---------
 
 .. list-table::
@@ -232,7 +232,7 @@ AD738xFMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD738xFMC <eval-ad738xfmcz>`
+   * - :adi:`AD738XFMC <eval-ad738xfmcz>`
      - :git-hdl:`ad738x_fmc <hdl_2021_r2:projects/ad738x_fmc>`
      - :git-hdl:`zed <hdl_2021_r2:projects/ad738x_fmc/zed>`
      - :ref:`ad738x_fmc_zed <util_hdl_2021_r2_ad738x_fmc_zed>`
@@ -368,7 +368,7 @@ AD777XARDZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD777XARDZ <eval-ad7770>`
+   * - :adi:`AD777XARDZ <EVAL-AD7770-AD7779>`
      - :git-hdl:`ad777x_ardz <hdl_2021_r2:projects/ad777x_ardz>`
      - :git-hdl:`de10nano <hdl_2021_r2:projects/ad777x_ardz/de10nano>`
        :git-hdl:`zed <hdl_2021_r2:projects/ad777x_ardz/zed>`
@@ -774,7 +774,7 @@ AD9783EBZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD9783-EBZ <eval-ad9783-ebz>`
+   * - :adi:`EVAL-AD9783`
      - :git-hdl:`ad9783_ebz <hdl_2021_r2:projects/ad9783_ebz>`
      - :git-hdl:`zcu102 <hdl_2021_r2:projects/ad9783_ebz/zcu102>`
      - :ref:`ad9783_ebz_zcu102 <util_hdl_2021_r2_ad9783_ebz_zcu102>`
@@ -795,7 +795,7 @@ ADQUADMXFE1EBZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`ADQUADMXFE1EBZ <ad-quasmxfe1-ebz>`
+   * - :adi:`ADQUADMXFE1EBZ`
      - :git-hdl:`ad_quadmxfe1_ebz <hdl_2021_r2:projects/ad_quadmxfe1_ebz>`
      - :git-hdl:`vcu118 <hdl_2021_r2:projects/ad_quadmxfe1_ebz/vcu118>`
      - :ref:`ad_quadmxfe1_ebz_vcu118 <util_hdl_2021_r2_ad_quadmxfe1_ebz_vcu118>`
@@ -854,7 +854,7 @@ ADAQ8092FMC
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`ADAQ8092-FMC <eval-adaq9082-fmc>`
+   * - :adi:`ADAQ8092-FMC <EVAL-ADAQ8092-FMCZ>`
      - :git-hdl:`adaq8092_fmc <hdl_2021_r2:projects/adaq8092_fmc>`
      - :git-hdl:`zed <hdl_2021_r2:projects/adaq8092_fmc/zed>`
      - :ref:`adaq8092_fmc_zed <util_hdl_2021_r2_adaq8092_fmc_zed>`
@@ -880,7 +880,7 @@ ADRV9001
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`AD-ADRV9001 <eval-adrv9001>`
+   * - :adi:`ADRV9001`
      - :git-hdl:`adrv9001 <hdl_2021_r2:projects/adrv9001>`
      - :git-hdl:`a10soc <hdl_2021_r2:projects/adrv9001/a10soc>`
        :git-hdl:`zc706 <hdl_2021_r2:projects/adrv9001/zc706>`
@@ -1102,7 +1102,7 @@ CN0501
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`CN0501`
+   * - CN0501
      - :git-hdl:`cn0501 <hdl_2021_r2:projects/cn0501>`
      - :git-hdl:`coraz7s <hdl_2021_r2:projects/cn0501/coraz7s>`
      - :ref:`cn0501_coraz7s <util_hdl_2021_r2_cn0501_coraz7s>`
@@ -1287,7 +1287,7 @@ DACFMCEBZ
      - 
      - 
      - :git-hdl:`axi_hdmi_tx <hdl_2021_r2:library/axi_hdmi_tx>`
-   * - :adi:`EVAL-AD916x`
+   * - :adi:`EVAL-AD916X`
      - 
      - 
      - 
@@ -1652,7 +1652,7 @@ PLUTO_NG
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`ADALM-PLUTO-NG`
+   * - :adi:`ADALM-PLUTO`
      - :git-hdl:`pluto_ng <hdl_2021_r2:projects/pluto_ng>`
      - :git-hdl:`pluto_ng <hdl_2021_r2:projects/pluto_ng>`
      - pluto_ng_pluto_ng
@@ -1674,7 +1674,7 @@ PULSAR_ADC_PMDZ
      - Carriers
      - Resource Utilization
      - Library Cores
-   * - :adi:`PULSAR-ADC-PMDZ <pulsar_adc_evaluation_tools>`
+   * - :adi:`PULSAR-ADC-PMDZ <en/resources/evaluation-hardware-and-software/evaluation-boards-kits/PulsarPMODs.html>`
      - :git-hdl:`pulsar_adc_pmdz <hdl_2021_r2:projects/pulsar_adc_pmdz>`
      - :git-hdl:`coraz7s <hdl_2021_r2:projects/pulsar_adc_pmdz/coraz7s>`
      - :ref:`pulsar_adc_pmdz_coraz7s <util_hdl_2021_r2_pulsar_adc_pmdz_coraz7s>`
@@ -1694,4 +1694,4 @@ Help & Support
 * The :ref:`carriers (abbreviations can be found here) <build_hdl>` are commonly available FPGA evaluation boards.
 * The :ref:`HDL user guide <user_guide>` contains all the documentation, build instructions and register map tables.
 * The following quick links allows you to browse the github repository for a list of current `branches <http://github.com/analogdevicesinc/hdl/branches/active>`__, :git-hdl:`library components <master:library>`, and :git-hdl:`projects <master:projects>`.
-* Questions? We can help with `FPGA questions <https://ez.analog.com/community/fpga>`__, `Linux driver questions <https://ez.analog.com/community/linux-device-drivers/linux-software-drivers>`__, `No-OS Drivers questions <https://ez.analog.com/community/linux-device-drivers/microcontroller-no-os-drivers>`__.
+* Questions? We can help with `FPGA questions <https://ez.analog.com/community/fpga>`__, `Linux driver questions <https://ez.analog.com/linux-software-drivers/>`__, `No-OS Drivers questions <https://ez.analog.com/microcontroller-no-os-drivers/>`__.

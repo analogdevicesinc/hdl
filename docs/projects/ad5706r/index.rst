@@ -30,7 +30,7 @@ Applications:
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`EVAL-AD5706RARDZ`
+- :adi:`EVAL-AD5706R-ARDZ`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -167,9 +167,8 @@ HDL related
 Software related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- :git-no-os:`AD5706R No-OS project source code <projects/ad5706r>`
-- :git-no-os:`AD5706R No-OS Driver source code <drivers/afe/ad5706r>`
-- :git-linux:`AD5706R Linux Driver source code <drivers/iio/dac/ad5706r>`
+- :git-no-os:`AD5706R No-OS Driver source code <drivers/dac/ad5706r>`
+- :git-linux:`AD5706R Linux Driver source code <dev_ad5706r_1:drivers/iio/dac/ad5706r.c>`
 
 .. include:: ../common/more_information.rst
 

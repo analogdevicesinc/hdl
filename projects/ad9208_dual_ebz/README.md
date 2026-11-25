@@ -2,7 +2,7 @@
 
 - Evaluation board product page: [EVAL-AD9208](https://www.analog.com/eval-ad9208)
 - System documentation: https://wiki.analog.com/resources/eval/user-guides/ad9208_dual_ebz/quickstart/vcu118
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad9208_dual_ebz/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad9208_dual_ebz/
 - Evaluation board VADJ range: 1.2V - 3.3V
 
 ## Supported parts

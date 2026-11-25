@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2025 Analog Devices, Inc.
+## Copyright (c) 2018 - 2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -21,9 +21,14 @@ M_DEPS += ../../../library/common/ad_iobuf.v
 M_DEPS += ../../../library/common/ad_3w_spi.v
 M_DEPS += ../../../projects/common/xilinx/data_offload_bd.tcl
 M_DEPS += ../../../library/jesd204/scripts/jesd204.tcl
+M_DEPS += ../../../library/axi_fsrc/scripts/axi_fsrc.tcl
 
+LIB_DEPS += axi_adf4030
 LIB_DEPS += axi_clkgen
 LIB_DEPS += axi_dmac
+LIB_DEPS += axi_fsrc/axi_fsrc_rx
+LIB_DEPS += axi_fsrc/axi_fsrc_sequencer
+LIB_DEPS += axi_fsrc/axi_fsrc_tx
 LIB_DEPS += axi_hsci
 LIB_DEPS += axi_sysid
 LIB_DEPS += axi_tdd
@@ -43,6 +48,7 @@ LIB_DEPS += util_do_ram
 LIB_DEPS += util_hbm
 LIB_DEPS += util_pack/util_cpack2
 LIB_DEPS += util_pack/util_upack2
+LIB_DEPS += util_pack_cdc
 LIB_DEPS += util_tdd_sync
 LIB_DEPS += xilinx/axi_adxcvr
 LIB_DEPS += xilinx/util_adxcvr

@@ -373,50 +373,28 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - adc_pd
-     - INOUT
-     - 38
-     - 92
-     - 116
-   * - dac_txen
-     - INOUT
-     - 37
-     - 91
-     - 115
-   * - adc_fdb
-     - INOUT
-     - 36
-     - 90
-     - 114
-   * - adc_fda
-     - INOUT
-     - 35
-     - 89
-     - 113
-   * - dac_irq
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - clkd_status
-     - INOUT
-     - 32
-     - 86
-     - 110
+================  =========  =======  =========  ===================  ==========
+GPIO signal       Direction  HDL no.  Zynq-7000  Zynq UltraScale+ MP  MicroBlaze
+================  =========  =======  =========  ===================  ==========
+adc_pd            INOUT      38       92         116                  38
+dac_txen          INOUT      37       91         115                  37
+adc_fdb           INOUT      36       90         114                  36
+adc_fda           INOUT      35       89         113                  35
+dac_irq           INOUT      34       88         112                  34
+clkd_status[1:0]  INOUT      33:32    87:86      111:110              33:32
+================  =========  =======  =========  ===================  ==========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO range
+   - Zynq-7000, Zynq UltraScale+ MP, MicroBlaze = Software GPIOs to be used in
+     device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -514,9 +492,8 @@ Systems related
 - :external+system-level:ref:`AD-FMCDAQ3-EBZ on VCU118 quick start guide <ad_fmcdaq3_ebz quickstart vcu118>`
 - :external+system-level:ref:`AD-FMCDAQ3-EBZ on ZC706 quick start guide <ad_fmcdaq3_ebz quickstart zc706>`
 - :external+system-level:ref:`AD-FMCDAQ3-EBZ on ZCU102 quick start guide <ad_fmcdaq3_ebz quickstart zcu102>`
-- :external+system-level:ref:`AD-FMCDAQ3-EBZ on A10GX (OBSOLETE) quick start guide <ad_fmcdaq3_ebz quickstart a10gx>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ on MicroBlaze quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/quickstart/microblaze>`
-  (:dokuwiki:`here <resources/tools-software/linux-drivers/platforms/nios2>`
+- :external+system-level:ref:`AD-FMCDAQ3-EBZ on MicroBlaze quick start guide <ad_fmcdaq2_ebz quickstart microblaze>`
+  (:external+system-level:ref:`here <linux-kernel nios2>`
   you can find prebuilt images for this setup;
   **these are not maintained anymore!**)
 
@@ -612,7 +589,7 @@ Software related
 - DAQ3/ZCU102 Linux device tree :git-linux:`zynqmp-zcu102-rev10-fmcdaq3.dts <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-fmcdaq3.dts>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ on Zynq ZC706 Linux quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/zynq>`
 - :external+system-level:ref:`AD-FMCDAQ3-EBZ baremetal (no-OS) guide <ad_fmcdaq3_ebz baremetal>`
-- :dokuwiki:`AD-FMCDAQ3-EBZ on MicroBlaze no-OS quick start guide <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/microblaze>`
+- :external+system-level:doc:`AD-FMCDAQ3-EBZ on MicroBlaze no-OS quick start guide <solutions/reference-designs/ad-fmcdaq2-ebz/quickstart/microblaze>`
 - :dokuwiki:`AD-FMCDAQ3-EBZ IIO Oscilloscope plugin <resources/eval/user-guides/ad-fmcdaq2-ebz/software/linux/applications/iio_scope>`
 - :external+system-level:ref:`FRU EEPROM (fru_dump) utility <software fru-dump>`
 

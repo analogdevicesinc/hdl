@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="885" height="910" viewBox="0 0 885 910" version="1.1" id="svg" sodipodi:docname="ad4080_fmc_evb_zed_spi_slave_hdl_bd.svg" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd">
+<sodipodi:namedview id="namedview" pagecolor="#ffffff" inkscape:document-units="px"/>
+<defs id="defs"><marker id="ArrowEnd" orient="auto" markerWidth="6" markerHeight="6" viewBox="0 0 6 6" refX="5" refY="3" markerUnits="strokeWidth" style="overflow:visible"><path d="M 0,0 L 6,3 L 0,6 Z" style="fill:context-stroke;stroke:none"/></marker><marker id="ArrowStart" orient="auto-start-reverse" markerWidth="6" markerHeight="6" viewBox="0 0 6 6" refX="5" refY="3" markerUnits="strokeWidth" style="overflow:visible"><path d="M 0,0 L 6,3 L 0,6 Z" style="fill:context-stroke;stroke:none"/></marker></defs>
+<rect id="background" x="0" y="0" width="885" height="910" style="fill:#ffffff;stroke:none"/>
+<g id="layer1" inkscape:groupmode="layer" inkscape:label="Board">
+<text xml:space="preserve" id="text25" x="825" y="120" style="font-family:Arial;font-weight:bold;font-size:20px;fill:#000000;text-anchor:end;dominant-baseline:central">ZedBoard</text>
+<path id="frame71" inkscape:label="ZedBoard" d="M 63,870 L 15,870 L 15,44 L 845,44 L 845,228 M 845,788 L 845,870 L 173,870" style="fill:none;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-linecap:square"/>
+</g>
+<g id="layer2" inkscape:groupmode="layer" inkscape:label="Clock domains">
+<rect id="rect26" inkscape:label="sys_cpu_clk = 100 MHz" x="70" y="196" width="255" height="624" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
+<text xml:space="preserve" id="text27" x="238" y="802" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">sys_cpu_clk = 100 MHz</text>
+<rect id="rect28" inkscape:label="adc_clk = 200 MHz (dco_clk / 2)" x="335" y="196" width="230" height="624" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
+<text xml:space="preserve" id="text29" x="450" y="802" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">adc_clk = 200 MHz</text>
+<text xml:space="preserve" id="text30" x="450" y="814" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">(dco_clk / 2)</text>
+<rect id="rect31" inkscape:label="dco_clk = 400 MHz" x="575" y="196" width="257.5" height="624" style="fill:none;fill-opacity:1;stroke:#754d00;stroke-width:2;stroke-linejoin:miter;stroke-dasharray:6,4"/>
+<text xml:space="preserve" id="text32" x="703.75" y="802" style="font-family:Arial;font-weight:normal;font-size:10.667px;fill:#754d00;text-anchor:middle;dominant-baseline:auto">dco_clk = 400 MHz</text>
+</g>
+<g id="layer3" inkscape:groupmode="layer" inkscape:label="Blocks">
+<rect id="rect7" x="30" y="60" width="680" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect9" x="358" y="60" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect11" x="402" y="60" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect13" x="446" y="60" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect15" x="490" y="60" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect17" x="534" y="60" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect19" x="578" y="60" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect21" x="622" y="60" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect23" x="666" y="60" width="44" height="120" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect33" inkscape:label="AXI DMAC" x="300" y="228" width="60" height="270" style="fill:#ffcccc;fill-opacity:1;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect35" inkscape:label="SPI SLAVE" x="300" y="518" width="60" height="270" style="fill:#ffcccc;fill-opacity:1;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect37" inkscape:label="MEMORY INTERCONNECT" x="45" y="228" width="50" height="270" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect39" inkscape:label="AXI AD408X" x="540" y="228" width="60" height="560" style="fill:#ffcccc;fill-opacity:1;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect41" inkscape:label="FMC CONNECTOR" x="820" y="228" width="50" height="560" style="fill:#e8e8e8;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<rect id="rect61" inkscape:label="PMOD JB" x="63" y="845" width="110" height="50" style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+</g>
+<g id="layer4" inkscape:groupmode="layer" inkscape:label="Arrows">
+<path id="bus43" d="M 300,353 L 113,353 L 113,346 L 95,363 L 113,380 L 113,373 L 300,373 Z" style="fill:#a01414;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<path id="bus45" d="M 540,353 L 378,353 L 378,346 L 360,363 L 378,380 L 378,373 L 540,373 Z" style="fill:#a01414;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<path id="bus47" d="M 540,643 L 378,643 L 378,636 L 360,653 L 378,670 L 378,663 L 540,663 Z" style="fill:#a01414;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<path id="path49" d="M 820,435 L 602,435" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path51" d="M 820,461 L 602,461" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path53" d="M 820,495 L 602,495" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path55" d="M 820,521 L 602,521" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path57" d="M 820,555 L 602,555" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path59" d="M 820,581 L 602,581" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path63" d="M 85,845 L 85,614 L 298,614" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path65" d="M 107,845 L 107,640 L 298,640" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path67" d="M 300,666 L 129,666 L 129,843" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+<path id="path69" d="M 300,692 L 151,692 L 151,843" style="fill:none;stroke:#000000;stroke-width:2;marker-end:url(#ArrowEnd)"/>
+</g>
+<g id="layer5" inkscape:groupmode="layer" inkscape:label="Labels">
+<text xml:space="preserve" id="text8" x="194" y="120" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central">ARM (Zynq)</text>
+<text xml:space="preserve" id="text10" x="380" y="120" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 380 120)">Interrupts</text>
+<text xml:space="preserve" id="text12" x="424" y="120" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 424 120)">Timer</text>
+<text xml:space="preserve" id="text14" x="468" y="120" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 468 120)">DDRx</text>
+<text xml:space="preserve" id="text16" x="512" y="120" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 512 120)">Ethernet</text>
+<text xml:space="preserve" id="text18" x="556" y="120" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 556 120)">UART</text>
+<text xml:space="preserve" id="text20" x="600" y="120" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 600 120)">I2C</text>
+<text xml:space="preserve" id="text22" x="644" y="120" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 644 120)">GPIO</text>
+<text xml:space="preserve" id="text24" x="688" y="120" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 688 120)">SPI</text>
+<text xml:space="preserve" id="text34" x="330" y="363" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 330 363)">AXI DMAC</text>
+<text xml:space="preserve" id="text36" x="330" y="653" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 330 653)">SPI SLAVE</text>
+<text xml:space="preserve" id="text38" x="70" y="363" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 70 363)">MEMORY INTERCONNECT</text>
+<text xml:space="preserve" id="text40" x="570" y="508" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 570 508)">AXI AD408X</text>
+<text xml:space="preserve" id="text42" x="845" y="508" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central" transform="rotate(-90 845 508)">FMC CONNECTOR</text>
+<text xml:space="preserve" id="text44" x="206.5" y="363" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#ffffff;text-anchor:middle;dominant-baseline:central">64b</text>
+<text xml:space="preserve" id="text46" x="459" y="363" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#ffffff;text-anchor:middle;dominant-baseline:central">32b/16b</text>
+<text xml:space="preserve" id="text48" x="459" y="653" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#ffffff;text-anchor:middle;dominant-baseline:central">32b/16b</text>
+<text xml:space="preserve" id="text50" x="710" y="429" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">dco_p</text>
+<text xml:space="preserve" id="text52" x="710" y="455" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">dco_n</text>
+<text xml:space="preserve" id="text54" x="710" y="489" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">da_p</text>
+<text xml:space="preserve" id="text56" x="710" y="515" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">da_n</text>
+<text xml:space="preserve" id="text58" x="710" y="549" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">db_p</text>
+<text xml:space="preserve" id="text60" x="710" y="575" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">db_n</text>
+<text xml:space="preserve" id="text62" x="118" y="870" style="font-family:Arial;font-weight:bold;font-size:18.667px;fill:#000000;text-anchor:middle;dominant-baseline:central">PMOD JB</text>
+<text xml:space="preserve" id="text64" x="192.5" y="608" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">pmod_spi_cs</text>
+<text xml:space="preserve" id="text66" x="203.5" y="634" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">pmod_spi_sclk</text>
+<text xml:space="preserve" id="text68" x="214.5" y="660" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">pmod_spi_miso</text>
+<text xml:space="preserve" id="text70" x="225.5" y="686" style="font-family:Arial;font-weight:normal;font-size:16px;fill:#000000;text-anchor:middle;dominant-baseline:auto">pmod_data_ready</text>
+</g>
+<g id="layer6" inkscape:groupmode="layer" inkscape:label="Legend">
+<rect id="rect2" x="20" y="14" width="16" height="16" style="fill:#ffcccc;fill-opacity:1;stroke:#a01414;stroke-width:2;stroke-linejoin:miter"/>
+<text xml:space="preserve" id="text3" x="44" y="22" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#000000;text-anchor:start;dominant-baseline:central">Receive path</text>
+<path id="path4" d="M 140,22 L 166,22" style="fill:none;stroke:#754d00;stroke-width:2;stroke-dasharray:6,4"/>
+<text xml:space="preserve" id="text5" x="174" y="22" style="font-family:Arial;font-weight:normal;font-size:12px;fill:#000000;text-anchor:start;dominant-baseline:central">Clock domain</text>
+</g>
+<g id="layer7" inkscape:groupmode="layer" inkscape:label="Border">
+<rect id="rect1" inkscape:label="outer border" x="1" y="1" width="883" height="908" style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter"/>
+<text xml:space="preserve" id="text6" x="825" y="22" style="font-family:Arial;font-weight:bold;font-size:20px;fill:#000000;text-anchor:end;dominant-baseline:central">EVAL-AD4080-FMC</text>
+</g>
+</svg>

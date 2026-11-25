@@ -1,8 +1,8 @@
 # AD5706R HDL Project
 
 - Evaluation board product page: [EVAL-AD5706RARDZ](https://analog.com/eval-ad5706r)
-- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad5706r 
-- HDL project documentation: http://analogdevicesinc.github.io/hdl/projects/ad5706r/index.html
+- System documentation: https://wiki.analog.com/resources/eval/user-guides/ad5706r
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad5706r/
 - Evaluation board VADJ: 2.5V
 
 ## Supported parts

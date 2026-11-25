@@ -11,4 +11,4 @@ cd projects/ad5766_sdz/zed
 make
 ```
 
-Corresponding No-OS project: [ad5766_sdz](https://github.com/analogdevicesinc/hdl/tree/main/projects/ad5766_sdz)
+Corresponding No-OS project: [ad5766-sdz](https://github.com/analogdevicesinc/no-OS/tree/main/projects/ad5766-sdz)

@@ -6,6 +6,7 @@ JESD204 Interface Framework
 .. toctree::
    :maxdepth: 1
 
+   System Architecture <system_architecture/index>
    Generic JESD204 block designs <generic_jesd_bds/index>
    JESD204B/C Link Transmit Peripheral <axi_jesd204_tx/index>
    JESD204B/C Link Receive Peripheral <axi_jesd204_rx/index>
@@ -14,6 +15,7 @@ JESD204 Interface Framework
    Xilinx FPGAs Transceivers Wizard <xgt_wizard/index>
    AMD Versal Adaptive SoC Transceiver Subsystem <versal_transceiver_subsystem/index>
    Troubleshooting JESD204 TX links <troubleshoot/troubleshoot_jesd204_tx>
+   JESD204 Component-Level Testbenches <component_testbenches/index>
 
 The JESD204, JESD204A, JESD204B and the JESD204C data converter serial interface
 standard was created through the JEDEC committee to standardize and reduce the
@@ -359,8 +361,8 @@ Linux
 - :dokuwiki:`JESD204B/C Receive Linux Driver <resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx>`:
   Linux driver for the JESD204B receive core.
 - :dokuwiki:`JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux Driver <resources/tools-software/linux-drivers/jesd204/axi_adxcvr>`
-- :dokuwiki:`JESD204B Statistical Eyescan Application <resources/tools-software/linux-software/jesd_eye_scan>`
-- :dokuwiki:`JESD204B Status Utility <resources/tools-software/linux-software/jesd_status>`
+- :external+system-level:ref:`JESD204B Statistical Eyescan Application <software jesd-eye-scan>`
+- :external+system-level:ref:`JESD204B Status Utility <software jesd-status>`
 - :dokuwiki:`AXI DAC HDL Linux Driver <resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
 
   - :dokuwiki:`AD9172 DAC Linux Driver <resources/tools-software/linux-drivers/iio-dds/ad9172>`
@@ -387,7 +389,7 @@ No-OS
 Tutorial
 --------------------------------------------------------------------------------
 
-#. :dokuwiki:`System Architecture <resources/fpga/peripherals/jesd204/tutorial/system_architecture>`
+#. :ref:`jesd204-system-architecture`
 #. :ref:`generic_jesd_bds`.
    This will help you understand the generic blocks for the next steps.
 #. Checkout the :ref:`HDL Source <build_hdl>`, and then build either one of:
@@ -400,14 +402,11 @@ Tutorial
 HDL Example Projects
 --------------------------------------------------------------------------------
 
-- :ref:`AD-FMCADC2-EBZ Reference Design (RETIRED) <fmcadc2>`
 - :dokuwiki:`AD-FMCADC3-EBZ Reference Design (RETIRED) <resources/fpga/xilinx/fmc/ad-fmcadc3-ebz>`
 - :dokuwiki:`AD-FMCADC4-EBZ Reference Design (RETIRED) <resources/fpga/xilinx/fmc/ad-fmcadc4-ebz>` on:
 
   - :git-hdl:`AMD Xilinx ZC706 <hdl_2018_r2:projects/fmcadc4/zc706>`
 
-- :ref:`AD-FMCADC5-EBZ Reference Design (RETIRED) <fmcadc5>`
-- :ref:`AD-FMCJESDADC1-EBZ Reference Design (RETIRED) <fmcjesdadc1>`
 - :ref:`AD-FMCOMMS8-EBZ Reference Design <fmcomms8>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/fmcomms8/a10soc>`
@@ -449,12 +448,12 @@ HDL Example Projects
 
 - :ref:`ADRV9009-ZU11EG-SOM Reference Design <adrv9009zu11eg>` on:
 
-  - :git-hdl:`Intel Arria 10 SoC <projects/adrv9009zu11eg/a10soc>`
-  - :git-hdl:`Intel A10Gx (RETIRED) <hdl_2021_r1:projects/adrv9009zu11eg/a10gx>`
-  - :git-hdl:`AMD Xilinx ZC706 <projects/adrv9009zu11eg/zc706>`
+  - :git-hdl:`ADRV2CRR-FMC <projects/adrv9009zu11eg/adrv2crr_fmc>`
+  - :git-hdl:`ADRV2CRR-FMC + FMCOMMS8 <projects/adrv9009zu11eg/adrv2crr_fmcomms8>`
+  - :git-hdl:`ADRV2CRR-FMC + FMCXMWBR1 <projects/adrv9009zu11eg/adrv2crr_fmcxmwbr1>`
   - :git-hdl:`ADRV9009-ZU11EG-SOM <projects/adrv9009zu11eg>`
 
-- :ref:`AD913x/AD917x/AD9144/AD915x Reference Design (dac_fmc_ebz) <dac_fmc_ebz>` on:
+- :ref:`AD913X/AD917X/AD9144/AD915X Reference Design (dac_fmc_ebz) <dac_fmc_ebz>` on:
 
   - See the :git-hdl:`list of supported parts <projects/dac_fmc_ebz#readme>`
   - :git-hdl:`Intel Arria 10 SoC <projects/dac_fmc_ebz/a10soc>`
@@ -462,7 +461,7 @@ HDL Example Projects
   - :git-hdl:`AMD Xilinx ZC706 <projects/dac_fmc_ebz/zc706>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/dac_fmc_ebz/zcu102>`
 
-- :ref:`AD916x Reference Design <ad916x_fmc>` on:
+- :ref:`AD916X Reference Design <ad916x_fmc>` on:
 
   - See the :git-hdl:`list of supported parts <projects/ad916x_fmc#readme>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/ad916x_fmc/zcu102>`
@@ -523,17 +522,14 @@ HDL Example Projects
 
   - :git-hdl:`AMD Xilinx VCU118 <projects/ad_quadmxfe1_ebz/vcu118>`
 
-- :ref:`AD-FMCLIDAR1-EBZ Reference Design (RETIRED) <ad_fmclidar1_ebz>`
 - :ref:`ADRV9026 Reference Design <adrv9026>` on:
 
   - :git-hdl:`Intel Arria 10 SoC <projects/adrv9026/a10soc>`
-  - :git-hdl:`AMD Xilinx VCK190 <projects/adrv9026/vck190>`
   - :git-hdl:`AMD Xilinx VCU118 <projects/adrv9026/vcu118>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv9026/zcu102>`
 
-- :ref:`ADRV904x Reference Design <adrv904x>` on:
+- :ref:`ADRV904X Reference Design <adrv904x>` on:
 
-  - :git-hdl:`AMD Xilinx VCK190 <projects/adrv904x/vck190>`
   - :git-hdl:`AMD Xilinx ZCU102 <projects/adrv904x/zcu102>`
 
 Technical Articles
@@ -549,12 +545,12 @@ JESD204B Rapid Prototyping Platforms
 
 - :adi:`AD-FMCOMMS11-EBZ` :dokuwiki:`(User Guide) <resources/eval/user-guides/ad-fmcomms11-ebz>`
 - :adi:`ADRV9009-ZU11EG` :dokuwiki:`ADRV9009-ZU11EG (User Guide) <resources/eval/user-guides/adrv9009-zu11eg>`
-- :adi:`EVAL-AD-FMCADC2-EBZ`
+- :adi:`AD-FMCADC2-EBZ`
 - :adi:`EVAL-AD-FMCADC3-EBZ` (RETIRED)
 - :adi:`EVAL-AD-FMCADC4-EBZ` (RETIRED)
 - :adi:`EVAL-AD-FMCDAQ2-EBZ` :dokuwiki:`(User Guide) <resources/eval/user-guides/ad-fmcdaq2-ebz>`
 - :adi:`EVAL-AD-FMCJESDADC1-EBZ`
-- :adi:`EVAL-AD917x <EVAL-AD9172>`
+- :adi:`EVAL-AD917X <EVAL-AD9172>`
 - :adi:`EVAL-ADRV9008-9009` :dokuwiki:`(User Guide) <resources/eval/user-guides/adrv9009>`
 - :adi:`EVAL-ADRV9371` :dokuwiki:`(User Guide) <resources/eval/user-guides/mykonos>`
 - :adi:`EVAL-FMCDAQ3-EBZ`

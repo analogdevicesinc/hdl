@@ -48,7 +48,7 @@ adi_if_ports output 1 t
 adi_if_define "i3c_controller_cmdp"
 adi_if_ports input   1 cmdp_ready
 adi_if_ports output  1 cmdp_valid
-adi_if_ports output 31 cmdp
+adi_if_ports output 32 cmdp
 adi_if_ports input   3 cmdp_error
 adi_if_ports input   1 cmdp_nop
 adi_if_ports input   1 cmdp_daa_trigger

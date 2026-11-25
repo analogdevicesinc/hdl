@@ -15,7 +15,7 @@ All of the RX link modes can be found in the [AD9656 data sheet](https://www.ana
 
 This project is not parameterizable, it has a fixed configuration:
 
-- JESD_MODE - link layer encoder mode used; 
+- JESD_MODE - link layer encoder mode used;
   - **8B10B** - 8b10b link layer defined in JESD204B, uses ADI IP as Physical layer
 - RX_JESD_M - **4**; RX number of converters per link
 - RX_JESD_L - **4**; RX number of lanes per link

@@ -124,7 +124,7 @@ The Link layer consists of L number of lanes which form the link.
 More information on the TX Link layer can be found in
 :ref:`axi_jesd204_tx` page.
 
-Example 1: TX link with L=4, M=1, S=1, F=2, NP=16
+Example 1: TX link with L=4, M=1, S=4, F=2, NP=16
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this mode, the Transport Layer will output 2 frames in every clock cycle
@@ -187,7 +187,7 @@ The Link layer consists from L number of lanes which form the link.
 More information on the RX Link layer can be found in
 :ref:`axi_jesd204_rx` page.
 
-Example: RX link with L=4, M=1, S=1, F=2, NP=16
+Example: RX link with L=4, M=1, S=4, F=2, NP=16
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In this mode the Transport Layer will accept two frames in every clock cycle.
@@ -246,13 +246,13 @@ of the LinkClock speed.
 
 Such a parametrizable block design that supports also F=8 was built for the
 ADRV9009 prototyping platform, and can be found
-:git-hdl:`here <dev_adrv9009_less_lanes:projects/adrv9009/common/adrv9009_bd.tcl>`.
+:git-hdl:`here <projects/adrv9009/common/adrv9009_bd.tcl>`.
 
 Software related
 -------------------------------------------------------------------------------
 
-- :dokuwiki:`ADC Linux driver documentation <resources/tools-software/linux-drivers/iio-adc/axi-adc-hdl>`
-- :dokuwiki:`DAC Linux driver documentation <resources/tools-software/linux-drivers/iio-dds/axi-dac-dds-hdl>`
-- :dokuwiki:`ADI JESD204B/C Transmit Peripheral Linux driver documentation <resources/tools-software/linux-drivers/jesd204/axi_jesd204_tx>`
-- :dokuwiki:`ADI JESD204B/C Receive Peripheral Linux driver documentation <resources/tools-software/linux-drivers/jesd204/axi_jesd204_rx>`
-- :dokuwiki:`ADI JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux driver documentation <resources/tools-software/linux-drivers/jesd204/axi_adxcvr>`
+- :external+linux:ref:`ADC Linux driver documentation <axi-adc-hdl>`
+- :external+linux:ref:`DAC Linux driver documentation <axi-dac-dds-hdl>`
+- :external+linux:ref:`ADI JESD204B/C Transmit Peripheral Linux driver documentation <axi_jesd204_tx>`
+- :external+linux:ref:`ADI JESD204B/C Receive Peripheral Linux driver documentation <axi_jesd204_rx>`
+- :external+linux:ref:`ADI JESD204B/C AXI_ADXCVR Highspeed Transceivers Linux driver documentation <axi_adxcvr>`

@@ -1,11 +1,11 @@
 # ADAQ23875 HDL Project
 
-- Evaluation board product page:
+- Evaluation boards product pages:
   - [EVAL-ADAQ23878](https://analog.com/eval-adaq23878)
   - [EVAL-ADAQ23876](https://analog.com/eval-adaq23876)
   - [EVAL-ADAQ23875](https://analog.com/eval-adaq23875)
-- System documentation: TO BE ADDED 
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/adaq23875/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/adaq2387x/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/adaq23875/
 - Evaluation board VADJ: 2.5V
 
 ## Supported parts

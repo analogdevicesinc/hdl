@@ -53,14 +53,20 @@ Supported devices
 - :adi:`LTC2376-20`
 - :adi:`LTC2370-16`
 - :adi:`LTC2369-18`
-- :adi:`LTC2368-16/18`
-- :adi:`LTC2367-16/18`
-- :adi:`LTC2364-16/18`
+- :adi:`LTC2368-16`
+- :adi:`LTC2368-18`
+- :adi:`LTC2367-16`
+- :adi:`LTC2367-18`
+- :adi:`LTC2364-16`
+- :adi:`LTC2364-18`
 - :adi:`LTC2380-16`
 - :adi:`LTC2379-18`
-- :adi:`LTC2378-16/18`
-- :adi:`LTC2377-16/18`
-- :adi:`LTC2376-16/18`
+- :adi:`LTC2378-16`
+- :adi:`LTC2378-18`
+- :adi:`LTC2377-16`
+- :adi:`LTC2377-18`
+- :adi:`LTC2376-16`
+- :adi:`LTC2376-18`
 - :adi:`LTC2338-18`
 
 Supported carriers
@@ -138,30 +144,23 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Software GPIO number is calculated as follows:
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-- Zynq-7000: if PS7 is used, then offset is 54
+================  ============  =======  =========
+GPIO signal       Direction     HDL no.  Zynq-7000
+================  ============  =======  =========
+ltc2378_dcgn      INOUT         33       87
+ltc2378_chain     INOUT         32       86
+================  ============  =======  =========
 
-.. list-table::
-   :widths: 25 25 25 25
-   :header-rows: 2
+.. admonition:: Legend
+   :class: note
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-   * - ltc2378_dcgn
-     - INOUT
-     - 33
-     - 87
-   * - ltc2378_chain
-     - INOUT
-     - 32
-     - 86
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO number
+   - Zynq-7000 = Software GPIO to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -209,14 +208,20 @@ Hardware related
   - :adi:`LTC2376-20`
   - :adi:`LTC2370-16`
   - :adi:`LTC2369-18`
-  - :adi:`LTC2368-16/18`
-  - :adi:`LTC2367-16/18`
-  - :adi:`LTC2364-16/18`
+  - :adi:`LTC2368-16`
+- :adi:`LTC2368-18`
+  - :adi:`LTC2367-16`
+- :adi:`LTC2367-18`
+  - :adi:`LTC2364-16`
+- :adi:`LTC2364-18`
   - :adi:`LTC2380-16`
   - :adi:`LTC2379-18`
-  - :adi:`LTC2378-16/18`
-  - :adi:`LTC2377-16/18`
-  - :adi:`LTC2376-16/18`
+  - :adi:`LTC2378-16`
+- :adi:`LTC2378-18`
+  - :adi:`LTC2377-16`
+- :adi:`LTC2377-18`
+  - :adi:`LTC2376-16`
+- :adi:`LTC2376-18`
   - :adi:`LTC2338-18`
 
 HDL related

@@ -17,6 +17,6 @@ Corresponding device trees:
 
 - [zynq-coraz7s-ad7687-pmdz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7687-pmdz.dts)
 - [zynq-coraz7s-ad7689-ardz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7689-ardz.dts)
-- [zynq-coraz7s-ad7946.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7946.dts)
-- [zynq-coraz7s-ad7984.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7984.dts)
+- [zynq-coraz7s-ad7946-pmdz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7946-pmdz.dts)
+- [zynq-coraz7s-ad7984-pmdz.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-ad7984-pmdz.dts)
 - [zynq-coraz7s-adaq4003.dts](https://github.com/analogdevicesinc/linux/blob/main/arch/arm/boot/dts/xilinx/zynq-coraz7s-adaq4003.dts)

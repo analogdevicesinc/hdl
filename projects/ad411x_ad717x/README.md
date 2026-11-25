@@ -1,6 +1,6 @@
 # AD411X-AD717X HDL Project
 
-- Evaluation boards product page:
+- Evaluation boards product pages:
   - [EVAL-AD4111](https://www.analog.com/eval-ad4111)
   - [EVAL-AD4112](https://www.analog.com/eval-ad4112)
   - [EVAL-AD4114](https://www.analog.com/eval-ad4114)
@@ -14,7 +14,7 @@
   - [EVAL-AD7176-2](https://www.analog.com/ad7176-2)
   - [EVAL-AD7177-2](https://www.analog.com/ad7177-2)
 - System documentation: https://wiki.analog.com/resources/tools-software/product-support-software/ad717x_ad411x_mbed_example
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ad411x_ad717x/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ad411x_ad717x/
 - Evaluation board VIO: 3.3V
 
 ## Supported parts

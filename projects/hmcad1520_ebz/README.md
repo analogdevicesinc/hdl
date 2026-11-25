@@ -2,7 +2,7 @@
 
 - Evaluation board product page: TO BE ADDED
 - System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/hmcad1520_ebz/index.html
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/hmcad1520_ebz/
 - Evaluation board VADJ: 2.5V
 
 ## Supported parts

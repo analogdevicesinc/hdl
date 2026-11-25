@@ -265,7 +265,7 @@ Example block design for Single link; M=2; L=8; JESD204C
       $     TX_JESD_S=4       \
       $     TX_JESD_NP=8
 
-  In the case of :adi:`VCU118` board, a CORUNDUM parameter is also available,
+  In the case of :xilinx:`VCU118` board, a CORUNDUM parameter is also available,
   which enables or disables the Corundum Network Stack. By default it is
   disabled, set to 0. To enable it, set the value to 1.
 
@@ -437,7 +437,7 @@ mxfe_tx_data_offload $INTF_CFG!="RX"                   0x7C44_0000     0x9C44_00
 axi_tdd_0            $TDD_SUPPORT==1                   0x7C46_0000     0x9C46_0000 0xBC46_00000
 ==================== ================================= =============== =========== ============
 
-In case of :adi:`VCU118`, additional CPU interconnects may be present in the
+In case of :xilinx:`VCU118`, additional CPU interconnects may be present in the
 system.
 
 =================== ==================== ===========
@@ -489,21 +489,24 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-===========  =========  =======  =========  ===================  ======
-GPIO signal  Direction  HDL no.  Zynq-7000  Zynq UltraScale+ MP  Versal
-===========  =========  =======  =========  ===================  ======
-txen[1:0]    OUT        59:58    113:112    137:136              27:26
-rxen[1:0]    OUT        57:56    111:110    135:134              25:24
-rstb         OUT        55       109        133                  23
-hmc_sync     OUT        54       108        132                  22
-irqb[1:0]    IN         53:52    107:106    131:130              21:20
-agc3[1:0]    IN         51:50    105:104    129:128              19:18
-agc2[1:0]    IN         49:48    103:102    127:126              17:16
-agc1[1:0]    IN         47:46    101:100    125:124              15:14
-agc0[1:0]    IN         45:44    99:98      123:122              13:12
-hmc_gpio1    INOUT      43       97         121                  11
-gpio[10:0]   INOUT      42:32    96:86      120:110              10:0
-===========  =========  =======  =========  ===================  ======
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
+===========  =========  =======  =========  ===================  ======  ==========  ======  ======
+GPIO signal  Direction  HDL no.  Zynq-7000  Zynq UltraScale+ MP  Versal  MicroBlaze  A10soc  S10soc
+===========  =========  =======  =========  ===================  ======  ==========  ======  ======
+txen[1:0]    OUT        59:58    113:112    137:136              27:26    59:58      27:26   27:26
+rxen[1:0]    OUT        57:56    111:110    135:134              25:24    57:56      25:24   25:24
+rstb         OUT        55       109        133                  23       55         23      23
+hmc_sync     OUT        54       108        132                  22       54         22      22
+irqb[1:0]    IN         53:52    107:106    131:130              21:20    53:52      21:20   21:20
+agc3[1:0]    IN         51:50    105:104    129:128              19:18    51:50      19:18   19:18
+agc2[1:0]    IN         49:48    103:102    127:126              17:16    49:48      17:16   17:16
+agc1[1:0]    IN         47:46    101:100    125:124              15:14    47:46      15:14   15:14
+agc0[1:0]    IN         45:44    99:98      123:122              13:12    45:44      13:12   13:12
+hmc_gpio1    INOUT      43       97         121                  11       43         11      11
+gpio[10:0]   INOUT      42:32    96:86      120:110              10:0     42:32      10:0    10:0
+===========  =========  =======  =========  ===================  ======  ==========  ======  ======
 
 .. admonition:: Legend
    :class: note
@@ -511,8 +514,8 @@ gpio[10:0]   INOUT      42:32    96:86      120:110              10:0
    - GPIO signal = name of the GPIO in the HDL project
    - Direction = from the FPGA point of view
    - HDL no. = HDL GPIO EMIO
-   - Zynq-7000, Zynq UltraScale+ MP, Versal are Software GPIOs, to be used in
-     device trees
+   - Zynq-7000, Zynq UltraScale+ MP, Versal, MicroBlaze, S10soc, A10soc are
+     Software GPIOs, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -528,7 +531,7 @@ axi_mxfe_rx_jesd 11  55         87          107          139
 axi_mxfe_tx_jesd 10  54         86          106          138
 ================ === ========== =========== ============ =============
 
-In case of :adi:`VCU118`, additional interrupts may be present in the system.
+In case of :xilinx:`VCU118`, additional interrupts may be present in the system.
 
 ================ ======
 Instance name    HDL MB
@@ -765,7 +768,7 @@ then the folder name will be:
 truncation of some keywords so the name will not exceed the limits of the
 Operating System (``JESD``, ``LANE``, etc. are removed) of 260 characters.
 
-In case of the :adi:`VCU118`, if the Corundum Network Stack needs to be added,
+In case of the :xilinx:`VCU118`, if the Corundum Network Stack needs to be added,
 run the make command such as:
 
 ``make CORUNDUM=1``

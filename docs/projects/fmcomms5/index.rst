@@ -3,11 +3,11 @@
 FMCOMMS5 HDL Project
 ===============================================================================
 
-The :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` is a high-speed analog module designed
+The :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>` is a high-speed analog module designed
 to showcase the :adi:`AD9361` in multiple-input, multiple-output (MIMO)
 applications. The :adi:`AD9361`  is a high performance, highly integrated RF
 transceiver that operates from 70 MHz to 6 GHz, and supports bandwidths from
-less than 200 kHz to 56 MHz. The :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` supports
+less than 200 kHz to 56 MHz. The :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>` supports
 dual :adi:`AD9361` devices, allowing for the creation of a 4x4 MIMO system.
 This platform is intended to enable the prototyping and development of many
 software defined radio applications.
@@ -25,7 +25,7 @@ share a single clock. The data is sent or received based on the configuration
 Supported boards
 -------------------------------------------------------------------------------
 
-- :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>`
+- :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>`
 
 Supported devices
 -------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ Multi-cores operation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The core supports multiple instances of the same synchronized to a common
-clock. The :adi:`FMCOMMS5 <EVAL-AD-FMCOMMS5>` uses two instances of this
+clock. The :adi:`FMCOMMS5 <AD-FMCOMMS5-EBZ>` uses two instances of this
 core synchronized to a common clock. The data is recovered in each individual
 clock domain and transfers the data to a single clock domain. The multiple
 cores must all be using the same clock.
@@ -160,65 +160,80 @@ The SPI signals are controlled by a separate AXI based SPI core.
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
+
 The device control and monitor signals are interfaced to a GPIO module.
 
-ZC706
+ZC706/ZC702
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-================ ========= ============= =============
-GPIO signal      Direction HDL GPIO EMIO Zynq-700 GPIO
-================ ========= ============= =============
-gpio_resetb_1    INOUT     59            113
-gpio_ad5355_lock INOUT     58            112
-gpio_ad5355_rfen INOUT     57            111
-gpio_calsw_4_1   INOUT     56            110
-gpio_calsw_3_1   INOUT     55            109
-gpio_calsw_2_1   INOUT     54            108
-gpio_calsw_1_1   INOUT     53            107
-gpio_txnrx_1     OUT       52            106
-gpio_enable_1    OUT       51            105
-gpio_en_agc_1    INOUT     50            104
-gpio_txnrx_0     INOUT     49            103
-gpio_enable_0    INOUT     48            102
-gpio_en_agc_0    INOUT     47            101
-gpio_resetb_0    OUT       46            100
-gpio_debug_4_1   INOUT     43            97
-gpio_debug_3_1   INOUT     42            96
-gpio_debug_2_1   INOUT     41            95
-gpio_debug_1_1   INOUT     40            94
-gpio_ctl_0[3:0]  INOUT     39:36         93:90
-gpio_ctl_1[3:0]  INOUT     35:32         89:86
-================ ========= ============= =============
+================== ========= ======== ==========
+GPIO signal        Direction HDL no.  Zynq-7000
+================== ========= ======== ==========
+gpio_resetb_1      INOUT     59        113
+gpio_ad5355_lock   INOUT     58        112
+gpio_ad5355_rfen   INOUT     57        111
+gpio_calsw_4_1     INOUT     56        110
+gpio_calsw_3_1     INOUT     55        109
+gpio_calsw_2_0     INOUT     54        108
+gpio_calsw_1_0     INOUT     53        107
+gpio_txnrx_1       OUT       52        106
+gpio_enable_1      OUT       51        105
+gpio_en_agc_1      INOUT     50        104
+gpio_txnrx_0       INOUT     49        103
+gpio_enable_0      INOUT     48        102
+gpio_en_agc_0      INOUT     47        101
+gpio_resetb_0      OUT       46        100
+gpio_debug_4_1     INOUT     43        97
+gpio_debug_3_1     INOUT     42        96
+gpio_debug_2_0     INOUT     41        95
+gpio_debug_1_0     INOUT     40        94
+gpio_ctl_1[3:0]    INOUT     39:36     93:90
+gpio_ctl_0[3:0]    INOUT     35:32     89:86
+gpio_status_1[7:0] INOUT     31:24     85:78
+gpio_status_0[7:0] INOUT     23:16     77:70
+================== ========= ======== ==========
 
 ZCU102
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-================ ========= ============= ============
-GPIO signal      Direction HDL GPIO EMIO Zynq MP GPIO
-================ ========= ============= ============
-gpio_resetb_1    OUT       65            143
-gpio_ad5355_lock IN        64            142
-gpio_ad5355_rfen OUT       63            141
-gpio_calsw_4_1   OUT       62            140
-gpio_calsw_3_1   OUT       61            139
-gpio_calsw_2_0   OUT       60            138
-gpio_calsw_1_0   OUT       59            137
-gpio_txnrx_1     OUT       58            136
-gpio_enable_1    OUT       57            135
-gpio_en_agc_1    OUT       56            134
-gpio_txnrx_0     OUT       55            133
-gpio_enable_0    OUT       54            132
-gpio_en_agc_0    OUT       53            131
-gpio_resetb_0    OUT       52            130
-gpio_sync        OUT       51            129
-gpio_debug_4_0   OUT       49            127
-gpio_debug_3_0   OUT       48            126
-gpio_debug_2_0   OUT       47            125
-gpio_debug_1_0   OUT       46            124
-gpio_ctl_1       OUT       45:42         123:120
-gpio_ctl_0       OUT       41:38         119:116
-gpio_status_1    IN        37:30         115:108
-================ ========= ============= ============
+================== ========= =======  ===================
+GPIO signal        Direction HDL no.  Zynq UltraScale+ MP
+================== ========= =======  ===================
+gpio_resetb_1      OUT       65       143
+gpio_ad5355_lock   IN        64       142
+gpio_ad5355_rfen   OUT       63       141
+gpio_calsw_4_1     OUT       62       140
+gpio_calsw_3_1     OUT       61       139
+gpio_calsw_2_0     OUT       60       138
+gpio_calsw_1_0     OUT       59       137
+gpio_txnrx_1       OUT       58       136
+gpio_enable_1      OUT       57       135
+gpio_en_agc_1      OUT       56       134
+gpio_txnrx_0       OUT       55       133
+gpio_enable_0      OUT       54       132
+gpio_en_agc_0      OUT       53       131
+gpio_resetb_0      OUT       52       130
+gpio_sync          OUT       51       129
+gpio_debug_4_0     OUT       49       127
+gpio_debug_3_0     OUT       48       126
+gpio_debug_2_0     OUT       47       125
+gpio_debug_1_0     OUT       46       124
+gpio_ctl_1[3:0]    OUT       45:42    123:120
+gpio_ctl_0[3:0]    OUT       41:38    119:116
+gpio_status_1[7:0] IN        37:30    115:108
+gpio_status_0[7:0] IN        29:22    107:100
+================== ========= =======  ===================
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = EMIO GPIO number in the HDL
+   - Zynq-7000, Zynq UltraScale+ MP = Software GPIOs to
+     be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -270,10 +285,10 @@ Here you can find the quick start guides available for these evaluation boards:
 Other useful information:
 
 - :dokuwiki:`[Wiki] FMCOMMS5 User Guide <resources/eval/user-guides/ad-fmcomms5-ebz>`
-- :dokuwiki:`[Wiki] FMCOMMS2/3/4/5 basic IQ data files <resources/eval/user-guides/ad-fmcomms2-ebz/software/basic_iq_datafiles>`
+- :external+system-level:ref:`[Wiki] FMCOMMS2/3/4/5 basic IQ data files <fmcomms2 common basic-iq-datafiles>`
 - :dokuwiki:`[Wiki] FMCOMMS2/4/5 Specifications <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/card_specification>`
 - :dokuwiki:`[Wiki] Configuration options for AD9361/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options>`
-- :dokuwiki:`[Wiki] AD9361 filter response <resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal-filter>`
+- :external+system-level:ref:`[Wiki] AD9361 filter response <fmcomms2 software baremetal-filter>`
 
 Hardware related
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -282,7 +297,7 @@ Hardware related
 - Product datasheet: :adi:`AD9361`
 
 - :dokuwiki:`[Wiki] About AD9361/AD9363/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/ad9361>`
-- :dokuwiki:`[Wiki] About I/Q rotation <resources/eval/user-guides/ad-fmcomms2-ebz/iq_rotation>`
+- :external+system-level:ref:`[Wiki] About I/Q rotation <fmcomms2 common iq-rotation>`
 - :dokuwiki:`[Wiki] Configuration options for <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/configuration_options>`
 - :dokuwiki:`[Wiki] Tuning the AD9361/AD9364 <resources/eval/user-guides/ad-fmcomms2-ebz/hardware/tuning>`
 
@@ -343,10 +358,10 @@ Software related
    - :git-linux:`FMCOMMS5 ZCU102 Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9361-fmcomms5.dts>`
    - :git-linux:`FMCOMMS5 ZCU102 with ext. LO ADF4355 Linux device tree <arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev10-ad9361-fmcomms5-ext-lo-adf5355.dts>`
 
-- :dokuwiki:`[Wiki] AD9361 no-OS software documentation <resources/eval/user-guides/ad-fmcomms2-ebz/software/baremetal>`
-- :dokuwiki:`[Wiki] AD9361 Linux device driver documentation <resources/tools-software/linux-drivers/iio-transceiver/ad9361>`
-- :dokuwiki:`[Wiki] FMCOMMS2/3/4/5 Linux support <resources/eval/user-guides/ad-fmcomms2-ebz/software/linux>`
-- :dokuwiki:`[Wiki] AD936x IIO Oscilloscope plugin description <resources/tools-software/linux-software/fmcomms2_plugin>`
+- :external+no-OS:doc:`AD9361 no-OS software documentation <drivers/rf-transceiver/ad9361>`
+- :external+linux:doc:`AD9361 Linux device driver documentation <drivers/iio-transceiver/ad9361>`
+- :external+system-level:doc:`FMCOMMS2/3/4/5 Linux support <solutions/reference-designs/fmcomms2/software/linux>`
+- :external+system-level:doc:`AD936X IIO Oscilloscope plugin description <solutions/reference-designs/fmcomms2/software/ad9361_plugin>`
 
 .. include:: ../common/more_information.rst
 

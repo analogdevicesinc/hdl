@@ -9,7 +9,7 @@ Corundum Ethernet Core
    VCU118 <vcu118/index>
    K26 <k26/index>
 
-The :git-hdl:`Corundum Ethernet Core <library/corundum/ethernet_core>` is used
+The :git-hdl:`Corundum Ethernet Core <library/corundum/ethernet>` is used
 by the Corundum Network Stack. The Ethernet Core is specific to each FPGA board
 and encompasses the Ethernet physical layer and other auxiliary structures such
 as SPI and I2C that are required by the Corundum system. The configurations are

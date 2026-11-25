@@ -14,7 +14,7 @@ The :adi:`EVAL-AD4080-FMC` is designed to demonstrate the
 :adi:`AD4080` performance.
 
 The :adi:`EVAL-AD4080-FMC` HDL design supports the following
-:adi:`AD4080, AD4083, AD4086` features:
+:adi:`AD4080`, :adi:`AD4083`, :adi:`AD4086` features:
 
 * Single lane DDR data capture
 * Self synchronization using the fixed pattern and bit-slip feature
@@ -74,6 +74,80 @@ The data path and clock domains are depicted in the below diagram:
    :align: center
    :alt: AD4080-FMC-EVB/ZedBoard block diagram
 
+SPI slave interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The optional SPI slave interface is enabled at build time with the
+``SPI_SLAVE=1`` make parameter. It instantiates the :ref:`spi_slave` IP,
+which buffers the captured ADC samples in an asynchronous FIFO and streams
+them out to an external SPI master over the ZedBoard PMOD JB header,
+independently of the DMA data path. This lets a device that is not on the
+processor bus (for example a microcontroller acting as an SPI controller)
+read the ADC data without involving the processor or the DMA.
+
+.. image:: ../ad4080_fmc_evb/ad4080_fmc_evb_zed_spi_slave_hdl_bd.svg
+   :width: 800
+   :align: center
+   :alt: AD4080-FMC-EVB/ZedBoard block diagram with the optional SPI slave
+
+.. collapsible:: Click here for details on the block diagram modules
+
+   .. list-table::
+      :widths: 10 20 35 35
+      :header-rows: 1
+
+      * - Block name
+        - IP name
+        - Documentation
+        - Additional info
+      * - AXI AD408X
+        - :git-hdl:`axi_ad408x <library/axi_ad408x>`
+        - :ref:`axi_ad408x`
+        - Instance ``axi_ad4080_adc``; captures the LVDS data clocked by
+          ``dco_clk`` (``dco_p/n``, 400 MHz) and outputs ``adc_data`` in the
+          ``adc_clk`` domain (``dco_clk`` / 2 = 200 MHz)
+      * - AXI DMAC
+        - :git-hdl:`axi_dmac <library/axi_dmac>`
+        - :ref:`axi_dmac`
+        - Instance ``axi_ad4080_dma``; RX only, 32-bit (or 16-bit) source,
+          64-bit destination
+      * - SPI SLAVE
+        - :git-hdl:`spi_slave <library/spi_slave>`
+        - :ref:`spi_slave`
+        - Instance ``ad4080_spi_slave``; only present when ``SPI_SLAVE=1``.
+          ``pmod_data_ready`` is active low
+
+The SPI slave operates in Mode 3 (clock idles high), MSB first, and only
+sources data (there is no MOSI). The external master polls
+``pmod_data_ready`` to know when a new sample is available and frames each
+read as a single transfer. The signals are routed to the PMOD JB header
+using the LVCMOS33 I/O standard, as follows:
+
+.. list-table::
+   :widths: 30 20 20 30
+   :header-rows: 1
+
+   * - Signal
+     - PMOD JB pin
+     - FPGA pin
+     - Direction (FPGA view)
+   * - ``pmod_spi_cs``
+     - JB1
+     - W12
+     - Input
+   * - ``pmod_spi_sclk``
+     - JB2
+     - W11
+     - Input
+   * - ``pmod_spi_miso``
+     - JB3
+     - V10
+     - Output
+   * - ``pmod_data_ready``
+     - JB4
+     - W8
+     - Output
+
 Clock scheme
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -122,45 +196,26 @@ SPI connections
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :widths: 25 20 20 20 15
-   :header-rows: 2
+To know how the Software GPIO numbers are calculated, check out
+:ref:`GPIOs - HDL Architecture page <architecture gpio>`.
 
-   * - GPIO signal
-     - Direction
-     - HDL GPIO EMIO
-     - Software GPIO
-     - Software GPIO
-   * -
-     - (from FPGA view)
-     -
-     - Zynq-7000
-     - Zynq MP
-   * - sync_req
-     - OUT
-     - 37
-     - 91
-     - 115
-   * - pwrgd
-     - IN
-     - 36
-     - 90
-     - 114
-   * - adf435x_lock
-     - IN
-     - 35
-     - 89
-     - 113
-   * - gpio3_fmc
-     - INOUT
-     - 34
-     - 88
-     - 112
-   * - gpio3_fmc
-     - INOUT
-     - 33
-     - 87
-     - 111
+==============  =========  =======  =========
+GPIO signal     Direction  HDL no.  Zynq-7000
+==============  =========  =======  =========
+ad9508_sync     OUT        37       91
+pwrgd           IN         36       90
+adf435x_lock    INOUT      35       89
+gpio3_fmc       INOUT      34       88
+gpio2_fmc       INOUT      33       87
+==============  =========  =======  =========
+
+.. admonition:: Legend
+   :class: note
+
+   - GPIO signal = name of the GPIO in the HDL project
+   - Direction = from the FPGA point of view
+   - HDL no. = HDL GPIO EMIO
+   - Zynq-7000 = Software GPIO, to be used in device trees
 
 Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -201,6 +256,14 @@ Example of running the ``make`` command with parameters:
    $cd hdl/projects/ad4080_fmc_evb/zed
    $make ADC_N_BITS=16
 
+Example of running the ``make`` command with the optional SPI slave interface
+enabled on the PMOD JB header:
+
+.. shell::
+
+   $cd hdl/projects/ad4080_fmc_evb/zed
+   $make SPI_SLAVE=1
+
 The following table contains the parameters that can be used to configure this
 project:
 
@@ -214,6 +277,11 @@ project:
    |                | - 20                                                        |
    |                | - 16                                                        |
    |                | - 14                                                        |
+   +----------------+-------------------------------------------------------------+
+   | SPI_SLAVE      | Add the optional SPI slave (PMOD JB) interface (default: 0) |
+   |                |                                                             |
+   |                | - 0                                                         |
+   |                | - 1                                                         |
    +----------------+-------------------------------------------------------------+
 
 A more comprehensive build guide can be found in the :ref:`build_hdl` user guide.
@@ -271,6 +339,9 @@ HDL related
    * - AXI_SPDIF_TX
      - :git-hdl:`library/axi_spdif_tx`
      - ---
+   * - SPI_SLAVE
+     - :git-hdl:`library/spi_slave`
+     - :ref:`spi_slave`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :ref:`axi_sysid`
@@ -286,7 +357,7 @@ Software related
   - `PyADI-IIO documentation <https://analogdevicesinc.github.io/pyadi-iio/>`__
   - `PyADI-IIO example <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/examples/ad4080_example.py>`__
   - `PyADI-IIO class <https://github.com/analogdevicesinc/pyadi-iio/blob/ad4080/adi/ad4080.py>`__
-  - AD4080-FMC-EVB Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-adv7511-ad4080.dts`
+  - AD4080-FMC-EVB Linux device tree :git-linux:`arch/arm/boot/dts/xilinx/zynq-zed-ad4080.dts`
   - AD4080 Linux driver :git-linux:`ad4080.c <drivers/iio/adc/ad4080.c>`
 
 .. include:: ../common/more_information.rst

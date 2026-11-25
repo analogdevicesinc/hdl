@@ -1,8 +1,8 @@
 # LTC2378-FMC HDL Project
 
 - Evaluation board product page: TO BE ADDED
-- System documentation: TO BE ADDED
-- HDL project documentation: https://analogdevicesinc.github.io/hdl/projects/ltc2378_fmc/index.html
+- System documentation: https://developer.analog.com/docs/system-level/solutions/reference-designs/eval-ltc23xx/
+- HDL project documentation: https://developer.analog.com/docs/hdl/projects/ltc2378_fmc/
 - Evaluation board VADJ: 2.5V
 
 ## Supported parts

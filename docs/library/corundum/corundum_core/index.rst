@@ -23,9 +23,9 @@ Files
 
    * - Name
      - Description
-   * - :git-hdl:`library/corundum/corundum_core/corundum.v`
+   * - :git-hdl:`library/corundum/corundum_core/corundum_core.v`
      - Verilog source for the Corundum Core top module.
-   * - :git-hdl:`library/corundum/corundum_core/corundum_ip.tcl`
+   * - :git-hdl:`library/corundum/corundum_core/corundum_core_ip.tcl`
      - TCL script to generate the Vivado IP-integrator project.
    * - :git-hdl:`library/corundum/corundum_core/mqnic_app_block.v`
      - Verilog source for the Application Core that is found inside the Corundum
