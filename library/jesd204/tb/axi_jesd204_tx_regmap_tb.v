@@ -166,7 +166,7 @@ module axi_jesd204_tx_regmap_tb;
     for (i = 0; i < 1024; i = i + 1)
       expected_reg_mem[i] <= 'h00;
     /* Non zero power-on-reset values */
-    set_reset_reg_value('h00, 32'h00010761); /* PCORE version register */
+    set_reset_reg_value('h00, 32'h00010861); /* PCORE version register */
     set_reset_reg_value('h0c, 32'h32303454); /* PCORE magic register */
     set_reset_reg_value('h10, NUM_LANES); /* Number of lanes */
     set_reset_reg_value('h14, 'h2); /* Datapath width */
