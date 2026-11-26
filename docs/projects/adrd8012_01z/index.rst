@@ -45,22 +45,31 @@ Supported carriers
 Block diagram
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The data path designed in this reference design is as follows:
+The features present in this design are as follows:
 
 - the virtual channel inputs of one CSI-2 output port of the deserializer are
   captured using Xilinx's `MIPI CSI-2 Rx Subsystem IP <https://docs.amd.com/r/en-US/pg232-mipi-csi2-rx>`_
-- data is written into memory by using a Xilinx video-related DMA implementation
-  `Video Framebuffer Write <https://docs.amd.com/r/en-US/pg278-v-frmbuf>`_
 - the control of the camera modules is realized through I2C using Xilinx's
   `AXI IIC logic <https://docs.amd.com/v/u/en-US/pg090-axi-iic>`_
-- data is transmitted to a 10G-capable node by using Corundum NIC implementation
+- video RTP packets from RTP engines are multiplexed using RTP Session MUX IP
+  and then sent to the RTP Video Transmission Handler IP. It then has the role
+  to receive the NIC-related data and arbitrate and multiplex the transmission
+  of both NIC and video data to the application core instance of the Corundum
+  NIC implementation
 
-The data path and elements of the video network, 10G NIC, are depicted in the below diagram:
+The overview diagram for ADRD8012-01z is:
 
-.. image:: adrd8012_01z_hdl.svg
+.. image:: adrd8012_01z_bd.svg
    :width: 1200
    :align: center
    :alt: ADRD8012-01Z Evaluation Kit HDL-related block design
+
+The overview diagram of RTP Networking Stack is:
+
+.. image:: rtp-networking-stack.svg
+   :width: 1000
+   :align: center
+   :alt: AD8012-01z RTP Networking Stack example
 
 CPU/Memory interconnects addresses
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,12 +85,15 @@ mipi_csi2_rx_subsyst_1                            0x84A2_0000
 axi_iic_mipi                                      0x84A4_0000
 v_frmbuf_wr_0                                     0x84A6_0000
 v_frmbuf_wr_1                                     0x84A8_0000
-v_frmbuf_wr_2                                     0x84AA_0000
-v_frmbuf_wr_3                                     0x84AC_0000
-v_frmbuf_wr_4                                     0x84AE_0000
-v_frmbuf_wr_5                                     0x84B0_0000
-v_frmbuf_wr_6                                     0x84B2_0000
-v_frmbuf_wr_7                                     0x84B4_0000
+rtp_engine_0                                      0x84AA_0000
+rtp_engine_1                                      0x84AB_0000
+rtp_engine_2                                      0x84AC_0000
+rtp_engine_3                                      0x84AD_0000
+rtp_engine_4                                      0x84AE_0000
+rtp_engine_5                                      0x84AF_0000
+rtp_engine_6                                      0x84B0_0000
+rtp_engine_7                                      0x84B1_0000
+rtp_session_mux                                   0x84B2_0000
 axi_pwm_gen_0                                     0x84B6_0000
 corundum_hierarchy/corundum_core/s_axil_ctrl      0xA000_0000
 ============================================      ===========
@@ -117,8 +129,8 @@ SPI connections
      - CS
    * - PS
      - SPI0
-     - ad9545_spi
-     - 0
+- ad9545_spi
+- 0
 
 GPIOs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -132,7 +144,7 @@ GPIO signal           Direction  HDL no.  Zynq UltraScale+ MP
 fan_tach              INOUT      23       101
 fan_pwm               INOUT      22       100
 sfp_i2c_rstn          INOUT      10       88
-ap_rstn_frmbuf_{7:0}  OUT        9:2      87:80
+ap_rstn_frmbuf_{1:0}  OUT        3:2      81:80
 csirxss_rstn          OUT        0        78
 ====================  =========  =======  ===================
 
@@ -157,12 +169,6 @@ mipi1_csirxss_csi_irq   14  110          142
 iic2intc_irpt           13  109          141
 v_frmbuf_wr0/interrupt  12  108          140
 v_frmbuf_wr1/interrupt  11  107          139
-v_frmbuf_wr2/interrupt  10  106          138
-v_frmbuf_wr3/interrupt   9  105          137
-v_frmbuf_wr4/interrupt   8  104          136
-v_frmbuf_wr5/interrupt   7   96          128
-v_frmbuf_wr6/interrupt   6   95          127
-v_frmbuf_wr7/interrupt   5   94          126
 corundum_hierarcy/irq    4   93          125
 ======================= === ============ =============
 
@@ -237,9 +243,6 @@ HDL related
    * - IP name
      - Source code link
      - Documentation link
-   * - AXI_CLKGEN
-     - :git-hdl:`library/axi_clkgen`
-     - :ref:`axi_clkgen`
    * - AXI_PWM_GEN
      - :git-hdl:`library/axi_pwm_gen`
      - :ref:`axi_pwm_gen`
@@ -249,6 +252,15 @@ HDL related
    * - CORUNDUM_NETSTACK
      - :git-hdl:`library/corundum`
      - :ref:`corundum`
+   * - RTP_ENGINE
+     - :git-hdl:`library/rtp_engine`
+     - :ref:`rtp_engine`
+   * - RTP_SESSION_MUX
+     - :git-hdl:`library/rtp_session_mux`
+     - :ref:`rtp_session_mux`
+   * - RTP_VIDEO_TRANSM_HANDLER
+     - :git-hdl:`library/rtp_video_transm_handler`
+     - :ref:`rtp_video_transm_handler`
    * - SYSID_ROM
      - :git-hdl:`library/sysid_rom`
      - :ref:`axi_sysid`
