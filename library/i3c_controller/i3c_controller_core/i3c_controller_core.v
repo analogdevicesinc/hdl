@@ -50,7 +50,7 @@ module i3c_controller_core #(
 
   output        cmdp_ready,
   input         cmdp_valid,
-  input  [31:0] cmdp,
+  input  [32:0] cmdp,
   output [2:0]  cmdp_error,
   output        cmdp_nop,
   output        cmdp_daa_trigger,

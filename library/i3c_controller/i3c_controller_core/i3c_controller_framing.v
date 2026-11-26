@@ -73,7 +73,7 @@ module i3c_controller_framing #(
 
   output        cmdp_ready,
   input         cmdp_valid,
-  input  [31:0] cmdp,
+  input  [32:0] cmdp,
   output [2:0]  cmdp_error,
   output reg    cmdp_daa_trigger,
 
@@ -148,6 +148,7 @@ module i3c_controller_framing #(
   reg        ctrl_daa;
   reg        ctrl_validate;
   reg        ctrl_trp;
+  reg        ctrl_def;
   reg [3:0]  j;
   reg [2:0]  dev_char_len;
   reg        daa_trigger;
@@ -168,6 +169,8 @@ module i3c_controller_framing #(
   wire [6:0]  cmdp_ccc_id;
   wire        cmdp_ccc_bcast;
   wire        cmdp_trp;
+  wire        cmdp_ccc_def;
+  wire        sdo_pending;
   wire        trp_block;
   wire        dev_is_attached;
   wire        dev_is_i2c;
@@ -181,6 +184,7 @@ module i3c_controller_framing #(
       sm <= SM_SETUP;
       ctrl_daa <= 1'b0;
       ctrl_trp <= 1'b0;
+      ctrl_def <= 1'b0;
       ibi_requested_auto <= 1'b0;
       cmdp_sr_reg <= 0;
       daa_trigger <= 1'b0;
@@ -189,7 +193,7 @@ module i3c_controller_framing #(
       j <= 0;
       st  <= `CMDW_NOP;
       sm <= cmdp_entdaa ? SM_SETUP :
-             cmdp_rnw_reg ? SM_SETUP : SM_CLEANUP;
+             sdo_pending ? SM_CLEANUP : SM_SETUP;
       ctrl_daa <= 1'b0;
     end else begin
 
@@ -224,6 +228,7 @@ module i3c_controller_framing #(
             ibi_requested_auto <= 1'b1;
           end
           cmdp_valid_reg        <= cmdp_valid & ~cmdp_trp;
+          ctrl_def              <= cmdp_valid & cmdp_ccc_def;
           cmdp_ccc_reg          <= cmdp_ccc;
           cmdp_ccc_bcast_reg    <= cmdp_ccc_bcast;
           cmdp_ccc_id_reg       <= cmdp_ccc_id;
@@ -245,7 +250,7 @@ module i3c_controller_framing #(
               sm <= SM_TRANSFER;
             end else begin
               error_unknown_da <= 1'b1;
-              sm <= cmdp_rnw_reg ? SM_SETUP : SM_CLEANUP;
+              sm <= sdo_pending ? SM_CLEANUP : SM_SETUP;
             end
           end
         end
@@ -274,7 +279,10 @@ module i3c_controller_framing #(
                 ctrl_daa <= 1'b1;
               end
               `CMDW_CCC_PP: begin
-                if (cmdp_ccc_bcast_reg) begin
+                if (ctrl_def) begin
+                  st <= `CMDW_MSG_TX;
+                  sm <= SM_SETUP_SDO;
+                end else if (cmdp_ccc_bcast_reg) begin
                   st <= `CMDW_MSG_SR;
                 end else if (~|cmdp_buffer_len_reg) begin
                   st  <= `CMDW_STOP_PP;
@@ -310,13 +318,19 @@ module i3c_controller_framing #(
               end
               `CMDW_TARGET_ADDR_OD,
               `CMDW_TARGET_ADDR_PP: begin
-                if (cmdp_rnw_reg) begin
+                if (~|cmdp_buffer_len_reg) begin
+                  st <= dev_is_i2c ? `CMDW_STOP_OD : `CMDW_STOP_PP;
+                  if (cmdp_sr_reg) begin
+                    sm <= SM_SETUP;
+                  end
+                end else if (cmdp_rnw_reg) begin
                   st <= dev_is_i2c ? `CMDW_I2C_RX : `CMDW_MSG_RX;
+                  cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
                 end else begin
                   st <= dev_is_i2c ? `CMDW_I2C_TX : `CMDW_MSG_TX;
                   sm <= SM_SETUP_SDO;
+                  cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
                 end
-                cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
               end
               `CMDW_I2C_RX,
               `CMDW_MSG_RX: begin
@@ -331,14 +345,29 @@ module i3c_controller_framing #(
               end
               `CMDW_I2C_TX,
               `CMDW_MSG_TX: begin
-                cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
-                if (~|cmdp_buffer_len_reg) begin
-                  st  <= dev_is_i2c ? `CMDW_STOP_OD :`CMDW_STOP_PP;
-                  if (cmdp_sr_reg) begin
-                    sm <= SM_SETUP;
+                if (ctrl_def) begin
+                  ctrl_def <= 1'b0;
+                  if (cmdp_ccc_bcast_reg) begin
+                    st <= `CMDW_MSG_SR;
+                  end else if (~|cmdp_buffer_len_reg) begin
+                    st <= `CMDW_STOP_PP;
+                    if (cmdp_sr_reg) begin
+                      sm <= SM_SETUP;
+                    end
+                  end else begin
+                    sm <= SM_SETUP_SDO;
+                    cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
                   end
                 end else begin
-                  sm <= SM_SETUP_SDO;
+                  cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+                  if (~|cmdp_buffer_len_reg) begin
+                    st  <= dev_is_i2c ? `CMDW_STOP_OD :`CMDW_STOP_PP;
+                    if (cmdp_sr_reg) begin
+                      sm <= SM_SETUP;
+                    end
+                  end else begin
+                    sm <= SM_SETUP_SDO;
+                  end
                 end
               end
               `CMDW_STOP_OD,
@@ -376,9 +405,13 @@ module i3c_controller_framing #(
           // The peripheral did not ACK the SM_TRANSFER, so it is cancelled.
           // the SDO data is discarded
           if (sdo_valid) begin
-            cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+            if (ctrl_def) begin
+              ctrl_def <= 1'b0;
+            end else if (~cmdp_rnw_reg) begin
+              cmdp_buffer_len_reg <= cmdp_buffer_len_reg - 1;
+            end
           end
-          if (cmdp_buffer_len_reg == 0) begin
+          if (~sdo_pending) begin
             sm <= SM_SETUP;
           end
         end
@@ -434,7 +467,9 @@ module i3c_controller_framing #(
 
   assign cmdp_ready = sm == SM_SETUP & ~(cmdp_trp & trp_block) &
                       !cmdw_nack_bcast & !cmdw_nack_resp & reset_n;
-  assign sdo_ready = (sm == SM_SETUP_SDO | sm == SM_CLEANUP) & !cmdw_nack_bcast & !cmdw_nack_resp & reset_n;
+  assign sdo_pending = ctrl_def | (~cmdp_rnw_reg & |cmdp_buffer_len_reg);
+  assign sdo_ready = (sm == SM_SETUP_SDO | (sm == SM_CLEANUP & sdo_pending)) &
+                     !cmdw_nack_bcast & !cmdw_nack_resp & reset_n;
   assign cmdw = {st, cmdw_body};
   assign cmdw_valid = sm == SM_TRANSFER & st != `CMDW_TRP;
 
@@ -453,6 +488,7 @@ module i3c_controller_framing #(
   assign cmdp_ccc_id       = cmdp[29:23];
   assign cmdp_ccc_bcast    = cmdp[30];
   assign cmdp_trp          = cmdp[31];
+  assign cmdp_ccc_def      = cmdp[32];
 
   assign cmdp_entdaa = cmdp_ccc_reg & ~cmdp_ccc_bcast_reg & (cmdp_ccc_id_reg == CCC_ENTDAA);
 

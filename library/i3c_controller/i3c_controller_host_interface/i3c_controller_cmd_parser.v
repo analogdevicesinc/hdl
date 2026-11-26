@@ -62,7 +62,7 @@ module i3c_controller_cmd_parser (
 
   input         cmdp_ready,
   output        cmdp_valid,
-  output [31:0] cmdp,
+  output [32:0] cmdp,
   input  [2:0]  cmdp_error,
 
   output        rd_bytes_stop,
@@ -107,6 +107,8 @@ module i3c_controller_cmd_parser (
   wire [11:0] cmdp_buffer_len;
   wire        cmdp_ccc;
   wire        cmdp_ccc_direct;
+  wire        cmdp_ccc_def;
+  wire [12:0] sdo_len;
   wire [6:0]  cmdp_ccc_id;
   wire        error_nack_bcast;
   wire        error_unknown_da;
@@ -216,7 +218,10 @@ module i3c_controller_cmd_parser (
                          12'd0 : cmdp_buffer_len
                        );
 
-  assign rd_bytes_stop = (cmdp_buffer_len == rd_bytes_lvl) & |rd_bytes_lvl;
+  // On read, the buffer lenght means "bytes to read", so the defining byte is
+  // not accounted on it.
+  assign sdo_len = (cmdp_rnw ? 13'd0 : {1'b0, cmdp_buffer_len}) + {12'd0, cmdp_ccc_def};
+  assign rd_bytes_stop = (sdo_len == {1'b0, rd_bytes_lvl}) & |rd_bytes_lvl;
 
   assign cmdp_rnw        = cmdr1[0];
   assign cmdp_ccc        = cmdr1[22];
@@ -225,6 +230,7 @@ module i3c_controller_cmd_parser (
   assign cmdp_ccc_direct = cmdr2[7];
   assign cmdp_buffer_len = ~cmdp_ccc_direct & (cmdp_ccc_id == CCC_ENTDAA) ? 1 : cmdr1[19:08];
   assign cmdp_ccc_id     = cmdr2[6:0];
+  assign cmdp_ccc_def    = cmdr1[24];
 
   assign error_nack_bcast = cmdp_error[0];
   assign error_unknown_da = cmdp_error[1];
@@ -232,6 +238,7 @@ module i3c_controller_cmd_parser (
 
   // Remove reserved bits.
   assign cmdp = {
+    cmdr1[24],
     cmdr1[23],
     cmdr2[7:0],
     cmdr1[22:0]
