@@ -131,21 +131,6 @@ ipx::add_bus_parameter FREQ_HZ [ipx::get_bus_interfaces s_axis_signal_clock -of_
 
 ## Parameter validation
 set_property -dict [list \
-	"value_format" "bool" \
-	"value" "false" \
-] [ipx::get_user_parameters REDUCED_FIFO -of_objects $cc]
-
-set_property -dict [list \
-	"value_format" "bool" \
-	"value" "false" \
-] [ipx::get_hdl_parameters REDUCED_FIFO -of_objects $cc]
-
-set_property -dict [list \
-	"display_name" "FIFO Sample Limited" \
-	"tooltip" "Limit the amount of samples the FIFO can accumulate. Enabling this bit may reduce the size of Address, Almost Empty Threshold and Almost Full Threshold depending on the Slave and Master data width ratio." \
-] [ipgui::get_guiparamspec -name "REDUCED_FIFO" -component $cc]
-
-set_property -dict [list \
   "value_validation_type" "list" \
   "value_validation_list" "8 16 32 64 128 256 512 1024 2048 4096" \
 ] [ipx::get_user_parameters S_DATA_WIDTH -of_objects $cc]
@@ -212,6 +197,7 @@ foreach {k v} { \
   "TUSER_BITS_PER_BYTE" "false" \
 	"M_AXIS_REGISTERED"   "true" \
   "REDUCED_FIFO"			  "true" \
+  "SRC_REG_SLICE_EN"		"false" \
 } { \
   set_property -dict [list \
     "value_format" "bool" \
@@ -373,6 +359,12 @@ set_property -dict [list \
 	"display_name" "Reduced FIFO size" \
 	"tooltip" "\[REDUCED_FIFO\] Limit the amount of samples the FIFO can store. Enabling this parameter will reduce the size of Address, Almost Empty Threshold and Almost Full Threshold depending on the Slave and Master data width ratio." \
 ] [ipgui::get_guiparamspec -name "REDUCED_FIFO" -component $cc]
+
+ipgui::add_param -name "SRC_REG_SLICE_EN" -component $cc -parent $other_group
+set_property -dict [list \
+	"display_name" "Source register slice" \
+	"tooltip" "\[SRC_REG_SLICE_EN\] Adds an additional pipelining on the source side to ease timing. Use this parameter when the source side of the FIFO has timing violations. This will delay the FIFO status signals reaction time by 2 clock cycles." \
+] [ipgui::get_guiparamspec -name "SRC_REG_SLICE_EN" -component $cc]
 
 ## Create and save the XGUI file
 ipx::create_xgui_files $cc

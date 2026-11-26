@@ -80,6 +80,9 @@ Configuration Parameters
      - ``TDEST`` signal width if ``TDEST`` is enabled.
    * - REDUCED_FIFO
      - Reduce the FIFO size when master and slave data widths are not equal
+   * - SRC_REG_SLICE_EN
+     - Add an additional register slice to the slave AXI stream interface. It
+       is deasserted by default.
 
 Interface
 --------------------------------------------------------------------------------

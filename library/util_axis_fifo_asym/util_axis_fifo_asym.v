@@ -53,7 +53,8 @@ module util_axis_fifo_asym #(
   parameter TUSER_WIDTH = 1,
   parameter TID_WIDTH = 1,
   parameter TDEST_WIDTH = 1,
-  parameter REDUCED_FIFO = 1
+  parameter REDUCED_FIFO = 1,
+  parameter SRC_REG_SLICE_EN = 0
 ) (
   input                                                                           m_axis_aclk,
   input                                                                           m_axis_aresetn,
@@ -137,6 +138,16 @@ module util_axis_fifo_asym #(
   wire [RATIO-1:0]                 s_axis_almost_full_int_s;
   wire [RATIO*A_ADDRESS_WIDTH-1:0] s_axis_room_int_s;
 
+  wire [RATIO-1:0]                 fifo_axis_ready_int_s;
+  wire [RATIO-1:0]                 fifo_axis_valid_int_s;
+  wire [RATIO*A_DATA_WIDTH-1:0]    fifo_axis_data_int_s;
+  wire [RATIO*A_DATA_WIDTH/8-1:0]  fifo_axis_tkeep_int_s;
+  wire [RATIO*A_DATA_WIDTH/8-1:0]  fifo_axis_tstrb_int_s;
+  wire [RATIO-1:0]                 fifo_axis_tlast_int_s;
+  wire [RATIO*A_TUSER_WIDTH-1:0]   fifo_axis_tuser_int_s;
+  wire [RATIO*TID_WIDTH-1:0]       fifo_axis_tid_int_s;
+  wire [RATIO*TDEST_WIDTH-1:0]     fifo_axis_tdest_int_s;
+
   // instantiate the FIFOs
   genvar i;
   generate
@@ -177,20 +188,92 @@ module util_axis_fifo_asym #(
         .m_axis_almost_full(m_axis_almost_full_int_s[i]),
         .s_axis_aclk(s_axis_aclk),
         .s_axis_aresetn(s_axis_aresetn),
-        .s_axis_ready(s_axis_ready_int_s[i]),
-        .s_axis_valid(s_axis_valid_int_s[i]),
-        .s_axis_data(s_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH]),
-        .s_axis_tkeep(s_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
-        .s_axis_tstrb(s_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
-        .s_axis_tlast(s_axis_tlast_int_s[i]),
-        .s_axis_tuser(s_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH]),
-        .s_axis_tid(s_axis_tid_int_s[TID_WIDTH*i+:TID_WIDTH]),
-        .s_axis_tdest(s_axis_tdest_int_s[TDEST_WIDTH*i+:TDEST_WIDTH]),
+        .s_axis_ready(fifo_axis_ready_int_s[i]),
+        .s_axis_valid(fifo_axis_valid_int_s[i]),
+        .s_axis_data(fifo_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH]),
+        .s_axis_tkeep(fifo_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+        .s_axis_tstrb(fifo_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+        .s_axis_tlast(fifo_axis_tlast_int_s[i]),
+        .s_axis_tuser(fifo_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH]),
+        .s_axis_tid(fifo_axis_tid_int_s[TID_WIDTH*i+:TID_WIDTH]),
+        .s_axis_tdest(fifo_axis_tdest_int_s[TDEST_WIDTH*i+:TDEST_WIDTH]),
         .s_axis_room(s_axis_room_int_s[A_ADDRESS_WIDTH*i+:A_ADDRESS_WIDTH]),
         .s_axis_empty(s_axis_empty_int_s[i]),
         .s_axis_almost_empty(s_axis_almost_empty_int_s[i]),
         .s_axis_full(s_axis_full_int_s[i]),
         .s_axis_almost_full(s_axis_almost_full_int_s[i]));
+
+      // SRC_REG_SLICE_EN: Adds an AXI register slice on the slave (source) side
+      // of the FIFO to break timing critical paths
+      if (SRC_REG_SLICE_EN) begin : gen_with_slice
+
+        util_axis_fifo #(
+          .DATA_WIDTH(A_DATA_WIDTH),
+          .ADDRESS_WIDTH(1),
+          .ASYNC_CLK(0),
+          .M_AXIS_REGISTERED(M_AXIS_REGISTERED),
+          .ALMOST_EMPTY_THRESHOLD(0),
+          .ALMOST_FULL_THRESHOLD(0),
+          .TLAST_EN(TLAST_EN),
+          .TKEEP_EN(TKEEP_EN),
+          .TSTRB_EN(TSTRB_EN),
+          .TUSER_EN(TUSER_EN),
+          .TID_EN(TID_EN),
+          .TDEST_EN(TDEST_EN),
+          .TLAST_DEFAULT(TLAST_DEFAULT),
+          .TUSER_WIDTH(A_TUSER_WIDTH),
+          .TID_WIDTH(TID_WIDTH),
+          .TDEST_WIDTH(TDEST_WIDTH)
+        ) i_src_fifo_slice (
+          .m_axis_aclk(s_axis_aclk),
+          .m_axis_aresetn(s_axis_aresetn),
+          .m_axis_ready(fifo_axis_ready_int_s[i]),
+          .m_axis_valid(fifo_axis_valid_int_s[i]),
+          .m_axis_data(fifo_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH]),
+          .m_axis_tkeep(fifo_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+          .m_axis_tstrb(fifo_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+          .m_axis_tlast(fifo_axis_tlast_int_s[i]),
+          .m_axis_tuser(fifo_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH]),
+          .m_axis_tid(fifo_axis_tid_int_s[TID_WIDTH*i+:TID_WIDTH]),
+          .m_axis_tdest(fifo_axis_tdest_int_s[TDEST_WIDTH*i+:TDEST_WIDTH]),
+          .m_axis_level(),
+          .m_axis_empty(),
+          .m_axis_almost_empty(),
+          .m_axis_full(),
+          .m_axis_almost_full(),
+          .s_axis_aclk(s_axis_aclk),
+          .s_axis_aresetn(s_axis_aresetn),
+          .s_axis_ready(s_axis_ready_int_s[i]),
+          .s_axis_valid(s_axis_valid_int_s[i]),
+          .s_axis_data(s_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH]),
+          .s_axis_tkeep(s_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+          .s_axis_tstrb(s_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8]),
+          .s_axis_tlast(s_axis_tlast_int_s[i]),
+          .s_axis_tuser(s_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH]),
+          .s_axis_tid(s_axis_tid_int_s[TID_WIDTH*i+:TID_WIDTH]),
+          .s_axis_tdest(s_axis_tdest_int_s[TDEST_WIDTH*i+:TDEST_WIDTH]),
+          .s_axis_room(),
+          .s_axis_empty(),
+          .s_axis_almost_empty(),
+          .s_axis_full(),
+          .s_axis_almost_full());
+
+      end else begin : gen_without_slice
+
+        // Bypass FIFO slice
+
+        assign s_axis_ready_int_s[i]                                   = fifo_axis_ready_int_s[i];
+
+        assign fifo_axis_valid_int_s[i]                                = s_axis_valid_int_s[i];
+        assign fifo_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH]      = s_axis_data_int_s[A_DATA_WIDTH*i+:A_DATA_WIDTH];
+        assign fifo_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8] = s_axis_tkeep_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8];
+        assign fifo_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8] = s_axis_tstrb_int_s[A_DATA_WIDTH/8*i+:A_DATA_WIDTH/8];
+        assign fifo_axis_tlast_int_s[i]                                = s_axis_tlast_int_s[i];
+        assign fifo_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH]   = s_axis_tuser_int_s[A_TUSER_WIDTH*i+:A_TUSER_WIDTH];
+        assign fifo_axis_tid_int_s[TID_WIDTH*i+:TID_WIDTH]             = s_axis_tid_int_s[TID_WIDTH*i+:TID_WIDTH];
+        assign fifo_axis_tdest_int_s[TDEST_WIDTH*i+:TDEST_WIDTH]       = s_axis_tdest_int_s[TDEST_WIDTH*i+:TDEST_WIDTH];
+
+      end
     end
   endgenerate
 
