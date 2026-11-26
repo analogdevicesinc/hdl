@@ -176,7 +176,7 @@ set dac_data_offload_size [expr $dac_data_width / 8 * 2**$dac_fifo_address_width
                         $dac_data_width \
                         $dac_data_width \
                         $do_axi_data_width \
-                        {}
+                        {} \
                         1
 
 adi_tpl_jesd204_tx_create tx_adrv904x_tpl_core $TX_NUM_OF_LANES \
@@ -234,7 +234,7 @@ set adc_data_offload_size [expr $adc_data_width / 8 * 2**$adc_fifo_address_width
                         $adc_data_width \
                         $adc_data_width \
                         $do_axi_data_width \
-                        {}
+                        {} \
                         1
 
 adi_tpl_jesd204_rx_create rx_adrv904x_tpl_core $RX_NUM_OF_LANES \
