@@ -1250,7 +1250,7 @@
          y="123.60342"
          x="-144.23386"
          id="tspan5790-5"
-         sodipodi:role="line">UTIL_ADC FIFO</tspan></text>
+         sodipodi:role="line">DATA_OFFLOAD</tspan></text>
     <path
        sodipodi:nodetypes="cccc"
        inkscape:connector-curvature="0"
