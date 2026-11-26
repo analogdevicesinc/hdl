@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -187,6 +187,11 @@ module system_top #(
   wire          spi_mosi;
 
   wire          refclk_fgt_2;
+  wire  [ 2:0]  refclk_ready;
+  wire          refclk_fgt_2_en;
+  wire          refclk_fgt_2_enabled;
+  wire  [ 2:0]  syspll_refclk_ready;
+  wire          syspll_refclk_status;
 
   // Board GPIOs
   assign fpga_led      = gpio_o[7:0];
@@ -215,8 +220,16 @@ module system_top #(
   assign txen[0]    = gpio_o[58];
   assign txen[1]    = gpio_o[59];
 
+  // F-Tile RefClk #2 / System PLL ready control, set by software once the
+  // HMC7044 output is stable (bit 61: RX, bit 62: TX, bit 63: OS)
+  assign refclk_ready         = gpio_o[63:61];
+  assign refclk_fgt_2_en      = |refclk_ready;
+  assign syspll_refclk_ready  = refclk_ready & {3{refclk_fgt_2_enabled}};
+  assign gpio_i[60]           = syspll_refclk_status;
+
   // Unused GPIOs
-  assign gpio_i[63:54] = gpio_o[63:54];
+  assign gpio_i[63:61] = gpio_o[63:61];
+  assign gpio_i[59:54] = gpio_o[59:54];
   assign gpio_i[43:32] = gpio_o[43:32];
   assign gpio_i[31:29] = gpio_o[31:29];
 
@@ -357,6 +370,10 @@ module system_top #(
     .sys_spi_SS_n                              (spi_csn_s),
     .ref_clk_in_in_refclk_fgt_2                (fpga_refclk_in),
     .ref_clk_fgt_2_clk                         (refclk_fgt_2),
+    .en_refclk_fgt_2_en_refclk_fgt_2           (refclk_fgt_2_en),
+    .refclk_fgt_enabled_2_refclk_fgt_enabled_2 (refclk_fgt_2_enabled),
+    .refclock_ready_refclock_ready             (syspll_refclk_ready),
+    .refclock_status_refclock_status           (syspll_refclk_status),
     .tx_serial_data_tx_serial_data             (tx_data[TX_JESD_L-1:0]),
     .tx_serial_data_n_tx_serial_data_n         (tx_data_n[TX_JESD_L-1:0]),
     .tx_ref_clk_clk                            (refclk_fgt_2),

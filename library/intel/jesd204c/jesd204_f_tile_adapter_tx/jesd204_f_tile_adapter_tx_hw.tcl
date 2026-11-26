@@ -37,7 +37,7 @@ package require qsys
 source ../../../../scripts/adi_env.tcl
 source $ad_hdl_dir/library/scripts/adi_ip_intel.tcl
 
-ad_ip_create jesd204_f_tile_adapter_tx "ADI JESD204C F-Tile PHY Adapter TX"
+ad_ip_create jesd204_f_tile_adapter_tx "ADI JESD204C F-Tile/GTS PHY Adapter TX"
 
 # parameters
 

@@ -39,8 +39,6 @@ set dac_fifo_samples_per_converter [expr $ad_project_params(TX_KS_PER_CHANNEL)*1
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/fm87/fm87_system_qsys.tcl
-source $ad_hdl_dir/projects/common/intel/dacfifo_qsys.tcl
-source $ad_hdl_dir/projects/common/intel/adcfifo_qsys.tcl
 
 set jesd_mode $ad_project_params(JESD_MODE)
 
@@ -66,6 +64,24 @@ set_interface_property ref_clk_fgt_2 EXPORT_OF systemclk.out_refclk_fgt_2
 
 add_interface ref_clk_in clock sink
 set_interface_property ref_clk_in EXPORT_OF systemclk.refclk_fgt
+
+# RefClk #2 is driven by the HMC7044, which is only programmed after boot, so
+# it is not active at device configuration. The refclk buffer and the System
+# PLL are enabled at runtime through the en_refclk_fgt_2 and refclock_ready
+# handshakes.
+set_instance_parameter_value systemclk refclk_fgt_always_active_2 0
+
+add_connection sys_clk.clk systemclk.clock
+add_connection sys_clk.clk_reset systemclk.reset
+
+add_interface en_refclk_fgt_2 conduit end
+set_interface_property en_refclk_fgt_2 EXPORT_OF systemclk.en_refclk_fgt_2
+add_interface refclk_fgt_enabled_2 conduit end
+set_interface_property refclk_fgt_enabled_2 EXPORT_OF systemclk.refclk_fgt_enabled_2
+add_interface refclock_ready conduit end
+set_interface_property refclock_ready EXPORT_OF systemclk.refclock_ready
+add_interface refclock_status conduit end
+set_interface_property refclock_status EXPORT_OF systemclk.refclock_status
 
 set TRANSCEIVER_TYPE "F-Tile"
 if [info exists ad_project_dir] {

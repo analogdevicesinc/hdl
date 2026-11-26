@@ -86,6 +86,7 @@ module ad_ip_jesd204_tpl_adc_core #(
 
   wire [ADC_DATA_WIDTH-1:0] raw_data_s;
   wire link_valid_tmp;
+  wire adc_sync_armed;
 
   reg link_valid_d = 1'b0;
   reg link_valid_dd = 1'b0;

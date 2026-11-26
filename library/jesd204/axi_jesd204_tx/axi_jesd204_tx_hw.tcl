@@ -197,7 +197,7 @@ set_interface_property status associatedClock core_clock
 set_interface_property status associatedReset core_reset
 
 add_interface_port status core_status_state state Input 2
-add_interface_port status core_status_sync sync Input 1
+add_interface_port status core_status_sync sync Input NUM_LINKS
 add_interface_port status status_synth_params0 synth_params0 Input 32
 add_interface_port status status_synth_params1 synth_params1 Input 32
 add_interface_port status status_synth_params2 synth_params2 Input 32

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2024 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2024, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -47,7 +47,7 @@ module gearbox_66b64b (
 );
 
   reg  [65:0] buff_r;
-  reg  [ 5:0] gear_cnt;
+  reg  [ 5:0] gear_cnt = 6'd0;
   wire        pause;
   wire [63:0] gears [0:32];
 

@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2015-2023 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2015-2023, 2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -211,29 +211,29 @@ module util_adcfifo #(
 
   generate
   if (FPGA_TECHNOLOGY == 1) begin
-  mem_asym i_mem_asym (
-    .mem_i_wrclock_clk (adc_clk),
-    .mem_i_wren_wren (adc_wr_int),
-    .mem_i_wraddress_wraddress (adc_waddr_int),
-    .mem_i_datain_datain (adc_wdata_int),
-    .mem_i_rdclock_clk (dma_clk),
-    .mem_i_rdaddress_rdaddress (dma_raddr[DMA_ADDRESS_WIDTH-1:0]),
-    .mem_o_dataout_dataout (dma_rdata_s));
+    mem_asym i_mem_asym (
+      .mem_i_wrclock_clk (adc_clk),
+      .mem_i_wren_wren (adc_wr_int),
+      .mem_i_wraddress_wraddress (adc_waddr_int),
+      .mem_i_datain_datain (adc_wdata_int),
+      .mem_i_rdclock_clk (dma_clk),
+      .mem_i_rdaddress_rdaddress (dma_raddr[DMA_ADDRESS_WIDTH-1:0]),
+      .mem_o_dataout_dataout (dma_rdata_s));
   end else begin
-  ad_mem_asym #(
-    .A_ADDRESS_WIDTH (ADC_ADDRESS_WIDTH),
-    .A_DATA_WIDTH (ADC_DATA_WIDTH),
-    .B_ADDRESS_WIDTH (DMA_ADDRESS_WIDTH),
-    .B_DATA_WIDTH (DMA_DATA_WIDTH)
-  ) i_mem_asym (
-    .clka (adc_clk),
-    .wea (adc_wr_int),
-    .addra (adc_waddr_int),
-    .dina (adc_wdata_int),
-    .clkb (dma_clk),
-    .reb (1'b1),
-    .addrb (dma_raddr[DMA_ADDRESS_WIDTH-1:0]),
-    .doutb (dma_rdata_s));
+    ad_mem_asym #(
+      .A_ADDRESS_WIDTH (ADC_ADDRESS_WIDTH),
+      .A_DATA_WIDTH (ADC_DATA_WIDTH),
+      .B_ADDRESS_WIDTH (DMA_ADDRESS_WIDTH),
+      .B_DATA_WIDTH (DMA_DATA_WIDTH)
+    ) i_mem_asym (
+      .clka (adc_clk),
+      .wea (adc_wr_int),
+      .addra (adc_waddr_int),
+      .dina (adc_wdata_int),
+      .clkb (dma_clk),
+      .reb (1'b1),
+      .addrb (dma_raddr[DMA_ADDRESS_WIDTH-1:0]),
+      .doutb (dma_rdata_s));
   end
   endgenerate
 

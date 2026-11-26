@@ -49,10 +49,13 @@ set_module_property VALIDATION_CALLBACK info_param_validate
 # files
 
 ad_ip_files axi_adxcvr [list \
-  $ad_hdl_dir/library/util_cdc/sync_bits.v \
   $ad_hdl_dir/library/common/up_axi.v \
   axi_adxcvr_up.v \
   axi_adxcvr.v \
+  adxcvr_gts_phy_reset.v \
+  axi_adxcvr_constr.sdc \
+  $ad_hdl_dir/library/util_cdc/sync_bits.v \
+  $ad_hdl_dir/library/util_cdc/util_cdc_constr.tcl \
 ]
 
 # parameters
@@ -71,6 +74,28 @@ add_parameter NUM_OF_LANES INTEGER 4
 set_parameter_property NUM_OF_LANES DISPLAY_NAME NUM_OF_LANES
 set_parameter_property NUM_OF_LANES UNITS None
 set_parameter_property NUM_OF_LANES HDL_PARAMETER true
+
+# GTS only. Lanes that span more than one shoreline bank need one PHY instance
+# per bank, and each instance carries its own reset/ready handshake.
+add_parameter NUM_OF_PHYS INTEGER 1
+set_parameter_property NUM_OF_PHYS DISPLAY_NAME NUM_OF_PHYS
+set_parameter_property NUM_OF_PHYS UNITS None
+set_parameter_property NUM_OF_PHYS ALLOWED_RANGES {1:4}
+set_parameter_property NUM_OF_PHYS HDL_PARAMETER true
+
+add_parameter RESET_FSM_EN INTEGER 0
+set_parameter_property RESET_FSM_EN DISPLAY_NAME RESET_FSM_EN
+set_parameter_property RESET_FSM_EN UNITS None
+set_parameter_property RESET_FSM_EN ALLOWED_RANGES {0:1}
+set_parameter_property RESET_FSM_EN HDL_PARAMETER true
+
+# A PLL outside the transceiver generates the link clock (e.g. the gearbox link
+# clock of an external PHY): its lock is part of the ready status.
+add_parameter LINK_PLL_EN INTEGER 0
+set_parameter_property LINK_PLL_EN DISPLAY_NAME LINK_PLL_EN
+set_parameter_property LINK_PLL_EN UNITS None
+set_parameter_property LINK_PLL_EN ALLOWED_RANGES {0:1}
+set_parameter_property LINK_PLL_EN HDL_PARAMETER false
 
 adi_add_auto_fpga_spec_params
 
@@ -97,6 +122,16 @@ proc p_axi_adxcvr {} {
   set fpga_technology [get_parameter_value FPGA_TECHNOLOGY]
   set m_tx_or_rx_n [get_parameter_value TX_OR_RX_N]
   set m_num_of_lanes [get_parameter_value NUM_OF_LANES]
+  set m_num_of_phys [get_parameter_value NUM_OF_PHYS]
+  set m_reset_fsm_en [get_parameter_value RESET_FSM_EN]
+  set m_link_pll_en [get_parameter_value LINK_PLL_EN]
+
+  add_interface link_pll_locked conduit end
+  add_interface_port link_pll_locked up_link_pll_locked export Input 1
+  if {!$m_link_pll_en} {
+    set_port_property up_link_pll_locked TERMINATION true
+    set_port_property up_link_pll_locked TERMINATION_VALUE 1
+  }
 
   if {$m_tx_or_rx_n} {
     set rx_tx "tx"
@@ -105,22 +140,55 @@ proc p_axi_adxcvr {} {
   }
 
   # 105 = Agilex, see adi_intel_device_info_enc.tcl
-  if {$fpga_technology == 105} {
-    add_interface ready conduit end
-    add_interface_port ready up_ready ${rx_tx}_ready input 1
+  if {$fpga_technology == 105 || $fpga_technology == 106} {
 
-    add_interface reset conduit start
-    add_interface_port reset xcvr_reset ${rx_tx}_reset output 1
+    for {set i 0} {$i < $m_num_of_phys} {incr i} {
 
-    add_interface reset_ack conduit end
-    add_interface_port reset_ack up_reset_ack ${rx_tx}_reset_ack input 1
+      if {$m_num_of_phys == 1} {
+        set suffix ""
+      } else {
+        set suffix "_$i"
+      }
+
+      add_interface ready$suffix conduit end
+      add_interface_port ready$suffix up_ready$suffix ${rx_tx}_ready input 1
+
+      add_interface reset$suffix conduit start
+      add_interface_port reset$suffix xcvr_reset$suffix ${rx_tx}_reset output 1
+
+      add_interface reset_ack$suffix conduit end
+      add_interface_port reset_ack$suffix up_reset_ack$suffix ${rx_tx}_reset_ack input 1
+
+      if {$m_num_of_phys > 1} {
+        set_port_property up_ready$suffix fragment_list "up_ready($i:$i)"
+        set_port_property xcvr_reset$suffix fragment_list "xcvr_reset($i:$i)"
+        set_port_property up_reset_ack$suffix fragment_list "up_reset_ack($i:$i)"
+      }
+    }
+
+    if {$m_reset_fsm_en} {
+      add_interface phy_status conduit end
+      add_interface_port phy_status phy_reset_done ${rx_tx}_reset_done output $m_num_of_phys
+      add_interface_port phy_status phy_ready ${rx_tx}_phy_ready output $m_num_of_phys
+      add_interface_port phy_status phy_reset_ack ${rx_tx}_phy_reset_ack output $m_num_of_phys
+    }
 
     if {$m_tx_or_rx_n == 0} {
-      add_interface rx_lockedtodata conduit end
-      add_interface_port rx_lockedtodata up_rx_lockedtodata rx_is_lockedtodata input $m_num_of_lanes
+      if {$fpga_technology == 105} {
+        add_interface rx_lockedtodata conduit end
+        add_interface_port rx_lockedtodata up_rx_lockedtodata rx_is_lockedtodata input $m_num_of_lanes
+      } else {
+        add_interface rx_lockedtodata conduit end
+        add_interface_port rx_lockedtodata up_rx_lockedtodata o_rx_is_lockedtodata input $m_num_of_lanes
+      }
     } else {
-      add_interface core_pll_locked conduit end
-      add_interface_port core_pll_locked up_pll_locked ${rx_tx}_pll_locked Input $m_num_of_lanes
+      if {$fpga_technology == 105} {
+        add_interface core_pll_locked conduit end
+        add_interface_port core_pll_locked up_pll_locked tx_pll_locked Input $m_num_of_lanes
+      } else {
+        add_interface core_pll_locked conduit end
+        add_interface_port core_pll_locked up_pll_locked o_tx_pll_locked Input $m_num_of_lanes
+      }
     }
 
   } else {
