@@ -443,7 +443,9 @@ def check_title(text: str, path: Path, project: str, carrier: str | None) -> Non
         return
     board = project.upper().replace("_", "-")  # ad9081_fmca_ebz -> AD9081-FMCA-EBZ
     expected = f"# {board} HDL Project" if carrier is None else f"# {board}/{carrier.upper()} HDL Project"
-    if expected not in text:
+    # Anchor to line start + end so `## ADTEST/VCU118 HDL Project` (H2) doesn't
+    # falsely match via substring.
+    if re.search(rf"^{re.escape(expected)}\s*$", text, re.M) is None:
         report(path, 1, f"incorrect or missing title; expected `{expected}`")
 
 
