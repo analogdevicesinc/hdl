@@ -159,4 +159,11 @@ switch [get_env_param LANES_PER_CHANNEL 2] {
   }
 }
 
+# CLK_MODE=1: override echo_sclk input delays (Table 3) and add BUSY_clk
+# constraints (Tables 5/6). Loaded after per-SDI files to override their values.
+if {[get_env_param CLK_MODE 0] != 0} {
+  adi_project_files ad4630_fmc_zed [list \
+    "system_constr_busy_clk.xdc" ]
+}
+
 adi_project_run ad4630_fmc_zed
