@@ -1,0 +1,11 @@
+#!/bin/bash
+
+SOURCE="tx_chain_tb.v"
+SOURCE+=" ../util_axis_gearbox.v"
+SOURCE+=" ../../util_axis_fifo/util_axis_fifo.v"
+SOURCE+=" ../../util_axis_fifo/util_axis_fifo_address_generator.v"
+SOURCE+=" ../../common/ad_mem.v"
+SOURCE+=" ../../common/ad_mem_asym.v"
+
+cd `dirname $0`
+source ../../common/tb/run_tb.sh
