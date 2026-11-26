@@ -32,12 +32,11 @@
 ## THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ###############################################################################
 
-set adc_fifo_address_width 8
+set adc_data_offload_type 0                      ; ## BRAM
+set adc_data_offload_size [expr 1024*1024]       ; ## 1 MB
 
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_qsys.tcl
-source $ad_hdl_dir/projects/common/a10soc/a10soc_plddr4_dacfifo_qsys.tcl
-source $ad_hdl_dir/projects/common/intel/adcfifo_qsys.tcl
 
 if [info exists ad_project_dir] {
   source ../../common/ad9083_evb_qsys.tcl
