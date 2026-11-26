@@ -103,11 +103,23 @@ set_property -dict {PACKAGE_PIN C20 IOSTANDARD LVCMOS25} [get_ports adf435x_lock
 
 # clocks
 
-create_clock -period 2.500 -name dco_clk  [get_ports adca_dco_p]
-create_clock -period 2.500 -name ref_clk  [get_ports adca_clk_p]
-create_clock -period 2.500 -name dco_clk1 [get_ports adcb_dco_p]
-create_clock -period 2.500 -name ref_clk1 [get_ports adcb_clk_p]
+create_clock -period 2.500 -name dco_clk  [get_ports adca_dco_p];
+create_clock -period 2.500 -name ref_clk  [get_ports adca_clk_p];
+create_clock -period 2.500 -name dco_clk1 [get_ports adcb_dco_p];
+create_clock -period 2.500 -name ref_clk1 [get_ports adcb_clk_p];
 
-##by default IOB is TRUE and this register is not being driven by any IO element
+# shift_cnt inside ad408x_phy is a pattern-lock training counter: it changes
+# only while searching for bit alignment, then holds constant for the entire
+# capture. Paths from it into the 40->20 barrel shifter feeding
+# adc_data_shifted are therefore quasi-static in normal operation and can be
+# treated as multicycle. This buys ~5 ns of extra budget on those paths and
+# removes the marginal barrel-shift setup violations at 200 MHz on the
+# Artix-7 speed grade of Zynq-7020.
+set_multicycle_path -setup -from \
+  [get_cells -hier -filter {NAME =~ "*ad408x_interface/shift_cnt_reg*"}] 2
+set_multicycle_path -hold  -from \
+  [get_cells -hier -filter {NAME =~ "*ad408x_interface/shift_cnt_reg*"}] 1
 
-set_property IOB FALSE [get_cells -hierarchical -regexp {.*ad4080_b_spi.*IO0_I_REG$}];
+# ad4880_valid_gate: the started flags cross between the two adc clocks
+set_false_path -to [get_cells -hier -filter \
+  {NAME =~ "*align_valid_gate*cdc_sync_stage1_reg*" && IS_SEQUENTIAL}]

@@ -57,6 +57,9 @@ adi_ip_files axi_ad408x [list \
   "$ad_hdl_dir/library/xilinx/common/up_xfer_status_constr.xdc" \
   "$ad_hdl_dir/library/xilinx/common/up_clock_mon_constr.xdc" \
   "ad408x_phy.v" \
+  "ad_bitslip_align.v" \
+  "ad_sample_compact.v" \
+  "ad_sample_edge_select.v" \
   "axi_ad408x.v" ]
 
 adi_ip_properties axi_ad408x
@@ -74,6 +77,11 @@ ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_c
 ipx::infer_bus_interface delay_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
 
 adi_add_auto_fpga_spec_params
+
+set_property -dict [list \
+  enablement_value false \
+  value_tcl_expr {expr {($ENABLE_20BIT != 0 || ($ENABLE_14BIT != 0 && $NUM_LANES == 2)) ? 32 : 16}} \
+] [ipx::get_user_parameters ADC_DATA_WIDTH -of_objects [ipx::current_core]]
 
 ipx::create_xgui_files [ipx::current_core]
 ipx::save_core [ipx::current_core]

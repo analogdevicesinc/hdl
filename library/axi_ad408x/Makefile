@@ -1,5 +1,5 @@
 ####################################################################################
-## Copyright (c) 2018 - 2024 Analog Devices, Inc.
+## Copyright (c) 2018 - 2026 Analog Devices, Inc.
 ### SPDX short identifier: BSD-1-Clause
 ## Auto-generated, do not modify!
 ####################################################################################
@@ -17,6 +17,9 @@ GENERIC_DEPS += ../common/up_delay_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
 GENERIC_DEPS += ad408x_phy.v
+GENERIC_DEPS += ad_bitslip_align.v
+GENERIC_DEPS += ad_sample_compact.v
+GENERIC_DEPS += ad_sample_edge_select.v
 GENERIC_DEPS += axi_ad408x.v
 
 XILINX_DEPS += ../xilinx/common/ad_data_clk.v

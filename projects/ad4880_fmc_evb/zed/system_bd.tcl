@@ -33,6 +33,12 @@
 ###############################################################################
 
 source $ad_hdl_dir/projects/common/zed/zed_system_bd.tcl
+
+# RTL instantiated in the block design
+adi_project_files ad4880_fmc_evb_zed [list \
+  "$ad_hdl_dir/library/util_cdc/sync_bits.v" \
+  "../common/ad4880_valid_gate.v" ]
+
 source ../common/ad4880_fmc_evb_bd.tcl
 source $ad_hdl_dir/projects/scripts/adi_pd.tcl
 
@@ -43,4 +49,9 @@ ad_ip_parameter axi_sysid_0 CONFIG.ROM_ADDR_BITS 9
 ad_ip_parameter rom_sys_0 CONFIG.PATH_TO_FILE "[pwd]/$mem_init_sys_path"
 ad_ip_parameter rom_sys_0 CONFIG.ROM_ADDR_BITS 9
 
-sysid_gen_sys_init_file
+set sys_cstring "NUM_LANES=$ad_project_params(NUM_LANES)\
+  ENABLE_20BIT=$ad_project_params(ENABLE_20BIT)\
+  ENABLE_16BIT=$ad_project_params(ENABLE_16BIT)\
+  ENABLE_14BIT=$ad_project_params(ENABLE_14BIT)"
+
+sysid_gen_sys_init_file $sys_cstring
