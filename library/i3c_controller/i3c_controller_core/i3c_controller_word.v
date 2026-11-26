@@ -187,6 +187,8 @@ module i3c_controller_word (
           ibi_requested <= ibi_requested_auto;
           i <= 0;
           cmdw_nacked <= 1'b0;
+          do_ack  <= 1'b0;
+          do_rx_t <= 1'b0;
         end
         SM_SETUP: begin
           sm <= SM_TRANSFER;
