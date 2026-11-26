@@ -4,4 +4,4 @@ SOURCE="fill_holes_tb.v"
 SOURCE+=" ../fill_holes.sv"
 
 cd `dirname $0`
-source ../../../common/tb/run_tb.sh -g2005-sv
+source ../../../common/tb/run_tb.sh

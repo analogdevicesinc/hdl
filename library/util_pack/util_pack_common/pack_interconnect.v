@@ -66,10 +66,10 @@ module pack_interconnect #(
   localparam CTRL_WIDTH_PER_STAGE = NUM_PORTS * MUX_ORDER;
 
   wire [TOTAL_DATA_WIDTH-1:0] interconnect_comb[0:NUM_STAGES];
-  wire [TOTAL_DATA_WIDTH-1:0] interconnect[0:NUM_STAGES];
+  wire [TOTAL_DATA_WIDTH-1:0] interconnect_pipe[0:NUM_STAGES];
 
   assign interconnect_comb[0] = data_in;
-  assign data_out = interconnect[NUM_STAGES];
+  assign data_out = interconnect_pipe[NUM_STAGES];
 
   /*
    * Function to calculate cumulative pipeline delay for each stage.
@@ -105,7 +105,7 @@ module pack_interconnect #(
 
       if (SHOULD_REGISTER == 0) begin
         // No pipeline register, pass through
-        assign interconnect[p] = interconnect_comb[p];
+        assign interconnect_pipe[p] = interconnect_comb[p];
       end else begin
         // Pipeline register advances only when ce is asserted
         // This ensures data pipeline timing matches ce-gated control signals
@@ -115,7 +115,7 @@ module pack_interconnect #(
             data_pipe <= interconnect_comb[p];
           end
         end
-        assign interconnect[p] = data_pipe;
+        assign interconnect_pipe[p] = data_pipe;
       end
     end
   endgenerate
@@ -205,11 +205,11 @@ module pack_interconnect #(
        * Read from interconnect (pipelined) and write to interconnect_comb (combinational).
        */
       if (PACK) begin
-        assign mux_in = interconnect[i];
+        assign mux_in = interconnect_pipe[i];
         assign shuffle_in = mux_out;
         assign interconnect_comb[i+1] = shuffle_out;
       end else begin
-        assign shuffle_in = interconnect[i];
+        assign shuffle_in = interconnect_pipe[i];
         assign mux_in = shuffle_out;
         assign interconnect_comb[i+1] = mux_out;
       end

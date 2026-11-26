@@ -8,4 +8,4 @@ SOURCE+=" ../accum_set.sv"
 SOURCE+=" ../fifo_sync_2deep.v"
 
 cd `dirname $0`
-source ../../../common/tb/run_tb.sh -g2005-sv
+source ../../../common/tb/run_tb.sh

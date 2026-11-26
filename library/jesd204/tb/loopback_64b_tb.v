@@ -59,8 +59,9 @@ module loopback_64b_tb;
   parameter LANE_DELAY = 1;
   parameter DATA_PATH_WIDTH = 8;
 
+  localparam NUM_OUTPUT_PIPELINE = 0;
   localparam BEATS_PER_MULTIFRAME = OCTETS_PER_FRAME * FRAMES_PER_MULTIFRAME / 8;
-  localparam TX_LATENCY = 3 + i_tx.NUM_OUTPUT_PIPELINE;
+  localparam TX_LATENCY = 3 + NUM_OUTPUT_PIPELINE;
   localparam RX_LATENCY = 3;
   localparam BASE_LATENCY = TX_LATENCY + RX_LATENCY;
 
@@ -203,6 +204,7 @@ module loopback_64b_tb;
   jesd204_tx #(
     .NUM_LANES(NUM_LANES),
     .NUM_LINKS(NUM_LINKS),
+    .NUM_OUTPUT_PIPELINE(NUM_OUTPUT_PIPELINE),
     .LINK_MODE(2),
     .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
     .TPL_DATA_PATH_WIDTH(DATA_PATH_WIDTH),

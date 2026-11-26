@@ -92,7 +92,8 @@ module soft_pcs_pattern_align_tb;
     end
   end
 
-  always @(*) begin
+  always begin
+    #1;
     case (bitshift)
     4'd0: comma_unaligned <= comma[9:0];
     4'd1: comma_unaligned <= {comma[0],comma[9:1]};

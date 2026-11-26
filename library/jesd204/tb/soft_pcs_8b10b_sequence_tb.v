@@ -59,17 +59,17 @@ module soft_pcs_8b10b_sequence_tb;
 
   wire [9:0] raw_data;
 
-  reg [7:0] encoder_char = 'h00;
-  reg encoder_charisk = 1'b0;
+  reg [7:0] encoder_char;
+  reg encoder_charisk;
 
   wire [7:0] decoder_char;
   wire decoder_charisk;
   wire decoder_notintable;
   wire decoder_disperr;
 
-  reg encoder_disparity = 1'b0;
+  reg encoder_disparity;
   wire encoder_disparity_s;
-  reg decoder_disparity = 1'b0;
+  reg decoder_disparity;
   wire decoder_disparity_s;
 
   integer x;
@@ -85,6 +85,13 @@ module soft_pcs_8b10b_sequence_tb;
     end
   end
 */
+
+  initial begin
+    encoder_char = 'h00;
+    encoder_charisk = 1'b0;
+    encoder_disparity = 1'b0;
+    decoder_disparity = 1'b0;
+  end
 
   always @(posedge clk) begin
     x = {$random} % (256 + 5);
@@ -123,14 +130,32 @@ module soft_pcs_8b10b_sequence_tb;
     .in_disparity(decoder_disparity),
     .out_disparity(decoder_disparity_s));
 
-   wire char_mismatch = encoder_char != decoder_char;
-   wire charisk_mismatch = encoder_charisk != decoder_charisk;
+  wire char_mismatch = encoder_char != decoder_char;
+  wire charisk_mismatch = encoder_charisk != decoder_charisk;
 
-   always @(posedge clk) begin
-     if (char_mismatch == 1'b1 || charisk_mismatch == 1'b1 ||
-         decoder_notintable == 1'b1 || decoder_disperr == 1'b1) begin
-       failed <= 1'b1;
-     end
-   end
+  always @(posedge clk) begin
+    // $display("%0t\t%x\t%x",
+    //   $time, encoder_char, decoder_char);
+    if (char_mismatch == 1'b1) begin
+      $display("%0t: Char mismatch: %b",
+        $time, char_mismatch);
+    end
+    if (charisk_mismatch == 1'b1) begin
+      $display("%0t: Charisk mismatch: %b",
+        $time, charisk_mismatch);
+    end
+    if (decoder_notintable == 1'b1) begin
+      $display("%0t: Decoder not in table: %b",
+        $time, decoder_notintable);
+    end
+    if (decoder_disperr == 1'b1) begin
+      $display("%0t: Decoder disp Err: %b",
+        $time, decoder_disperr);
+    end
+    if (char_mismatch == 1'b1 || charisk_mismatch == 1'b1 ||
+        decoder_notintable == 1'b1 || decoder_disperr == 1'b1) begin
+      failed <= 1'b1;
+    end
+  end
 
 endmodule
