@@ -1,0 +1,15 @@
+#!/bin/bash
+
+C=../../../../../corundum/fpga
+SOURCE="mrmac_gty_wrapper_tb.v mrmac_ns_loopback_model.v"
+SOURCE+=" ../mrmac_gty_wrapper.v ../mrmac_tx_adapt.v ../mrmac_rx_adapt.v"
+SOURCE+=" ../mrmac_ptp_ts_cvt.v ../mrmac_ptp_sync.v"
+SOURCE+=" $C/common/rtl/cmac_pad.v $C/common/rtl/mac_ts_insert.v"
+SOURCE+=" $C/lib/axis/rtl/axis_adapter.v $C/lib/axis/rtl/axis_fifo.v"
+SOURCE+=" $C/lib/eth/lib/axis/rtl/sync_reset.v"
+
+if [[ -n "$TB_4X25G" ]]; then SOURCE+=" -d MODE_4X25G"; fi
+if [[ -n "$TB_1X40G" ]]; then SOURCE+=" -d MODE_1X40G"; fi
+
+cd `dirname $0`
+source ../../../common/tb/run_tb.sh

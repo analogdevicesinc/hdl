@@ -1,0 +1,13 @@
+#!/bin/bash
+
+C=../../../../../corundum/fpga
+SOURCE="mrmac_versal_glue_tb.v ../mrmac_versal_glue.v ../mrmac_axis_loopback.v"
+SOURCE+=" $C/lib/axis/rtl/axis_fifo.v $C/lib/axis/rtl/axis_register.v"
+U=$XILINX_VIVADO/data/verilog/src
+SOURCE+=" $U/glbl.v $U/unisims/IBUFDS_GTE5.v $U/unisims/BUFG_GT.v $U/unisims/MBUFG_GT.v"
+
+if [[ -n "$TB_4X25G" ]]; then SOURCE+=" -d MODE_4X25G"; fi
+if [[ -n "$TB_1X40G" ]]; then SOURCE+=" -d MODE_1X40G"; fi
+
+cd `dirname $0`
+source ../../../common/tb/run_tb.sh

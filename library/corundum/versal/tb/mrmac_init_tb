@@ -1,0 +1,9 @@
+#!/bin/bash
+
+SOURCE="mrmac_init_tb.v ../mrmac_init.v ../../../util_cdc/sync_bits.v"
+
+if [[ -n "$TB_4X25G" ]]; then SOURCE+=" -d MODE_4X25G"; fi
+if [[ -n "$TB_1X40G" ]]; then SOURCE+=" -d MODE_1X40G"; fi
+
+cd `dirname $0`
+source ../../../common/tb/run_tb.sh
