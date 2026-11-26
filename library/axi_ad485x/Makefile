@@ -16,6 +16,7 @@ GENERIC_DEPS += ../common/up_clock_mon.v
 GENERIC_DEPS += ../common/up_delay_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_cntrl.v
 GENERIC_DEPS += ../common/up_xfer_status.v
+GENERIC_DEPS += axi_ad4858_lvds_nssi.v
 GENERIC_DEPS += axi_ad485x.v
 GENERIC_DEPS += axi_ad485x_16b_channel.v
 GENERIC_DEPS += axi_ad485x_20b_channel.v

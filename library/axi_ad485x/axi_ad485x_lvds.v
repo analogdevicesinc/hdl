@@ -39,9 +39,14 @@ module axi_ad485x_lvds #(
 
   parameter FPGA_TECHNOLOGY = 0,
   parameter RESOLUTION = 20,
+  parameter DRP_WIDTH = 5,
+  parameter ECHO_CLK_EN = 1,
   parameter DELAY_REFCLK_FREQ = 200,
+  parameter IODELAY_CTRL = 1,
   parameter IODELAY_ENABLE = 1,
-  parameter N_CHANNELS = 8
+  parameter N_CHANNELS = 8,
+  parameter IODELAY_GROUP = "dev_if_delay_group",
+  parameter NEG_EDGE = 1
 ) (
 
   input                   rst,
@@ -75,17 +80,18 @@ module axi_ad485x_lvds #(
 
   // delay interface (for IDELAY macros)
 
+  input       [ 7:0]      path_delay_tap,
+
   input                   up_clk,
   input                   up_adc_dld,
-  input       [ 4:0]      up_adc_dwdata,
-  output      [ 4:0]      up_adc_drdata,
+  input  [DRP_WIDTH-1:0]  up_adc_dwdata,
+  output [DRP_WIDTH-1:0]  up_adc_drdata,
   input                   delay_clk,
   input                   delay_rst,
   output                  delay_locked
 );
 
   localparam DW  = (32 * N_CHANNELS);
-  localparam HDW = (DW / 2)-1;
   localparam BW  = DW - 1;
   localparam FBW = DW + 31;
   localparam HBW = ((DW + 32) / 2)-1;
@@ -115,7 +121,6 @@ module axi_ad485x_lvds #(
   reg                 run_busy_period_cnt = 'h0;
   reg        [ 31:0]  busy_conversion_cnt = 'h0;
   reg        [ 31:0]  busy_measure_value = 'h0;
-  reg        [ 31:0]  busy_measure_value_plus = 'h0;
 
   reg        [FBW:0]  adc_data_store = 'h0;
   reg        [FBW:0]  adc_data_init = 'h0;
@@ -125,10 +130,11 @@ module axi_ad485x_lvds #(
   reg                 start_transfer = 'h0;
   reg                 start_transfer_d = 'h0;
 
-  reg        [ 15:0]  dynamic_delay = 'h0;
   reg                 adc_valid_init = 'h0;
   reg                 adc_valid_init_d = 'h0;
   reg                 adc_valid_init_d2 = 'h0;
+  reg        [ 15:0]  capture_complete_delay = 'h0;
+  reg        [255:0]  sckio_delay = 'h0;
 
   reg        [ BW:0]  adc_data_0 = 'h0;
   reg        [ BW:0]  adc_data_1 = 'h0;
@@ -164,7 +170,6 @@ module axi_ad485x_lvds #(
 
   wire                scko;
   wire                scko_s;
-  wire                sdo;
   wire                conversion_completed;
   wire                conversion_quiet_time_s;
 
@@ -288,15 +293,36 @@ module axi_ad485x_lvds #(
 
   // valid delay (0 to 15)
   always @(posedge clk) begin
-    dynamic_delay <= {dynamic_delay[14:0], capture_complete_s};
+    capture_complete_delay <= {capture_complete_delay[14:0], capture_complete_s};
   end
 
-  assign capture_complete = dynamic_delay[4'd10];
+  assign capture_complete = capture_complete_delay[4'd10];
 
-  IBUFDS i_scko_bufds (
-    .O(scko_s),
-    .I(scko_p),
-    .IB(scko_n));
+  generate
+    wire aquire_data_delay;
+    if (ECHO_CLK_EN == 1'b1) begin
+      IBUFDS i_scko_bufds (
+        .O(scko_s),
+        .I(scko_p),
+        .IB(scko_n));
+    end else begin
+      reg aquire_data_delay_reg = 1'b0;
+      always @(posedge fast_clk) begin
+        sckio_delay <= {sckio_delay[254:0], aquire_data};
+        aquire_data_delay_reg <= sckio_delay[path_delay_tap];
+      end
+      assign aquire_data_delay = aquire_data_delay_reg;
+      BUFGCE #(
+        .CE_TYPE("SYNC"),          // ASYNC, HARDSYNC, SYNC
+        .IS_CE_INVERTED(1'b0),     // Programmable inversion on CE
+        .IS_I_INVERTED(1'b1),      // Programmable inversion on I
+        .SIM_DEVICE("ULTRASCALE")  // ULTRASCALE
+      ) BUFGCE_inst (
+        .O(scko_s),             // 1-bit output: Buffer
+        .CE(aquire_data_delay), // 1-bit input: Buffer enable
+        .I(fast_clk));          // 1-bit input: Buffer
+    end
+  endgenerate
 
    // It is added to constraint the tool to keep the logic in the same region
    // as the input pins, otherwise the tool will automatically add a bufg and
@@ -310,8 +336,9 @@ module axi_ad485x_lvds #(
   ad_data_in #(
     .FPGA_TECHNOLOGY (FPGA_TECHNOLOGY),
     .REFCLK_FREQUENCY (DELAY_REFCLK_FREQ),
-    .IODELAY_CTRL (1),
+    .IODELAY_CTRL (IODELAY_CTRL),
     .IODELAY_ENABLE (IODELAY_ENABLE),
+    .IODELAY_GROUP (IODELAY_GROUP),
     .IDDR_CLK_EDGE ("OPPOSITE_EDGE")
   ) i_rx (
     .rx_clk (scko),
@@ -321,8 +348,8 @@ module axi_ad485x_lvds #(
     .rx_data_n (sdo_n_s),
     .up_clk (up_clk),
     .up_dld (up_adc_dld),
-    .up_dwdata (up_adc_dwdata[4:0]),
-    .up_drdata (up_adc_drdata[4:0]),
+    .up_dwdata (up_adc_dwdata),
+    .up_drdata (up_adc_drdata),
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked));

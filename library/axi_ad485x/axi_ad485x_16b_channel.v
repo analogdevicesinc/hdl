@@ -87,12 +87,11 @@ module axi_ad485x_16b_channel #(
 
   reg                    adc_pn_err;
   reg                    adc_valid_f1;
-  reg        [23:0]      adc_data_f1;
   reg        [31:0]      adc_raw_data;
   reg        [31:0]      read_channel_data;
   reg                    adc_or;
   (* keep = "true" *)  reg [31:0] pattern;
-  (* keep = "true" *)  reg [31:0] expected_package_pattern;
+  reg [31:0] expected_package_pattern;
 
   // internal signals
 
@@ -101,12 +100,6 @@ module axi_ad485x_16b_channel #(
   wire                   adc_dfmt_se_s;
   wire                   adc_dfmt_type_s;
   wire                   adc_dfmt_enable_s;
-  wire                   adc_pn_err_s;
-
-  wire                   adc_valid_f2;
-  wire        [31:0]     adc_data_f2;
-  wire                   adc_valid_f2_ovs;
-  wire        [31:0]     adc_data_f2_ovs;
 
   wire        [31:0]     expected_pattern;
   wire        [31:0]     expected_package_pattern_s;
