@@ -1,0 +1,85 @@
+##############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+### SPDX short identifier: BSD-1-Clause
+##
+## Enforces the README template on project READMEs (see
+## .github/scripts/check_readme_template.py for the full rule set).
+##############################################################################
+
+name: README template check
+
+on:
+  pull_request:
+    branches:
+      - main
+      - 'hdl_[0-9]*_r*'  # release branches, e.g. hdl_2026_r1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-readme-template:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          # Need history to diff against the PR base commit.
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5.6.0
+        with:
+          python-version: '3.12'
+
+      - name: Determine files to check
+        id: files
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "mode=all" >> "$GITHUB_OUTPUT"
+          else
+            # PR mode. Three-dot range so upstream commits don't count as PR
+            # changes; -ACMR skips deletions so removed projects don't trip
+            # the missing-README check.
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+            DIFF_RANGE="$BASE_SHA...$HEAD_SHA"
+            # (a) READMEs touched in the PR.
+            git diff --name-only --diff-filter=ACMR "$DIFF_RANGE" \
+              | awk '/^projects\/.+\/README\.md$/' > changed_readmes.txt
+
+            # (b) expected READMEs for newly-added project/carrier dirs, so
+            # PRs that forget the README on a new project fail here.
+            git diff --name-only --diff-filter=A "$DIFF_RANGE" \
+              | awk -F/ '
+                  /^projects\/(common|scripts)\// { next }
+                  /^projects\// && NF >= 4 && $3 !~ /^(common|scripts)$/ {
+                      print "projects/" $2 "/README.md"
+                      print "projects/" $2 "/" $3 "/README.md"
+                  }
+                  /^projects\// && NF == 3 { print "projects/" $2 "/README.md" }
+                ' \
+              | sort -u >> changed_readmes.txt
+            sort -u changed_readmes.txt -o changed_readmes.txt
+            if [ -s changed_readmes.txt ]; then
+              echo "mode=diff" >> "$GITHUB_OUTPUT"
+            else
+              echo "mode=none" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
+      - name: Run template check (all READMEs)
+        if: steps.files.outputs.mode == 'all'
+        run: python3 .github/scripts/check_readme_template.py --all
+
+      - name: Run template check (changed READMEs only)
+        if: steps.files.outputs.mode == 'diff'
+        run: xargs -d '\n' -a changed_readmes.txt python3 .github/scripts/check_readme_template.py
+
+      - name: Nothing to check
+        if: steps.files.outputs.mode == 'none'
+        run: echo "No project README changes in this PR; skipping."
