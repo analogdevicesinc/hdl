@@ -127,7 +127,10 @@ for {set idx 0} {$idx < $max_axi_ifc} {incr idx} {
   set_property master_address_space_ref MAXI_${idx} \
     [ipx::get_bus_interfaces MAXI_$idx \
     -of_objects [ipx::current_core]]
-  set_property range 4G [ipx::get_address_spaces MAXI_${idx}]
+  set_property -dict [list \
+    "range_resolve_type" "dependent" \
+    "range_dependency" {pow(2,(spirit:decode(id('MODELPARAM_VALUE.AXI_ADDR_WIDTH')) - 1) - 0 + 1)} \
+  ] [ipx::get_address_spaces MAXI_${idx}]
 
 }
 adi_add_bus_clock "m_axi_aclk" $ifc_list "m_axi_aresetn"
@@ -254,12 +257,19 @@ set_property -dict [list \
   [ipx::get_user_parameters HBM_SEGMENT_INDEX -of_objects $cc]
 
 set_property -dict [list \
-    "value_validation_type" "range_long" \
-    "value_validation_range_minimum" "0" \
-    "value_validation_range_maximum" "4294967296" \
+    "value" "0x0000000000000000" \
+    "value_bit_string_length" "64" \
+    "value_format" "bitString" \
     "enablement_tcl_expr" "\$MEM_TYPE == 1" \
   ] \
   [ipx::get_user_parameters DDR_BASE_ADDDRESS -of_objects $cc]
+
+set_property -dict [list \
+    "value" "0x0000000000000000" \
+    "value_bit_string_length" "64" \
+    "value_format" "bitString" \
+  ] \
+  [ipx::get_hdl_parameters DDR_BASE_ADDDRESS -of_objects $cc]
 
 #
 # GUI formatting
@@ -382,6 +392,7 @@ ipgui::move_param -component $cc -order 0 $p -parent $hbm_group
 set_property -dict [list \
   "display_name" "DDR base address" \
   "tooltip" "The base address where data is stored is generated based on this parameter" \
+  "widget" "hexEdit" \
 ] $p
 
 ipgui::remove_param -component $cc [ipgui::get_guiparamspec -name "AXI_ADDR_WIDTH" -component $cc]

@@ -63,6 +63,6 @@ proc ad_plddr_data_offload_create {data_offload_name} {
   ad_connect  axi_ddr_cntrl/device_temp_i GND
   ad_connect  $data_offload_name/i_data_offload/ddr_calib_done axi_ddr_cntrl/init_calib_complete
 
-  ad_ip_parameter $data_offload_name/storage_unit CONFIG.DDR_BASE_ADDDRESS [format "%d" 0x80000000]
+  ad_ip_parameter $data_offload_name/storage_unit CONFIG.DDR_BASE_ADDDRESS 0x0000000080000000
 
 }
