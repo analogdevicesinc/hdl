@@ -48,32 +48,35 @@
 
 `timescale 1ns/100ps
 
-module jesd204_rx_header (
-  input clk,
-  input reset,
+module jesd204_rx_header #(
+  parameter ENABLE_FEC = 0
+) (
+  input             clk,
+  input             reset,
 
-  input sh_lock,
-  input [1:0] header,
+  input             sh_lock,
+  input      [1:0]  header,
 
-  input [1:0] cfg_header_mode,  // 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD
-  input [4:0] cfg_rx_thresh_emb_err,
-  input [7:0] cfg_beats_per_multiframe,
+  input      [1:0]  cfg_header_mode,  // 0 - CRC12 ; 1 - CRC3; 2 - FEC; 3 - CMD
+  input      [4:0]  cfg_rx_thresh_emb_err,
+  input      [7:0]  cfg_beats_per_multiframe,
 
-  output emb_lock,
+  output            emb_lock,
 
-  output valid_eomb,
-  output valid_eoemb,
-  // Received header data qualified by valid_eomb
-  output [11:0] crc12,
-  output [2:0] crc3,
-  output [25:0] fec,
-  output [18:0] cmd,
-  output reg [7:0] sh_count = 'h0,
+  output            valid_eomb,
+  output            valid_eoemb,
+  output            valid_fec,
+  // Received header data qualified by valid_eomb (fec by valid_fec)
+  output     [11:0] crc12,
+  output     [2:0]  crc3,
+  output     [25:0] fec,
+  output     [18:0] cmd,
+  output reg [7:0]  sh_count = 'h0,
 
-  output [2:0] status_lane_emb_state,
-  output reg event_invalid_header,
-  output reg event_unexpected_eomb,
-  output reg event_unexpected_eoemb
+  output     [2:0]  status_lane_emb_state,
+  output reg        event_invalid_header,
+  output reg        event_unexpected_eomb,
+  output reg        event_unexpected_eoemb
 );
 
   localparam STATE_EMB_INIT = 3'b001;
@@ -84,20 +87,22 @@ module jesd204_rx_header (
   localparam BIT_EMB_HUNT = 1;
   localparam BIT_EMB_LOCK = 2;
 
-  reg [2:0] state = STATE_EMB_INIT;
-  reg [2:0] next_state;
+  reg  [2:0]  state = STATE_EMB_INIT;
+  reg  [2:0]  next_state;
 
-  reg [31:0] sync_word = 'h0;
+  reg  [31:0] sync_word = 'h0;
 
-  wire header_bit;
-  wire invalid_sequence;
-  wire invalid_eoemb;
-  wire invalid_eomb;
-  wire [6:0] cmd0;
-  wire [6:0] cmd1;
+  reg         sh_count_wrap = 1'b0;
+
+  wire        header_bit;
+  wire        invalid_sequence;
+  wire        invalid_eoemb;
+  wire        invalid_eomb;
+  wire [6:0]  cmd0;
+  wire [6:0]  cmd1;
   wire [18:0] cmd3;
-  wire eoemb;
-  wire eomb;
+  wire        eoemb;
+  wire        eomb;
 
   assign header_bit = header == 2'b01;
 
@@ -122,17 +127,29 @@ module jesd204_rx_header (
                cfg_header_mode == 1 ? {12'b0,cmd1} :
                cfg_header_mode == 3 ? cmd3 : 'b0;
 
-  assign fec = {sync_word[31:10],sync_word[8:5]};
+  assign fec = {sync_word[26:5],sync_word[3:0]};
 
   assign eomb  = sync_word[4:0] == 5'b00001;
   assign eoemb = sync_word[9] & eomb;
 
+  // sh_count is only used outside EMB_INIT. Loading 1 while in EMB_INIT would
+  // therefore not matter.
+  // On the first EMB_HUNT cycle, sh_count would have the value 1, as expected.
   always @(posedge clk) begin
-    if (next_state[BIT_EMB_INIT] || sh_count == cfg_beats_per_multiframe) begin
+    if (state[BIT_EMB_INIT]) begin
+      sh_count <= 'h1;
+    end else if (sh_count_wrap) begin
       sh_count <= 'h0;
     end else begin
       sh_count <= sh_count + 8'b1;
     end
+  end
+
+  // High when sh_count == cfg_beats_per_multiframe, computed one beat early to
+  // compensate for its output register.
+  always @(posedge clk) begin
+    sh_count_wrap <= ~state[BIT_EMB_INIT] &&
+                     (sh_count == cfg_beats_per_multiframe - 8'd1);
   end
 
   reg [1:0] emb_vcount = 'b0;
@@ -180,10 +197,27 @@ module jesd204_rx_header (
 
   assign invalid_eoemb = (sh_count == 0 && ~eoemb);
   assign invalid_eomb = (sh_count[4:0] == 0 && ~eomb);
-  assign valid_eomb = next_state[BIT_EMB_LOCK] && eomb;
-  assign valid_eoemb = next_state[BIT_EMB_LOCK] && eoemb;
+  assign valid_eomb = next_state[BIT_EMB_LOCK] && (sh_count[4:0] == 0) && eomb;
+  assign valid_eoemb = next_state[BIT_EMB_LOCK] && (sh_count == 0) && eoemb;
 
   assign invalid_sequence = (invalid_eoemb || invalid_eomb);
+
+  generate if (ENABLE_FEC) begin
+    reg valid_fec_r;
+
+    // FEC signal is available before EOMB
+    always @(posedge clk) begin
+      if (reset == 1'b1) begin
+        valid_fec_r <= 1'b0;
+      end else begin
+        valid_fec_r <= next_state[BIT_EMB_LOCK] && (sh_count[4:0] == 26);
+      end
+    end
+    assign valid_fec = valid_fec_r;
+  end else begin
+    assign valid_fec = 1'b0;
+  end
+  endgenerate
 
   always @(posedge clk) begin
     if (reset == 1'b1) begin
@@ -200,7 +234,10 @@ module jesd204_rx_header (
 
   always @(posedge clk) begin
     event_invalid_header <= (~state[BIT_EMB_INIT]) && (header[0] == header[1]);
-    event_unexpected_eomb <= (~state[BIT_EMB_INIT]) && (sh_count[4:0] != 0 && eomb);
+    // FEC parity bits are unconstrained and regularly contain the EoMB
+    // pattern, so an off-boundary EoMB is only an error in the other modes.
+    event_unexpected_eomb <= (~state[BIT_EMB_INIT]) && (cfg_header_mode != 2'd2) &&
+                             (sh_count[4:0] != 0 && eomb);
     event_unexpected_eoemb <= (~state[BIT_EMB_INIT]) && invalid_eoemb;
   end
 

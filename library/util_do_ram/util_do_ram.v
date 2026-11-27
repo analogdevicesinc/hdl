@@ -1,6 +1,6 @@
 // ***************************************************************************
 // ***************************************************************************
-// Copyright (C) 2022-2025 Analog Devices, Inc. All rights reserved.
+// Copyright (C) 2022-2026 Analog Devices, Inc. All rights reserved.
 //
 // In this HDL repository, there are many different and unique modules, consisting
 // of various HDL (Verilog or VHDL) components. The individual modules are
@@ -42,7 +42,8 @@ module util_do_ram #(
   parameter DST_DATA_WIDTH = 128,
   parameter LENGTH_WIDTH = 16,
   parameter RD_DATA_REGISTERED = 0,
-  parameter RD_FIFO_ADDRESS_WIDTH = 2
+  parameter RD_FIFO_ADDRESS_WIDTH = 2,
+  parameter WR_DATA_REGISTERED = 0
 ) (
   input                                    wr_request_enable,
   input                                    wr_request_valid,
@@ -92,6 +93,20 @@ module util_do_ram #(
   localparam SRC_ADDRESS_WIDTH = LENGTH_WIDTH - SRC_ADDR_ALIGN;
   localparam DST_ADDRESS_WIDTH = LENGTH_WIDTH - DST_ADDR_ALIGN;
 
+  reg                         wr_full = 1'b0;
+  reg [SRC_ADDRESS_WIDTH-1:0] wr_addr = 'h0;
+  reg [SRC_ADDRESS_WIDTH-1:0] wr_length = 'h0;
+  reg                         rd_active = 1'b0;
+  reg [1:0]                   rd_req_cnt = 2'b0;
+  reg [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
+  reg [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
+  reg                         rd_valid_l1 = 1'b0;
+  reg                         rd_valid_l2 = 1'b0;
+  reg                         rd_last_l1 = 1'b0;
+  reg                         rd_last_l2 = 1'b0;
+  reg [DST_DATA_WIDTH-1:0]    rd_data_l2 = 'h0;
+  reg [DST_DATA_WIDTH/8-1:0]  rd_keep_l2 = 'h0;
+
   wire                        wr_enable;
   wire                        wr_last_beat;
   wire                        rd_early_finish;
@@ -109,20 +124,6 @@ module util_do_ram #(
   wire                        rd_fifo_s_last;
   wire [DST_DATA_WIDTH-1:0]   rd_fifo_s_data;
   wire [DST_DATA_WIDTH/8-1:0] rd_fifo_s_keep;
-
-  reg                         wr_full = 1'b0;
-  reg [SRC_ADDRESS_WIDTH-1:0] wr_addr = 'h0;
-  reg [SRC_ADDRESS_WIDTH-1:0] wr_length = 'h0;
-  reg                         rd_active = 1'b0;
-  reg [1:0]                   rd_req_cnt = 2'b0;
-  reg [DST_ADDRESS_WIDTH-1:0] rd_addr = 'h0;
-  reg [DST_ADDRESS_WIDTH-1:0] rd_length = 'h0;
-  reg                         rd_valid_l1 = 1'b0;
-  reg                         rd_valid_l2 = 1'b0;
-  reg                         rd_last_l1 = 1'b0;
-  reg                         rd_last_l2 = 1'b0;
-  reg [DST_DATA_WIDTH-1:0]    rd_data_l2 = 'h0;
-  reg [DST_DATA_WIDTH/8-1:0]  rd_keep_l2 = 'h0;
 
   always @(posedge s_axis_aclk) begin
     if (~s_axis_aresetn)
@@ -304,7 +305,7 @@ module util_do_ram #(
     .DATA_WIDTH(DST_DATA_WIDTH),
     .ADDRESS_WIDTH(RD_FIFO_ADDRESS_WIDTH),
     .ASYNC_CLK(0),
-    .M_AXIS_REGISTERED(0),
+    .M_AXIS_REGISTERED(WR_DATA_REGISTERED),
     .TLAST_EN(1),
     .TKEEP_EN(1)
   ) i_rd_fifo (

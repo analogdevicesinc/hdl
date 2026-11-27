@@ -45,13 +45,13 @@ module axi_adf4030 #(
   parameter TRIGGER_STRETCH = 0
 ) (
 
-  inout  logic bsync_p,
-  inout  logic bsync_n,
-  input  logic device_clk,
-  input  logic trigger,
-  output logic sysref,
+  inout  logic                     bsync_p,
+  inout  logic                     bsync_n,
+  input  logic                     device_clk,
+  input  logic                     trigger,
+  output logic                     sysref,
   output logic [CHANNEL_COUNT-1:0] trig_channel,
-  output logic trig_request_out,
+  output logic                     trig_request_out,
 
   // AXI BUS
   input  logic                     s_axi_aresetn,
@@ -133,7 +133,9 @@ module axi_adf4030 #(
 
   assign sysref = external_bsync;
 
-  bsync_generator i_bsync_gen (
+  bsync_generator #(
+    .SIM_DEVICE             (SIM_DEVICE)
+  ) i_bsync_gen (
     .clk                    (device_clk),
     .rstn                   (rstn),
     .direction              (direction),

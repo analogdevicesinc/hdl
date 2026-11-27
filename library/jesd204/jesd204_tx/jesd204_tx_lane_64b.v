@@ -48,36 +48,47 @@
 
 `timescale 1ns/100ps
 
-module jesd204_tx_lane_64b (
-  input clk,
-  input reset,
+module jesd204_tx_lane_64b #(
+  parameter ENABLE_FEC = 1'b0
+) (
+  input             clk,
+  input             reset,
 
-  input [63:0] tx_data,
-  input tx_ready,
+  input      [63:0] tx_data,
+  input             tx_ready,
 
   output reg [63:0] phy_data,
-  output     [1:0] phy_header,
+  output     [1:0]  phy_header,
 
-  input lmc_edge,
-  input lmc_quarter_edge,
-  input eoemb,
+  input             lmc_edge,
+  input             lmc_quarter_edge,
+  input             eoemb,
 
   // Scrambling mandatory in 64bxxb, keep this for debugging purposes
-  input cfg_disable_scrambler,
-  input [1:0] cfg_header_mode,
-  input cfg_lane_disable
+  input             cfg_disable_scrambler,
+  input      [1:0]  cfg_header_mode,
+  input             cfg_lane_disable
 );
 
-  reg [63:0] scrambled_data;
-  reg lmc_edge_d1 = 'b0;
-  reg lmc_edge_d2 = 'b0;
-  reg lmc_quarter_edge_d1 = 'b0;
-  reg lmc_quarter_edge_d2 = 'b0;
-  reg tx_ready_d1 = 'b0;
+  reg  [63:0] scrambled_data;
+  reg  [63:0] scrambled_data_d1;
+  reg         lmc_edge_d1 = 'b0;
+  reg         lmc_edge_d2 = 'b0;
+  reg         lmc_edge_d3 = 'b0;
+  reg         lmc_quarter_edge_d1 = 'b0;
+  reg         lmc_quarter_edge_d2 = 'b0;
+  reg         lmc_quarter_edge_d3 = 'b0;
+  reg         tx_ready_d1 = 'b0;
+  reg         tx_ready_d2 = 'b0;
+  reg         eoemb_d1 = 'b0;
+  reg  [11:0] crc12_d1 = 'b0;
+  reg         cfg_lane_disable_int;
+  (* dont_touch = "yes" *) reg  [1:0]  cfg_header_mode_int;
 
   wire [63:0] tx_data_msb_s;
-  wire [63:0] scrambled_data_r;
+  wire [63:0] scrambled_data_s;
   wire [11:0] crc12;
+  wire [25:0] fec;
 
   /* Reorder octets MSB first */
   genvar i;
@@ -92,25 +103,31 @@ module jesd204_tx_lane_64b (
     .DESCRAMBLE(0)
   ) i_scrambler (
     .clk(clk),
-    .reset(1'b0),
+    .reset(reset),
     .enable(~cfg_disable_scrambler),
     .data_in(tx_data_msb_s),
-    .data_out(scrambled_data_r));
+    .data_out(scrambled_data_s));
 
   always @(posedge clk) begin
     lmc_edge_d1 <= lmc_edge;
     lmc_edge_d2 <= lmc_edge_d1;
+    lmc_edge_d3 <= lmc_edge_d2;
     lmc_quarter_edge_d1 <= lmc_quarter_edge;
     lmc_quarter_edge_d2 <= lmc_quarter_edge_d1;
+    lmc_quarter_edge_d3 <= lmc_quarter_edge_d2;
   end
 
   always @(posedge clk) begin
-    scrambled_data <= scrambled_data_r;
-    phy_data <= scrambled_data;
+    scrambled_data <= scrambled_data_s;
+    scrambled_data_d1 <= scrambled_data;
+    phy_data <= scrambled_data_d1;
   end
 
   always @(posedge clk) begin
     tx_ready_d1 <= tx_ready;
+    tx_ready_d2 <= tx_ready_d1;
+    eoemb_d1 <= eoemb;
+    crc12_d1 <= crc12;
   end
 
   jesd204_crc12 i_crc12 (
@@ -120,20 +137,49 @@ module jesd204_tx_lane_64b (
     .data_in(scrambled_data),
     .crc12(crc12));
 
-  jesd204_tx_header i_header_gen (
+  if(ENABLE_FEC) begin : gen_fec
+    wire [63:0] fec_data_in;
+
+    // The encoder shifts data_in[0] first and expects eomb with the last
+    // block of the multiblock; bit 63 is the first bit on the wire and
+    // scrambled_data_d1 holds the last block while lmc_edge_d2 is high.
+    for (i = 0; i < 64; i = i + 1) begin: g_fec_data_in
+      assign fec_data_in[i] = scrambled_data_d1[63-i];
+    end
+
+    jesd204_fec_encode #(
+      .DATA_WIDTH     (64)
+    ) jesd204_fec_encode (
+      .fec         (fec),
+      .clk         (clk),
+      .rst         (~tx_ready),
+      .shift_en    (tx_ready_d2),
+      .eomb        (lmc_edge_d2),
+      .data_in     (fec_data_in));
+  end else begin : gen_no_fec
+    assign fec = 26'b0;
+  end
+
+  // Pipeline lane disable signal and header mode signals, for better timing.
+  always @(posedge clk) begin
+    cfg_lane_disable_int <= cfg_lane_disable;
+    cfg_header_mode_int <= cfg_header_mode;
+  end
+
+  (* DONT_TOUCH = "yes" *) jesd204_tx_header i_header_gen (
     .clk(clk),
-    .reset(~tx_ready | cfg_lane_disable),
+    .reset(~tx_ready | cfg_lane_disable_int),
 
-    .cfg_header_mode(cfg_header_mode),
+    .cfg_header_mode(cfg_header_mode_int),
 
-    .lmc_edge(lmc_edge_d2),
-    .lmc_quarter_edge(lmc_quarter_edge_d2),
+    .lmc_edge(lmc_edge_d3),
+    .lmc_quarter_edge(lmc_quarter_edge_d3),
 
     // Header content to be sent must be valid during lmc_edge
-    .eoemb(eoemb),
+    .eoemb(eoemb_d1),
     .crc3(3'b0),
-    .crc12(crc12),
-    .fec(26'b0),
+    .crc12(crc12_d1),
+    .fec(fec),
     .cmd(19'b0),
 
     .header(phy_header));

@@ -56,65 +56,68 @@ module ad_ip_jesd204_tpl_dac_core #(
 ) (
 
   // dac interface
-  input clk,
+  input                                  clk,
 
-  output link_valid,
-  input link_ready,
-  output [LINK_DATA_WIDTH-1:0] link_data,
+  output                                 link_valid,
+  input                                  link_ready,
+  output [LINK_DATA_WIDTH-1:0]           link_data,
 
   // dma interface
-  output [NUM_CHANNELS-1:0] dac_valid,
-  input [LINK_DATA_WIDTH-1:0] dac_ddata,
-  output dac_rst,
+  output [NUM_CHANNELS-1:0]              dac_valid,
+  input  [LINK_DATA_WIDTH-1:0]           dac_ddata,
+  output                                 dac_rst,
 
   // Configuration interface
 
-  input dac_sync,
-  input dac_ext_sync_arm,
-  input dac_ext_sync_disarm,
+  input                                  dac_sync,
+  input                                  dac_ext_sync_arm,
+  input                                  dac_ext_sync_disarm,
 
-  input dac_sync_in,
-  input dac_sync_manual_req,
+  input                                  dac_sync_in,
+  input                                  dac_sync_manual_req,
 
-  output dac_sync_in_status,
+  output                                 dac_sync_in_status,
 
-  input dac_dds_format,
+  input                                  dac_dds_format,
 
-  input [NUM_CHANNELS*4-1:0] dac_data_sel,
-  input [NUM_CHANNELS-1:0]   dac_mask_enable,
+  input  [NUM_CHANNELS*4-1:0]            dac_data_sel,
+  input  [NUM_CHANNELS-1:0]              dac_mask_enable,
 
-  input [NUM_CHANNELS*16-1:0] dac_dds_scale_0,
-  input [NUM_CHANNELS*16-1:0] dac_dds_scale_1,
-  input [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_init_0,
-  input [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_incr_0,
-  input [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_init_1,
-  input [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_incr_1,
+  input  [NUM_CHANNELS*16-1:0]           dac_dds_scale_0,
+  input  [NUM_CHANNELS*16-1:0]           dac_dds_scale_1,
+  input  [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_init_0,
+  input  [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_incr_0,
+  input  [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_init_1,
+  input  [NUM_CHANNELS*DDS_PHASE_DW-1:0] dac_dds_incr_1,
 
-  input [NUM_CHANNELS*16-1:0] dac_pat_data_0,
-  input [NUM_CHANNELS*16-1:0] dac_pat_data_1,
+  input  [NUM_CHANNELS*16-1:0]           dac_pat_data_0,
+  input  [NUM_CHANNELS*16-1:0]           dac_pat_data_1,
 
-  input [NUM_CHANNELS-1:0]  dac_iqcor_enb,
-  input [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_1,
-  input [NUM_CHANNELS*16-1:0] dac_iqcor_coeff_2,
+  input  [NUM_CHANNELS-1:0]              dac_iqcor_enb,
+  input  [NUM_CHANNELS*16-1:0]           dac_iqcor_coeff_1,
+  input  [NUM_CHANNELS*16-1:0]           dac_iqcor_coeff_2,
 
-  input [NUM_CHANNELS*8-1:0] dac_src_chan_sel,
+  input  [NUM_CHANNELS*8-1:0]            dac_src_chan_sel,
 
-  output [NUM_CHANNELS-1:0] enable
+  output [NUM_CHANNELS-1:0]              enable
 );
 
   localparam DAC_CDW = CONVERTER_RESOLUTION * DATA_PATH_WIDTH;
   localparam DAC_DATA_WIDTH = DAC_CDW * NUM_CHANNELS;
 
-  wire [DAC_DATA_WIDTH-1:0] dac_data_s;
-  wire [DAC_DATA_WIDTH-1:0] dac_ddata_muxed;
+  reg  [NUM_CHANNELS-1:0]    dac_sync_int;
+  reg                        dac_sync_armed_dly;
 
-  wire [DAC_CDW-1:0] pn7_data;
-  wire [DAC_CDW-1:0] pn15_data;
+  wire [DAC_DATA_WIDTH-1:0]  dac_data_s;
+  wire [DAC_DATA_WIDTH-1:0]  dac_ddata_muxed;
+
+  wire [DAC_CDW-1:0]         pn7_data;
+  wire [DAC_CDW-1:0]         pn15_data;
 
   wire [LINK_DATA_WIDTH-1:0] dac_ddata_int;
 
   assign link_valid = 1'b1;
-  assign dac_sync_in_status = dac_sync_armed;
+  assign dac_sync_in_status = dac_sync_armed_dly;
 
   util_ext_sync #(
     .ENABLED (EXT_SYNC)
@@ -126,7 +129,14 @@ module ad_ip_jesd204_tpl_dac_core #(
     .sync_armed (dac_sync_armed));
 
   // Sync either from external or software source
-  assign dac_sync_int = dac_sync_armed | dac_sync;
+  always @(posedge clk) begin: gen_replicated_sync_reg
+    integer i;
+
+    for (i = 0; i < NUM_CHANNELS; i = i + 1) begin
+      dac_sync_int[i] <= dac_sync_armed | dac_sync;
+    end
+    dac_sync_armed_dly <= dac_sync_armed;
+  end
 
   // device interface
 
@@ -151,7 +161,7 @@ module ad_ip_jesd204_tpl_dac_core #(
       .CONVERTER_RESOLUTION (CONVERTER_RESOLUTION)
     ) i_pn_gen (
       .clk (clk),
-      .reset (dac_sync_int),
+      .reset (dac_sync_int[0]),
 
       .pn7_data (pn7_data),
       .pn15_data (pn15_data));
@@ -163,11 +173,11 @@ module ad_ip_jesd204_tpl_dac_core #(
 
   // dac valid
 
-  assign dac_valid = {NUM_CHANNELS{~dac_sync_armed}};
-  assign dac_rst = dac_sync_armed;
+  assign dac_valid = {NUM_CHANNELS{~dac_sync_armed_dly}};
+  assign dac_rst = dac_sync_armed_dly;
 
   // Gate input data
-  assign dac_ddata_int = dac_sync_armed ? {LINK_DATA_WIDTH{1'b0}} : dac_ddata;
+  assign dac_ddata_int = dac_sync_armed_dly ? {LINK_DATA_WIDTH{1'b0}} : dac_ddata;
 
   generate
   genvar i;
@@ -216,7 +226,7 @@ module ad_ip_jesd204_tpl_dac_core #(
       .pn7_data (pn7_data),
       .pn15_data (pn15_data),
 
-      .dac_data_sync (dac_sync_int),
+      .dac_data_sync (dac_sync_int[i]),
       .dac_dds_format (dac_dds_format),
 
       .dac_data_sel (dac_data_sel[4*i+:4]),

@@ -107,6 +107,11 @@ set_parameter_property NUM_INPUT_PIPELINE DISPLAY_NAME "Number of input pipeline
 set_parameter_property NUM_INPUT_PIPELINE ALLOWED_RANGES 1:3
 set_parameter_property NUM_INPUT_PIPELINE HDL_PARAMETER true
 
+add_parameter NUM_BUFFER_READY_PIPELINE INTEGER 1
+set_parameter_property NUM_BUFFER_READY_PIPELINE DISPLAY_NAME "Number of buffer ready pipeline stages"
+set_parameter_property NUM_BUFFER_READY_PIPELINE ALLOWED_RANGES 0:3
+set_parameter_property NUM_BUFFER_READY_PIPELINE HDL_PARAMETER true
+
 add_parameter ASYNC_CLK BOOLEAN false
 set_parameter_property ASYNC_CLK DISPLAY_NAME "Link and device clock asynchronous"
 set_parameter_property ASYNC_CLK HDL_PARAMETER true
@@ -178,6 +183,7 @@ add_interface_port config cfg_links_disable links_disable Input NUM_LINKS
 add_interface_port config cfg_octets_per_multiframe octets_per_multiframe Input 10
 add_interface_port config cfg_octets_per_frame octets_per_frame Input 8
 add_interface_port config cfg_disable_scrambler disable_scrambler Input 1
+add_interface_port config cfg_header_mode header_mode Input 2
 add_interface_port config cfg_disable_char_replacement disable_char_replacement Input 1
 add_interface_port config cfg_frame_align_err_threshold frame_align_err_threshold Input 8
 add_interface_port config ctrl_err_statistics_reset err_statistics_reset Input 1

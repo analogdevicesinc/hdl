@@ -50,13 +50,16 @@
 
 module loopback_64b_tb;
   parameter VCD_FILE = "loopback_64b_tb.vcd";
-  parameter NUM_LANES = 4;
-  parameter NUM_LINKS = 1;
+  parameter NUM_LANES = 8;
+  parameter NUM_LINKS = 2;
   parameter OCTETS_PER_FRAME = 8;
   parameter FRAMES_PER_MULTIFRAME = 32;
   parameter ENABLE_SCRAMBLER = 1;
   parameter BUFFER_EARLY_RELEASE = 0;
   parameter LANE_DELAY = 1;
+  // Skew in beats between two adjacent lanes. 1 is the historical behaviour.
+  parameter LANE_SKEW = 0;
+  parameter BUFFER_READY_PIPELINE = 1;
   parameter DATA_PATH_WIDTH = 8;
 
   localparam BEATS_PER_MULTIFRAME = OCTETS_PER_FRAME * FRAMES_PER_MULTIFRAME / 8;
@@ -68,10 +71,10 @@ module loopback_64b_tb;
 
   reg [5:0] tx_counter = 'h00;
   reg [5:0] rx_counter = 'h00;
+  reg data_mismatch = 1'b1;
   wire tx_ready;
   wire rx_valid;
   wire [NUM_LANES*64-1:0] rx_data;
-  reg data_mismatch = 1'b1;
 
   always @(posedge clk) begin
     if (tx_ready == 1'b1) begin
@@ -93,6 +96,12 @@ module loopback_64b_tb;
     end
   end
 
+  reg [NUM_LANES-1:0] phy_block_sync = {NUM_LANES{1'b1}};
+
+  reg [5:0] sysref_counter = 'h00;
+  reg sysref_rx = 1'b0;
+  reg sysref_tx = 1'b0;
+
   wire [63:0] tx_data =
       {{tx_counter,2'h0,tx_counter,2'h1,tx_counter,2'h2,tx_counter,2'h3},
        {tx_counter,2'h3,tx_counter,2'h2,tx_counter,2'h1,tx_counter,2'h0}};
@@ -105,12 +114,6 @@ module loopback_64b_tb;
   wire [NUM_LANES*64-1:0] phy_data_in;
   wire [NUM_LANES*2-1:0] phy_header_in;
 
-  reg [NUM_LANES-1:0] phy_block_sync = {NUM_LANES{1'b1}};
-
-  reg [5:0] sysref_counter = 'h00;
-  reg sysref_rx = 1'b0;
-  reg sysref_tx = 1'b0;
-
   always @(posedge clk) begin
     if (sysref_counter == 'h2f)
       sysref_rx <= ~sysref_rx;
@@ -118,7 +121,8 @@ module loopback_64b_tb;
     sysref_tx <= sysref_rx;
   end
 
-  localparam MAX_LANE_DELAY = LANE_DELAY + NUM_LANES;
+  // Lane i is delayed by LANE_DELAY + i*LANE_SKEW beats
+  localparam MAX_LANE_DELAY = LANE_DELAY + (NUM_LANES-1)*LANE_SKEW + 1;
 
   reg [10:0] phy_delay_fifo_wr;
   reg [(2+64)*NUM_LANES-1:0] phy_delay_fifo[0:MAX_LANE_DELAY-1];
@@ -135,7 +139,7 @@ module loopback_64b_tb;
 
   genvar i;
   generate for (i = 0; i < NUM_LANES; i = i + 1) begin
-    localparam OFF = MAX_LANE_DELAY - (i + LANE_DELAY);
+    localparam OFF = MAX_LANE_DELAY - (LANE_DELAY + i*LANE_SKEW);
 
     assign phy_data_in[64*i+63:64*i] =
       phy_delay_fifo[(phy_delay_fifo_wr + OFF) % MAX_LANE_DELAY][64*i+63:64*i];
@@ -160,6 +164,7 @@ module loopback_64b_tb;
   wire tx_cfg_skip_ilas;
   wire [7:0] tx_cfg_mframes_per_ilas;
   wire tx_cfg_disable_char_replacement;
+  wire [1:0] tx_cfg_header_mode;
   wire tx_cfg_disable_scrambler;
 
   wire tx_ilas_config_rd;
@@ -187,6 +192,7 @@ module loopback_64b_tb;
     .cfg_skip_ilas(tx_cfg_skip_ilas),
     .cfg_mframes_per_ilas(tx_cfg_mframes_per_ilas),
     .cfg_disable_char_replacement(tx_cfg_disable_char_replacement),
+    .cfg_header_mode(tx_cfg_header_mode),
     .cfg_disable_scrambler(tx_cfg_disable_scrambler),
 
     .device_cfg_octets_per_multiframe(tx_device_cfg_octets_per_multiframe),
@@ -242,6 +248,7 @@ module loopback_64b_tb;
     .cfg_skip_ilas(tx_cfg_skip_ilas),
     .cfg_mframes_per_ilas(tx_cfg_mframes_per_ilas),
     .cfg_disable_char_replacement(tx_cfg_disable_char_replacement),
+    .cfg_header_mode(tx_cfg_header_mode),
     .cfg_disable_scrambler(tx_cfg_disable_scrambler),
 
     .device_cfg_octets_per_multiframe(tx_device_cfg_octets_per_multiframe),
@@ -316,7 +323,8 @@ module loopback_64b_tb;
     .LINK_MODE(2),
     .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
     .TPL_DATA_PATH_WIDTH(DATA_PATH_WIDTH),
-    .ASYNC_CLK(0)
+    .ASYNC_CLK(0),
+    .NUM_BUFFER_READY_PIPELINE(BUFFER_READY_PIPELINE)
   ) i_rx (
     .clk(clk),
     .reset(reset),
@@ -389,6 +397,14 @@ module loopback_64b_tb;
     .status_synth_params0(),
     .status_synth_params1(),
     .status_synth_params2());
+
+  // Beyond the supported lane skew the elastic buffer is never released, so
+  // rx_valid never asserts. That is the expected outcome rather than an error,
+  // hence it is reported separately from the SUCCESS/FAILED verdict.
+  initial begin
+    @(posedge rx_valid);
+    $display("LINK_UP");
+  end
 
   integer ii;
   reg rx_status_mismatch = 1'b0;
