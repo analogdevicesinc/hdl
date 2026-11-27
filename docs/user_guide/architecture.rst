@@ -65,8 +65,8 @@ Base Design
 
 The base design contains all the I/O peripherals, memory interfaces
 and processing components, which are necessary for a fully functional
-Linux system. The majority of these components are Intel and AMD Xilinx IP
-cores.
+Linux system. The majority of these components are IP cores of the FPGA
+vendor.
 
 Usually, they contain:
 
@@ -77,7 +77,7 @@ Usually, they contain:
 Microprocessor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In our designs, we use only three types:
+The processors used in our designs:
 
 .. list-table::
    :header-rows: 2
@@ -88,12 +88,14 @@ In our designs, we use only three types:
      -
      -
      - Lattice
+     - Microchip
    * - **SoC**
      - **FPGA**
      - **SoC**
      - **FPGA**
      - `ACAP`_
      - **FPGA**
+     - **SoC**
    * - `HPS`_
      - `NIOS II`_
      - `PS7`_
@@ -101,6 +103,7 @@ In our designs, we use only three types:
      - `MicroBlaze`_
      - `Versal`_
      - `riscv-rx`_
+     - `MSS`_
 
 .. _ACAP: https://www.xilinx.com/an/adaptive-compute-acceleration-platforms.html
 .. _HPS: https://www.intel.com/content/www/us/en/docs/programmable/683458/current/hard-processor-system-hps.html
@@ -110,6 +113,7 @@ In our designs, we use only three types:
 .. _MicroBlaze: https://www.xilinx.com/products/design-tools/microblaze.html
 .. _Versal: https://www.xilinx.com/products/silicon-devices/acap/versal.html
 .. _riscv-rx: https://www.latticesemi.com/products/designsoftwareandip/intellectualproperty/ipcore/ipcores04/risc-v-rx-cpu
+.. _MSS: https://ww1.microchip.com/downloads/aemDocuments/documents/FPGA/ProductDocuments/ReferenceManuals/PolarFire_SoC_FPGA_MSS_Technical_Reference_Manual_VC.pdf
 
 Worth mentioning in case of SoCs, the **Hard Processor System** (HPS)
 or **Processing System 7/8** (PS7/8) do not contain just the dual-core
@@ -126,6 +130,11 @@ the manufacturer's website, listed in the table above.
 - ``Versal`` --- `Versal ACAP
   CIPS <https://docs.xilinx.com/r/en-US/pg352-cips/Overview>`__
   (``versal_cips``)
+- ``MSS`` --- PolarFire SoC Microprocessor Subsystem, with the RISC-V cores
+  (`MSS Technical Reference Manual`_), configured with the `PolarFire SoC MSS
+  Configurator <https://www.microchip.com/en-us/products/fpgas-and-plds/fpga-and-soc-design-tools/soc-fpga/polarfire-soc-mss-configurator>`__
+
+.. _MSS Technical Reference Manual: https://ww1.microchip.com/downloads/aemDocuments/documents/FPGA/ProductDocuments/ReferenceManuals/PolarFire_SoC_FPGA_MSS_Technical_Reference_Manual_VC.pdf
 
 Memory interface controller
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,13 +148,15 @@ system. In several cases we even have system limitations because of it
 (e.g. the memory interface is not fast enough to handle the required
 data throughput).
 
-In the following two links, one can find the landing page of the available
-memory solutions for Intel and AMD:
+In the following links, one can find the landing page of the available
+memory solutions of the vendors:
 
 - Intel's memory interfaces:
   https://www.intel.com/content/www/us/en/programmable/support/support-resources/external-memory.html
 - AMD's memory interfaces:
   https://www.xilinx.com/products/intellectual-property/mig.html#documentation
+- Microchip's memory controllers (PolarFire SoC MSS DDR and fabric):
+  https://ww1.microchip.com/downloads/aemDocuments/documents/FPGA/ProductDocuments/UserGuides/PolarFire_PolarFire_SoC_FPGA_Memory_Controller_User_Guide_VA.pdf
 
 Peripheral interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -203,14 +214,21 @@ The address usually (but not always) starts from 0x0002_0000, or the first
 available block of a bigger size. In Quartus block design you should be
 able to determine it.
 
+**PolarFire SoC**
+
+There is no offset: the software uses the same address as the HDL. The
+register access is usually through the APB interface of the MSS reserved for
+it (FIC3), see :ref:`fmcomms2 project <fmcomms2>`.
+
 SPI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In general, the base design of the carrier (#1) has two Serial Peripheral
 Interfaces (SPIs), which are used as a control interface for FMC/HSMC devices.
 These SPI interfaces are controlled by the integrated SPI controller of the
-**Hard Processor System** (HPS) or **Processing System 7/8** (PS7/8) or an
-Intel or AMD SPI controller core.
+**Hard Processor System** (HPS, Intel), **Processing System 7/8** (PS7/8, AMD)
+or **Microprocessor Subsystem** (MSS, Microchip), or by an SPI controller core
+of the FPGA vendor.
 
 I2C/I2S/SPDIF
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -241,8 +259,8 @@ The general rule of thumb is to define 64 GPIO pins for the design:
 - bits [95:64] will be used when the FPGA type is Zynq UltraScale+ MPSoC.
 
 When some of these GPIOs are not used, the input pins should have the
-output pins driven to them, so that
-:xilinx:`Vivado <products/design-tools/vivado.html>` will not complain about
+output pins driven to them, so that the tools (e.g.
+:xilinx:`Vivado <products/design-tools/vivado.html>`) will not complain about
 inputs not being assigned to.
 
 Depending on the processor type, add these values to the GPIO number
@@ -252,6 +270,8 @@ from the HDL project to obtain the final number used in software:
 - PS8 EMIO offset = **78**
 - MicroBlaze offset = **no offset**
 - Versal offset = **-32**
+- PolarFire SoC = **no offset**; the GPIOs are the bits of one of the MSS
+  GPIO controllers
 
 Connectivity
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -266,15 +286,16 @@ Interrupts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When developing the Linux software parts for an HDL project, the
-interrupts number to the PS have a different number in the software
-side.
+interrupts number to the processing system (PS7/8, HPS, MSS, etc.) have a
+different number in the software side.
 
 Not a rule, but in our designs we preffer to use firstly the interrupts
 from 15 and to go down to 0. Be careful when assigning one, because it
 might be used in the base design of the carrier!
 
-Always check which are used (in
-``/projects/common/$carrier/$carrier_system_bd.tcl``)
+Always check which are used (in the base design of the carrier:
+``/projects/common/$carrier/$carrier_system_bd.tcl``; ``_qsys.tcl`` for Intel,
+``_pb.tcl`` for Lattice, ``_lb.tcl`` for Microchip)
 
 Interrupts table
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -300,26 +321,30 @@ HDL Linux Zynq Actual Zynq Linux ZynqMP Actual ZynqMP S10SoC Linux Cyclone V Act
 0   29         61          89           121           17     40              72
 === ========== =========== ============ ============= ====== =============== ================
 
-=== ==============
-HDL riscv-rx no-OS
-=== ==============
-15  15
-14  14
-13  13
-12  12
-11  11
-10  10
-9   9
-8   8
-7   7
-6   6
-5   5
-4   4
-3   3
-2   2
-1   1
-0   0
-=== ==============
+On PolarFire SoC, the HDL number is the bit of the MSS ``MSS_INT_F2M``
+interrupt bus, and the Linux number is the PLIC interrupt (``MSS_INT_F2M``
+bit + 118):
+
+=== ============== ===================
+HDL riscv-rx no-OS Linux PolarFire SoC
+=== ============== ===================
+15  15             133
+14  14             132
+13  13             131
+12  12             130
+11  11             129
+10  10             128
+9   9              127
+8   8              126
+7   7              125
+6   6              124
+5   5              123
+4   4              122
+3   3              121
+2   2              120
+1   1              119
+0   0              118
+=== ============== ===================
 
 Board design and capabilities
 -------------------------------------------------------------------------------
@@ -413,12 +438,6 @@ The board files of these carriers can be found :git-hdl:`here <projects/common>`
      - ---
      - 3.3V/2.5V/**\*1.8V**
      - Zynq-7000
-   * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
-     - JTAG | SPI flash
-     - HPC
-     - ---
-     - ---
-     - CertusPro-NX
 
 .. note::
 
@@ -546,6 +565,57 @@ VADJ values
    connected to the FMC, the custom VADJ will have the value supported by
    both the carrier and the device(s)
 
+Lattice platforms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 16 16 18 18 16 16
+   :header-rows: 1
+
+   * - Board name
+     - Boots from
+     - FMC connector 1
+     - FMC connector 2
+     - VADJ FMC connector
+     - Family
+   * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
+     - JTAG | SPI flash
+     - HPC
+     - ---
+     - ---
+     - CertusPro-NX
+
+Microchip platforms
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :widths: 16 16 18 18 16 16
+   :header-rows: 1
+
+   * - Board name
+     - Boots from
+     - FMC connector 1
+     - FMC connector 2
+     - VADJ FMC connector
+     - Family
+   * - `PolarFire SoC Video Kit <https://www.microchip.com/en-us/development-tool/MPFS250-VIDEO-KIT>`__
+     - SoC memory | SD card | eMMC
+     - HPC
+     - ---
+     - 3.3V/2.5V/1.8V/1.5V/1.2V
+     - PolarFire SoC
+
+.. note::
+
+   PolarFire SoC is a non-volatile FPGA: the fabric starts configured,
+   without loading a bitstream. The Hart Software Services (HSS) boot loader
+   is in the eNVM; it loads U-Boot and Linux from the SD card or the eMMC. The
+   on-chip non-volatile memories are the eNVM (128 KB), the sNVM (56 KB) and
+   the uPROM (470 Kb on MPFS250T); for their use, see the `PolarFire SoC
+   Product Overview
+   <https://ww1.microchip.com/downloads/aemDocuments/documents/FPGA/ProductDocuments/ProductBrief/PolarFire-SoC-Product-Overview-60001656.pdf>`__
+   and the `MSS Technical Reference Manual`_.
+
 Memory Specifications
 -------------------------------------------------------------------------------
 
@@ -654,11 +724,6 @@ AMD platforms
         - 1,470 x 36 Kb (~52 Mb)
         - ---
         - ---
-      * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
-        - CertusPro-NX (Lattice)
-        - 208 x 18 Kb EBR (~3.7 Mb) + 7 x 512 Kb LRAM (~3.5 Mb)
-        - ---
-        - ---
 
 
 Discontinued AMD platforms
@@ -737,6 +802,51 @@ on-chip RAM (OCRAM) used by the preloader before external DDR is initialised.
         - Agilex 7 F-Series
         - 10,464 M20K (AGF023) / 13,272 M20K (AGF027)
         - 256 KB
+
+Lattice platforms
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. collapsible:: Lattice platforms on-chip memory
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 17 18 28 22 15
+
+      * - Board
+        - Family
+        - BRAM (PL)
+        - UltraRAM (PL)
+        - PS OCM SRAM
+      * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
+        - CertusPro-NX (Lattice)
+        - 208 x 18 Kb EBR (~3.7 Mb) + 7 x 512 Kb LRAM (~3.5 Mb)
+        - ---
+        - ---
+
+Microchip platforms
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. collapsible:: Microchip platforms on-chip memory
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 17 18 28 22 15
+
+      * - Board
+        - Family
+        - BRAM (PL)
+        - UltraRAM (PL)
+        - PS OCM SRAM
+      * - `PolarFire SoC Video Kit <https://www.microchip.com/en-us/development-tool/MPFS250-VIDEO-KIT>`__
+        - PolarFire SoC (MPFS250T)
+        - 812 x 20 Kb LSRAM (~15.9 Mb) + 2,352 x 768 b uSRAM (~1.7 Mb)
+        - ---
+        - 2 MB MSS L2 memory *
+
+   .. note::
+
+      \* The 2 MB L2 memory subsystem of the MSS is configurable as L2 cache,
+      Loosely Integrated Memory (LIM) or scratchpad memory.
 
 External Memory
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -887,18 +997,6 @@ AMD Platforms
         - 64-bit
         - 1,600
         - ~25.6 GB/s
-      * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
-        - ---
-        - ---
-        - ---
-        - ---
-        - ---
-        - No external DRAM **
-
-   .. note::
-
-      ** The CertusPro-NX device itself supports LPDDR4, DDR3/3L and LPDDR2 up
-      to 1,066 Mbps, but no DRAM is populated on the LFCPNX-EVN evaluation board.
 
 Discontinued AMD platforms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1072,6 +1170,59 @@ Intel platforms
         **DIMM2 (J5) is unpopulated** at the factory - socket only, available
         on the AGF027 variant only.
 
+Lattice platforms
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. collapsible:: Lattice platforms external memory
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 11 14 9 8 9 11 17
+
+      * - Board
+        - Interface
+        - Type
+        - Size
+        - Width
+        - Rate (MT/s)
+        - Bandwidth
+      * - `LFCPNX-EVN <https://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/CertusPro-NXEvaluationBoard>`__
+        - ---
+        - ---
+        - ---
+        - ---
+        - ---
+        - No external DRAM **
+
+   .. note::
+
+      ** The CertusPro-NX device itself supports LPDDR4, DDR3/3L and LPDDR2 up
+      to 1,066 Mbps, but no DRAM is populated on the LFCPNX-EVN evaluation board.
+
+Microchip platforms
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. collapsible:: Microchip platforms external memory
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 11 14 9 8 9 11 17
+
+      * - Board
+        - Interface
+        - Type
+        - Size
+        - Width
+        - Rate (MT/s)
+        - Bandwidth
+      * - `PolarFire SoC Video Kit <https://www.microchip.com/en-us/development-tool/MPFS250-VIDEO-KIT>`__
+        - MSS DDR
+        - LPDDR4
+        - 2 GB
+        - 32-bit
+        - 1,600
+        - ~6.4 GB/s
+
 File structure of a project
 -------------------------------------------------------------------------------
 
@@ -1175,3 +1326,30 @@ A project for a Lattice FPGA board should contain the following files:
   I/O buffers, I/ODDRs, modules that transform signals from LVDS to single-ended,
   etc. The I/O ports of this Verilog module will be connected to actual
   I/O pads of the FPGA
+
+Project files for Microchip boards
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A project for a Microchip FPGA board should contain the following files:
+
+- ``Makefile`` --- contains the project name, all the IP dependencies needed
+  for the project to be built and the project options; it includes
+  project-microchip.mk
+- ``mss_base.cfg`` --- configuration of the Microprocessor Subsystem (MSS) of
+  the PolarFire SoC, made with the PolarFire SoC MSS Configurator; ``make``
+  generates the MSS from it with ``pfsoc_mss``
+- ``system_project.tcl`` --- used to build the Libero project; linked in
+  project-microchip.mk, run by libero
+- ``system_lb.tcl`` --- the SmartDesign block design; sources the base design
+  of the carrier first, then the block design of the evaluation board, and
+  afterwards it contains all the IP instances and connections that must be
+  added on top of the sourced files, to complete the design of the project
+- ``system_constr.sdc`` --- contains clock definitions and other path
+  constraints
+- ``system_constr.pdc`` --- contains the physical (I/O) constraints
+- ``system_top.v`` --- contains everything about the HDL part of the
+  project; it instantiates the SmartDesign of the block design, I/O buffers,
+  etc. The I/O ports of this Verilog module will be connected to actual I/O
+  pads of the FPGA
+- ``system_project_sim.tcl`` --- optional; builds the simulation project
+  (see :ref:`build_hdl build-microchip-project`)

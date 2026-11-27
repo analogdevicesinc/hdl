@@ -56,6 +56,7 @@ adi_ip_files axi_ad9361 [list \
   "$ad_hdl_dir/library/common/ad_addsub.v" \
   "$ad_hdl_dir/library/common/ad_tdd_control.v" \
   "$ad_hdl_dir/library/common/ad_pps_receiver.v" \
+  "$ad_hdl_dir/library/common/up_apb.v" \
   "$ad_hdl_dir/library/common/up_axi.v" \
   "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
   "$ad_hdl_dir/library/common/up_xfer_status.v" \
@@ -138,6 +139,40 @@ set_property value "ACTIVE_HIGH" $reset_polarity
 ipx::infer_bus_interface gps_pps_irq xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
 
 ipgui::remove_param -component [ipx::current_core] [ipgui::get_guiparamspec -name "RX_NODPA" -component [ipx::current_core]]
+
+# register map interface: AXI (REGMAP_INTERFACE = 0) or APB (1)
+
+set_property ENABLEMENT_DEPENDENCY \
+  "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 0)" \
+  [ipx::get_bus_interfaces s_axi -of_objects [ipx::current_core]]
+foreach intf {s_axi_aclk s_axi_aresetn} {
+  set_property ENABLEMENT_DEPENDENCY \
+    "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 0)" \
+    [ipx::get_bus_interfaces $intf -of_objects [ipx::current_core]]
+}
+foreach port {aclk aresetn awvalid awaddr awprot awready wvalid wdata wstrb \
+              wready bvalid bresp bready arvalid araddr arprot arready rvalid \
+              rresp rdata rready} {
+  adi_set_ports_dependency "s_axi_$port" \
+    "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 0)" 0
+}
+foreach intf {s_apb_pclk s_apb_presetn} {
+  set_property ENABLEMENT_DEPENDENCY \
+    "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 1)" \
+    [ipx::get_bus_interfaces $intf -of_objects [ipx::current_core]]
+}
+adi_set_bus_dependency "s_apb" "s_apb" \
+  "(spirit:decode(id('MODELPARAM_VALUE.REGMAP_INTERFACE')) = 1)"
+
+set_property -dict [list \
+  "display_name" "Register Map Interface" \
+  "value_validation_type" "pairs" \
+  "value_validation_pairs" {"AXI" "0" "APB" "1"} \
+] [ipx::get_user_parameters REGMAP_INTERFACE -of_objects [ipx::current_core]]
+set_property -dict [list \
+  "widget" "comboBox" \
+  "display_name" "Register Map Interface" \
+] [ipgui::get_guiparamspec -name "REGMAP_INTERFACE" -component [ipx::current_core]]
 
 adi_add_auto_fpga_spec_params
 ipx::create_xgui_files [ipx::current_core]

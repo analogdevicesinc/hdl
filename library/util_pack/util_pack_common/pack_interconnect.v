@@ -65,11 +65,11 @@ module pack_interconnect #(
   localparam TOTAL_DATA_WIDTH = PORT_DATA_WIDTH * NUM_PORTS;
   localparam CTRL_WIDTH_PER_STAGE = NUM_PORTS * MUX_ORDER;
 
-  wire [TOTAL_DATA_WIDTH-1:0] interconnect_comb[0:NUM_STAGES];
-  wire [TOTAL_DATA_WIDTH-1:0] interconnect[0:NUM_STAGES];
+  wire [TOTAL_DATA_WIDTH-1:0] stage_data_comb[0:NUM_STAGES];
+  wire [TOTAL_DATA_WIDTH-1:0] stage_data[0:NUM_STAGES];
 
-  assign interconnect_comb[0] = data_in;
-  assign data_out = interconnect[NUM_STAGES];
+  assign stage_data_comb[0] = data_in;
+  assign data_out = stage_data[NUM_STAGES];
 
   /*
    * Function to calculate cumulative pipeline delay for each stage.
@@ -105,17 +105,17 @@ module pack_interconnect #(
 
       if (SHOULD_REGISTER == 0) begin
         // No pipeline register, pass through
-        assign interconnect[p] = interconnect_comb[p];
+        assign stage_data[p] = stage_data_comb[p];
       end else begin
         // Pipeline register advances only when ce is asserted
         // This ensures data pipeline timing matches ce-gated control signals
         (* shreg_extract = "no" *) reg [TOTAL_DATA_WIDTH-1:0] data_pipe = {TOTAL_DATA_WIDTH{1'b0}};
         always @(posedge clk) begin
           if (ce == 1'b1) begin
-            data_pipe <= interconnect_comb[p];
+            data_pipe <= stage_data_comb[p];
           end
         end
-        assign interconnect[p] = data_pipe;
+        assign stage_data[p] = data_pipe;
       end
     end
   endgenerate
@@ -202,16 +202,16 @@ module pack_interconnect #(
       /*
        * Pack is MUX followed by shuffle.
        * Unpack is shuffle followed by MUX.
-       * Read from interconnect (pipelined) and write to interconnect_comb (combinational).
+       * Read from stage_data (pipelined) and write to stage_data_comb (combinational).
        */
       if (PACK) begin
-        assign mux_in = interconnect[i];
+        assign mux_in = stage_data[i];
         assign shuffle_in = mux_out;
-        assign interconnect_comb[i+1] = shuffle_out;
+        assign stage_data_comb[i+1] = shuffle_out;
       end else begin
-        assign shuffle_in = interconnect[i];
+        assign shuffle_in = stage_data[i];
         assign mux_in = shuffle_out;
-        assign interconnect_comb[i+1] = mux_out;
+        assign stage_data_comb[i+1] = mux_out;
       end
   end
   endgenerate

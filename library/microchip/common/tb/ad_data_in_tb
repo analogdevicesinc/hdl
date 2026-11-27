@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd `dirname $0`
+# SystemVerilog: the testbench uses $isunknown
+exec bash ../../../common/tb/run_tb_microchip.sh --top ad_data_in_tb --dir run/ad_data_in_tb \
+	--vlog -sv \
+	ad_data_in_tb.v \
+	../ad_data_in.v \
+	../ad_iod_delay_ctrl.v \
+	../../../util_cdc/sync_bits.v \
+	../../../util_cdc/sync_data.v \
+	"$@"

@@ -1,0 +1,154 @@
+###############################################################################
+## Copyright (C) 2026 Analog Devices, Inc. All rights reserved.
+## SPDX short identifier: ADIBSD
+###############################################################################
+
+# PDC of the MPFS Video Kit base design, the board part of the fmcomms2 PDC.
+#
+# VADJ = 2.5V (J40 = 7-8, J46 = 7-8).
+#
+# Bank voltages follow the Microchip fmcomms2 reference design (IO_BANKS.pdc).
+# Bank1 and Bank9 must be equal when an FMC card is used.
+
+# Fabric DDR4 interface
+set_iobank -bank_name Bank0  \
+	-vcci 1.20               \
+	-vref 0.60               \
+	-fixed true              \
+	-update_iostd true
+
+set_iobank -bank_name Bank1  \
+	-vcci 2.50               \
+	-fixed true
+
+set_iobank -bank_name Bank2  \
+	-vcci 3.30               \
+	-fixed true              \
+	-update_iostd true
+
+set_iobank -bank_name Bank3  \
+	-vcci 3.30               \
+	-fixed true              \
+	-update_iostd true
+
+# MSS SD interface
+set_iobank -bank_name Bank4  \
+	-vcci 1.80               \
+	-fixed true
+
+set_iobank -bank_name Bank5  \
+	-vcci 3.30               \
+	-fixed true
+
+# MSS DDR4
+set_iobank -bank_name Bank6  \
+	-vcci 1.10               \
+	-vref 0.55               \
+	-fixed true
+
+set_iobank -bank_name Bank7  \
+	-vcci 2.50               \
+	-fixed true
+
+# Fabric DDR4 interface
+set_iobank -bank_name Bank8  \
+	-vcci 1.20               \
+	-vref 0.60               \
+	-fixed true              \
+	-update_iostd true
+
+# FMC VADJ
+set_iobank -bank_name Bank9  \
+	-vcci 2.50               \
+	-fixed true
+
+# Board pins
+
+# fabric reference clock: XCVR_2B_REFCLK, 148.5 MHz LVDS oscillator
+
+set_io -port_name REF_CLK_PAD_N  \
+	-pin_name AF30                \
+	-DIRECTION INPUT
+
+set_io -port_name REF_CLK_PAD_P  \
+	-pin_name AF29                \
+	-DIRECTION INPUT
+
+set_io -port_name MMUART_0_RXD_F2M  \
+	-pin_name C7                    \
+	-fixed true                     \
+	-io_std LVCMOS25                \
+	-DIRECTION INPUT
+
+set_io -port_name MMUART_0_TXD_M2F  \
+	-pin_name B7                    \
+	-fixed true                     \
+	-io_std LVCMOS25                \
+	-DIRECTION OUTPUT
+
+set_io -port_name MMUART_1_RXD_F2M  \
+	-pin_name D4                    \
+	-fixed true                     \
+	-io_std LVCMOS25                \
+	-DIRECTION INPUT
+
+set_io -port_name MMUART_1_TXD_M2F  \
+	-pin_name C4                    \
+	-fixed true                     \
+	-io_std LVCMOS25                \
+	-DIRECTION OUTPUT
+
+# FMC1 default EEPROM I2C after onboard level shifter
+set_io -port_name i2c0_scl_io  \
+	-pin_name A18               \
+	-fixed true                 \
+	-io_std LVCMOS25            \
+	-DIRECTION INOUT
+
+set_io -port_name i2c0_sda_io  \
+	-pin_name A19               \
+	-fixed true                 \
+	-io_std LVCMOS25            \
+	-DIRECTION INOUT
+
+set_io -port_name VSC_8662_CMODE3  \
+	-pin_name H12                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_CMODE4  \
+	-pin_name G12                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_CMODE5  \
+	-pin_name F12                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_CMODE6  \
+	-pin_name E12                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_CMODE7  \
+	-pin_name G14                  \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_RESETN  \
+	-pin_name A8                   \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
+
+set_io -port_name VSC_8662_SRESET  \
+	-pin_name A7                   \
+	-fixed true                    \
+	-io_std LVCMOS25               \
+	-DIRECTION OUTPUT
